@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ADE18260276D16F1003AFFAB /* SharePromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE1825F276D16F1003AFFAB /* SharePromptView.swift */; };
 		ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC7D276BD35700539B44 /* AppDelegate.swift */; };
 		ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC7F276BD35700539B44 /* SceneDelegate.swift */; };
 		ADFEFC82276BD35700539B44 /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC81276BD35700539B44 /* ToDoListViewController.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		ADE1825F276D16F1003AFFAB /* SharePromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePromptView.swift; sourceTree = "<group>"; };
 		ADFEFC7A276BD35700539B44 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADFEFC7D276BD35700539B44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADFEFC7F276BD35700539B44 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 		ADEE88E0276BF9FA003D005D /* View */ = {
 			isa = PBXGroup;
 			children = (
+				ADE1825F276D16F1003AFFAB /* SharePromptView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				ADFEFC82276BD35700539B44 /* ToDoListViewController.swift in Sources */,
 				ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */,
 				ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */,
+				ADE18260276D16F1003AFFAB /* SharePromptView.swift in Sources */,
 				ADFEFC88276BD35700539B44 /* ToDoList.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,10 +9,12 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
 
+//    var shareView = SharePromptView()
     let itemArray = ["luna", "rysiek", "kupa"]
     
     override func loadView() {
         super.loadView()
+//        view = shareView
         setUpNavigationController()
     }
     override func viewDidLoad() {
@@ -21,15 +23,18 @@ class ToDoListViewController: UITableViewController {
     }
     
     private func setUpNavigationController() {
-        navigationController?.navigationBar.backgroundColor = .blue
+//        navigationController?.navigationBar.backgroundColor = .blue
         navigationItem.title = "TODOLIST"
-        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+
         //this changes the titleColor, maybe there is better solution to this problem?
-        if #available(iOS 13.0, *) {
-            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        } else {
-            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        }
+//        if #available(iOS 13.0, *) {
+//            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        } else {
+//            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        }
+        
+       
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -45,7 +50,15 @@ class ToDoListViewController: UITableViewController {
         print(itemArray[indexPath.row])
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
+    @objc func addTapped() {
+        
+        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            print("alert is working fine")
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 
