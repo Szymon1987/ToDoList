@@ -10,9 +10,26 @@ import UIKit
 class ToDoListViewController: UITableViewController {
 
     
-    let itemArray = ["luna", "rysiek", "kupa"]
+    var itemArray = ["luna", "rysiek", "kupa"]
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        itemArray.count
+    }
     
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        cell.textLabel?.text = itemArray[indexPath.row]
+        return cell
+    }
+        
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let categoryItem = itemArray[indexPath.row]
+    
+        let vc = CategoryTableViewController()
+        vc.title = categoryItem
+        navigationController?.pushViewController(vc, animated: true)
+    }
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,27 +79,20 @@ class ToDoListViewController: UITableViewController {
     @objc func addTapped() {
         
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            print("Alert is working fine")
-        }
-//        alert.addAction(UIAlertAction(title: "Add Item", style: .default, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>))
-//        alert.addAction(action)
+        alert.addTextField()
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        itemArray.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-        cell.textLabel?.text = itemArray[indexPath.row]
-        return cell
-    }
+        alert.addAction(UIAlertAction(title: "Add Item", style: .default) { [weak self, weak alert] _ in
+            guard let category = alert?.textFields?[0].text else { return }
+            self?.addCategory(category)
+        })
         
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CategoryTableViewController()
-        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func addCategory(_ category: String) {
+        itemArray.insert(category, at: 0)
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
 }
 
