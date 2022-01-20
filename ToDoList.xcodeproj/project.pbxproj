@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD65A7882799D69500377DF3 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7872799D69500377DF3 /* TabBarController.swift */; };
+		AD65A78A2799DBFA00377DF3 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */; };
 		ADE18260276D16F1003AFFAB /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE1825F276D16F1003AFFAB /* Handler.swift */; };
 		ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC7D276BD35700539B44 /* AppDelegate.swift */; };
 		ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC7F276BD35700539B44 /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AD65A7872799D69500377DF3 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		ADE1825F276D16F1003AFFAB /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
 		ADFEFC7A276BD35700539B44 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADFEFC7D276BD35700539B44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 			isa = PBXGroup;
 			children = (
 				ADFEFC81276BD35700539B44 /* ToDoListViewController.swift */,
+				AD65A7872799D69500377DF3 /* TabBarController.swift */,
+				AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -280,9 +286,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD65A78A2799DBFA00377DF3 /* CategoryTableViewController.swift in Sources */,
 				ADFEFC82276BD35700539B44 /* ToDoListViewController.swift in Sources */,
 				ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */,
 				ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */,
+				AD65A7882799D69500377DF3 /* TabBarController.swift in Sources */,
 				ADE18260276D16F1003AFFAB /* Handler.swift in Sources */,
 				ADFEFC88276BD35700539B44 /* ToDoList.xcdatamodeld in Sources */,
 			);
@@ -461,7 +469,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -489,7 +497,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

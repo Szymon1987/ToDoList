@@ -15,14 +15,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
   
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
-        let rootVC = ToDoListViewController()
-        window?.rootViewController = UINavigationController(rootViewController: rootVC)
-        
-        
+
+        let rootVc = ToDoListViewController()
+        let navVc = UINavigationController(rootViewController: rootVc)
+        window?.rootViewController = navVc
+      
+
+       
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
