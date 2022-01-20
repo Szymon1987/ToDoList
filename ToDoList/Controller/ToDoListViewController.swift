@@ -9,16 +9,18 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
 
-//    var shareView = SharePromptView()
-    let itemArray = ["luna", "rysiek", "kupa"]
+    var handler: Handler!
     
     override func loadView() {
         super.loadView()
-//        view = shareView
+        handler = Handler()
         setUpNavigationController()
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.dataSource = handler
+        tableView.delegate = handler
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
     }
     
@@ -34,30 +36,19 @@ class ToDoListViewController: UITableViewController {
 //            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 //        }
         
+        
        
     }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-        cell.textLabel?.text = itemArray[indexPath.row]
-        return cell
-    }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(itemArray[indexPath.row])
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
+  
     @objc func addTapped() {
         
-        let alert = UIAlertController(title: "Add New Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            print("alert is working fine")
+            print("Alert is working fine")
         }
+        
         alert.addAction(action)
-        present(alert, animated: true, completion: nil)
+        present(alert, animated: true)
     }
 }
 
