@@ -4,13 +4,13 @@
 //
 //  Created by Szymon Tadrzak on 16/12/2021.
 //
-
+import CoreData
 import UIKit
 
 class ToDoListViewController: UITableViewController {
     
     var items = [Item]()
-
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var itemArray = ["luna", "rysiek", "kupa"]
     
@@ -36,6 +36,8 @@ class ToDoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        print(FileManager.default.urls(for: .documentationDirectory, in: .userDomainMask))
+        
         setUpNavigationController()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
    
@@ -92,12 +94,31 @@ class ToDoListViewController: UITableViewController {
     }
     
     func addCategory(_ category: String) {
-        let categoryItem = Item(title: category)
+        
+        
+        let newCategotyItem = Item(context: context)
+        newCategotyItem.title = category
+        newCategotyItem.done = false
+        
+        
         if category != "" {
-            items.insert(categoryItem, at: items.count)
+            items.append(newCategotyItem)
             tableView.reloadData()
         } else { return }
         
     }
+    
+    func save() {
+        do {
+            
+            try context.save()
+        } catch {
+            print("Error saving context \(error)")
+        }
+    }
+}
+
+func load() {
+    
 }
 
