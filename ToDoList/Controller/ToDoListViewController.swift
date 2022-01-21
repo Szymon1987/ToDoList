@@ -8,26 +8,28 @@
 import UIKit
 
 class ToDoListViewController: UITableViewController {
+    
+    var items = [Item]()
 
     
     var itemArray = ["luna", "rysiek", "kupa"]
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        itemArray.count
+        items.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = items[indexPath.row].title
         return cell
     }
         
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let categoryItem = itemArray[indexPath.row]
+        let categoryItem = items[indexPath.row]
     
         let vc = CategoryTableViewController()
-        vc.title = categoryItem
+        vc.title = categoryItem.title
         navigationController?.pushViewController(vc, animated: true)
     }
    
@@ -78,7 +80,7 @@ class ToDoListViewController: UITableViewController {
   
     @objc func addTapped() {
         
-        let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
@@ -90,10 +92,12 @@ class ToDoListViewController: UITableViewController {
     }
     
     func addCategory(_ category: String) {
-        itemArray.insert(category, at: 0)
-        let indexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        let categoryItem = Item(title: category)
+        if category != "" {
+            items.insert(categoryItem, at: items.count)
+            tableView.reloadData()
+        } else { return }
+        
     }
 }
-
 
