@@ -12,8 +12,6 @@ class ToDoListViewController: UITableViewController {
     var items = [Item]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    var itemArray = ["luna", "rysiek", "kupa"]
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         items.count
     }
@@ -59,6 +57,7 @@ class ToDoListViewController: UITableViewController {
 //                navigationController?.navigationBar.standardAppearance = appearance
 //                navigationController?.navigationBar.compactAppearance = appearance
                 navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        loadItem()
 
     }
     
@@ -95,30 +94,34 @@ class ToDoListViewController: UITableViewController {
     
     func addCategory(_ category: String) {
         
-        
         let newCategotyItem = Item(context: context)
         newCategotyItem.title = category
         newCategotyItem.done = false
         
-        
         if category != "" {
             items.append(newCategotyItem)
+            saveItem()
             tableView.reloadData()
         } else { return }
-        
     }
     
-    func save() {
+    func saveItem() {
         do {
-            
             try context.save()
         } catch {
             print("Error saving context \(error)")
         }
     }
+    
+    func loadItem() {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            items = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error) ")
+        }
+        }
 }
 
-func load() {
-    
-}
+
 
