@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
 
-        let rootVc = ToDoListViewController()
+        let rootVc = CategoryTableViewController()
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
       

@@ -24,40 +24,35 @@ class ToDoListViewController: UITableViewController {
         
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let categoryItem = items[indexPath.row]
-    
-        let vc = CategoryTableViewController()
-        vc.title = categoryItem.title
-        navigationController?.pushViewController(vc, animated: true)
+        items[indexPath.row].done = !items[indexPath.row].done
+        saveItems()
+//        tableView.deselectRow(at: indexPath, animated: true)
+        
+        
+
     }
    
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        print(FileManager.default.urls(for: .documentationDirectory, in: .userDomainMask))
+//        print(FileManager.default.urls(for: .documentationDirectory, in: .userDomainMask))
         
-        setUpNavigationController()
+//        setUpNavigationController()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
    
        
-        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
-        
-        
-        navigationController?.navigationBar.backgroundColor = .lightGray
-    
-        navigationController?.tabBarController?.tabBar.backgroundColor = .lightGray
-        navigationController?.tabBarItem.title = "Luna"
-        
-        let appearance = UINavigationBarAppearance()
-                appearance.backgroundColor = .lightGray
-//                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-//                navigationController?.navigationBar.tintColor = .white
-//                navigationController?.navigationBar.standardAppearance = appearance
-//                navigationController?.navigationBar.compactAppearance = appearance
-                navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        loadItem()
+//        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+//
+//
+//        navigationController?.navigationBar.backgroundColor = .lightGray
+//
+//        navigationController?.tabBarController?.tabBar.backgroundColor = .lightGray
+//        navigationController?.tabBarItem.title = "Luna"
+//
+//        let appearance = UINavigationBarAppearance()
+//                appearance.backgroundColor = .lightGray
+//                navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        loadItems()
 
     }
     
@@ -81,46 +76,50 @@ class ToDoListViewController: UITableViewController {
   
     @objc func addTapped() {
         
-        let alert = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
         alert.addAction(UIAlertAction(title: "Add Item", style: .default) { [weak self, weak alert] _ in
-            guard let category = alert?.textFields?[0].text else { return }
-            self?.addCategory(category)
+            guard let item = alert?.textFields?[0].text else { return }
+            self?.addItem(item)
         })
         
     }
     
-    func addCategory(_ category: String) {
+    func addItem(_ item: String) {
         
-        let newCategotyItem = Item(context: context)
-        newCategotyItem.title = category
-        newCategotyItem.done = false
+        let newItem = Item(context: context)
+        newItem.title = item
+        newItem.done = false
         
-        if category != "" {
-            items.append(newCategotyItem)
-            saveItem()
-            tableView.reloadData()
+        if item != "" {
+            items.append(newItem)
+            saveItems()
+            
         } else { return }
     }
     
-    func saveItem() {
+    
+    
+    func saveItems() {
         do {
             try context.save()
         } catch {
             print("Error saving context \(error)")
         }
+        tableView.reloadData()
     }
     
-    func loadItem() {
+    func loadItems() {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
         do {
             items = try context.fetch(request)
         } catch {
             print("Error fetching data from context \(error) ")
         }
-        }
+        tableView.reloadData()
+    }
 }
 
 
