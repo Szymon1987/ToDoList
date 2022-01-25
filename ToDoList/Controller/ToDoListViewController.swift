@@ -10,6 +10,12 @@ import UIKit
 class ToDoListViewController: UITableViewController {
     
     var items = [Item]()
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -25,6 +31,9 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         items[indexPath.row].done = !items[indexPath.row].done
+        context.delete(items[indexPath.row])
+               items.remove(at: indexPath.row)
+
         saveItems()
 //        tableView.deselectRow(at: indexPath, animated: true)
         
@@ -34,14 +43,10 @@ class ToDoListViewController: UITableViewController {
    
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-//        print(FileManager.default.urls(for: .documentationDirectory, in: .userDomainMask))
         
 //        setUpNavigationController()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
-   
-       
-//        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 //
 //
 //        navigationController?.navigationBar.backgroundColor = .lightGray
@@ -52,7 +57,7 @@ class ToDoListViewController: UITableViewController {
 //        let appearance = UINavigationBarAppearance()
 //                appearance.backgroundColor = .lightGray
 //                navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        loadItems()
+//        loadItems()
 
     }
     
@@ -88,18 +93,14 @@ class ToDoListViewController: UITableViewController {
     }
     
     func addItem(_ item: String) {
-        
+        if item == "" { return }
         let newItem = Item(context: context)
         newItem.title = item
         newItem.done = false
-        
-        if item != "" {
-            items.append(newItem)
-            saveItems()
-            
-        } else { return }
+        newItem.parentCategory = self.selectedCategory
+        items.append(newItem)
+        saveItems()
     }
-    
     
     
     func saveItems() {
@@ -111,8 +112,12 @@ class ToDoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    func loadItems() {
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
+    
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+        guard let selectedCategory = selectedCategory else { return }
+
+        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
+        request.predicate = predicate
         do {
             items = try context.fetch(request)
         } catch {

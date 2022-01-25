@@ -7,8 +7,10 @@
 
 import UIKit
 import CoreData
+import SwipeCellKit
 
 class CategoryTableViewController: UITableViewController {
+
     
     var categories = [Category]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -29,7 +31,8 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! SwipeTableViewCell
+        cell.delegate = self
         cell.textLabel?.text = categories[indexPath.row].name
         return cell
     }
@@ -46,6 +49,7 @@ class CategoryTableViewController: UITableViewController {
         let category = categories[indexPath.row]
         let vc = ToDoListViewController()
         vc.title = category.name
+        vc.selectedCategory = category
         navigationController?.pushViewController(vc, animated: true)
 
     }
@@ -64,7 +68,7 @@ class CategoryTableViewController: UITableViewController {
 //            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
 //        }
         
-        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
+//        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
         navigationController?.navigationBar.backgroundColor = .lightGray
         navigationController?.tabBarController?.tabBar.backgroundColor = .lightGray
         navigationController?.tabBarItem.title = "Luna"
@@ -93,9 +97,7 @@ class CategoryTableViewController: UITableViewController {
     }
     
     func addCategory(_ category: String) {
-        if category == "" {
-            return
-        }
+        if category == "" { return }
         let newCategory = Category(context: context)
         newCategory.name = category
         categories.append(newCategory)
