@@ -19,7 +19,7 @@ class CategoryTableViewController: UITableViewController {
         super.viewDidLoad()
         title = "CATEGORIES"
         setUpNavigationController()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "CellId")
         loadCategory()
     }
 
@@ -31,7 +31,7 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath) as! SwipeTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as! SwipeTableViewCell
         cell.delegate = self
         cell.textLabel?.text = categories[indexPath.row].name
         return cell
