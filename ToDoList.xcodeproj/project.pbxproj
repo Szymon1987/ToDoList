@@ -14,6 +14,7 @@
 		AD65A78A2799DBFA00377DF3 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */; };
 		AD94189D27A05FFA002CA77F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD94189C27A05FFA002CA77F /* Extensions.swift */; };
 		AD9A9B9527A19D06000C74B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADFEFC89276BD35E00539B44 /* Assets.xcassets */; };
+		AD9A9B9727A1BA4F000C74B6 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */; };
 		ADC28E72279B5037002B013B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADC28E70279B5037002B013B /* DataModel.xcdatamodeld */; };
 		ADE18260276D16F1003AFFAB /* Handler.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE1825F276D16F1003AFFAB /* Handler.swift */; };
 		ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADFEFC7D276BD35700539B44 /* AppDelegate.swift */; };
@@ -53,6 +54,7 @@
 		AD65A7872799D69500377DF3 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		AD94189C27A05FFA002CA77F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		ADC28E71279B5037002B013B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		ADE1825F276D16F1003AFFAB /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
 		ADFEFC7A276BD35700539B44 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +128,7 @@
 				ADFEFC81276BD35700539B44 /* ToDoListViewController.swift */,
 				AD65A7872799D69500377DF3 /* TabBarController.swift */,
 				AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */,
+				AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -416,6 +419,7 @@
 				ADFEFC82276BD35700539B44 /* ToDoListViewController.swift in Sources */,
 				ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */,
 				ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */,
+				AD9A9B9727A1BA4F000C74B6 /* SwipeTableViewController.swift in Sources */,
 				AD65A7882799D69500377DF3 /* TabBarController.swift in Sources */,
 				ADC28E72279B5037002B013B /* DataModel.xcdatamodeld in Sources */,
 				ADE18260276D16F1003AFFAB /* Handler.swift in Sources */,

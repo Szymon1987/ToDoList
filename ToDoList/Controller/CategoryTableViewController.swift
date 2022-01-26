@@ -7,11 +7,10 @@
 
 import UIKit
 import CoreData
-import SwipeCellKit
 
-class CategoryTableViewController: UITableViewController {
 
-    
+class CategoryTableViewController: SwipeTableViewController {
+
     var categories = [Category]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
    
@@ -19,7 +18,7 @@ class CategoryTableViewController: UITableViewController {
         super.viewDidLoad()
         title = "CATEGORIES"
         setUpNavigationController()
-        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "CellId")
+        
         loadCategory()
     }
 
@@ -31,8 +30,7 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories[indexPath.row].name
         return cell
     }
@@ -41,9 +39,9 @@ class CategoryTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
 
-//        context.delete(categories[indexPath.row])
-//        categories.remove(at: indexPath.row)
-//        saveCategory()
+        context.delete(categories[indexPath.row])
+        categories.remove(at: indexPath.row)
+        saveCategory()
 
 
         let category = categories[indexPath.row]
