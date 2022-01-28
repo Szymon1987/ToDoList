@@ -19,8 +19,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
+        
+        let layout = UICollectionViewFlowLayout()
 
-        let rootVc = CategoryTableViewController()
+        let rootVc = CategoryCollectionViewController(collectionViewLayout: layout)
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
       

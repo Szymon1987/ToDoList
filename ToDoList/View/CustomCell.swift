@@ -8,11 +8,12 @@
 import UIKit
 import SwipeCellKit
 
-class CustomCell: SwipeTableViewCell {
+class CustomCell: SwipeCollectionViewCell {
     
-    override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        print("Cos")
+        backgroundColor = .red
     }
     
     required public init?(coder aDecoder: NSCoder) {

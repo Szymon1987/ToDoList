@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class CategoryTableViewController: SwipeTableViewController {
+class CategoryCollectionViewController: SwipeCollectionViewController {
 
     var categories = [Category]()
    
@@ -18,30 +18,38 @@ class CategoryTableViewController: SwipeTableViewController {
         setUpNavigationController()
         
         loadCategory()
+
     }
 
     // MARK: - Table view data source
 
-   
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  categories.count
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return categories.count
+
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.textLabel?.text = categories[indexPath.row].name
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
+//        cell.textLabel?.text = categories[indexPath.row].name
         return cell
     }
+   
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         let category = categories[indexPath.row]
-        let vc = ToDoListViewController()
+        let vc = ToDoListViewController(collectionViewLayout: UICollectionViewFlowLayout())
         vc.title = category.name
         vc.selectedCategory = category
         navigationController?.pushViewController(vc, animated: true)
-
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 80)
     }
     
 
@@ -91,7 +99,7 @@ class CategoryTableViewController: SwipeTableViewController {
         } catch {
             print("Error fetching data from context \(error)")
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     override func updateModel(indexPath: IndexPath) {

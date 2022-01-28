@@ -7,7 +7,7 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: SwipeTableViewController {
+class ToDoListViewController: SwipeCollectionViewController {
     
     var items = [Item]()
     var selectedCategory: Category? {
@@ -16,19 +16,22 @@ class ToDoListViewController: SwipeTableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         items.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.textLabel?.text = items[indexPath.row].title
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
+//        cell.textLabel?.text = items[indexPath.row].title
+        
         return cell
     }
+    
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
- 
     }
+    
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +94,7 @@ class ToDoListViewController: SwipeTableViewController {
         } catch {
             print("Error fetching data from context \(error) ")
         }
-        tableView.reloadData()
+        collectionView.reloadData()
     }
     
     override func updateModel(indexPath: IndexPath) {
