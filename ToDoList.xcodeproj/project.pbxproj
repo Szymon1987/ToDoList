@@ -10,9 +10,7 @@
 		04057C399DED6E58346D740A /* libPods-ToDoList-ToDoListUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A255B8059C916A2DFA0494F /* libPods-ToDoList-ToDoListUITests.a */; };
 		2D599A864628958A7BD0B2B1 /* libPods-ToDoListTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F38CCED3F1AB6F538E86E2 /* libPods-ToDoListTests.a */; };
 		957589EBAB567948F4E841CF /* libPods-ToDoList.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5B9BCDDA10B8266FD7A0914 /* libPods-ToDoList.a */; };
-		AD65A7882799D69500377DF3 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7872799D69500377DF3 /* TabBarController.swift */; };
 		AD65A78A2799DBFA00377DF3 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */; };
-		AD94189D27A05FFA002CA77F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD94189C27A05FFA002CA77F /* Extensions.swift */; };
 		AD9A9B9527A19D06000C74B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ADFEFC89276BD35E00539B44 /* Assets.xcassets */; };
 		AD9A9B9727A1BA4F000C74B6 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */; };
 		ADC28E72279B5037002B013B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ADC28E70279B5037002B013B /* DataModel.xcdatamodeld */; };
@@ -51,9 +49,7 @@
 		536AC3FAAC0FF3F98DE9BD54 /* Pods-ToDoListTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoListTests.release.xcconfig"; path = "Target Support Files/Pods-ToDoListTests/Pods-ToDoListTests.release.xcconfig"; sourceTree = "<group>"; };
 		56F38CCED3F1AB6F538E86E2 /* libPods-ToDoListTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ToDoListTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B48BE4C2915803D55BE4AC3 /* Pods-ToDoList-ToDoListUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList-ToDoListUITests.release.xcconfig"; path = "Target Support Files/Pods-ToDoList-ToDoListUITests/Pods-ToDoList-ToDoListUITests.release.xcconfig"; sourceTree = "<group>"; };
-		AD65A7872799D69500377DF3 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
-		AD94189C27A05FFA002CA77F /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		ADC28E71279B5037002B013B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		ADE1825F276D16F1003AFFAB /* Handler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Handler.swift; sourceTree = "<group>"; };
@@ -114,19 +110,10 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		AD94189B27A05FCF002CA77F /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				AD94189C27A05FFA002CA77F /* Extensions.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
 		ADEE88DF276BF9D7003D005D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				ADFEFC81276BD35700539B44 /* ToDoListViewController.swift */,
-				AD65A7872799D69500377DF3 /* TabBarController.swift */,
 				AD65A7892799DBFA00377DF3 /* CategoryTableViewController.swift */,
 				AD9A9B9627A1BA4F000C74B6 /* SwipeTableViewController.swift */,
 			);
@@ -176,7 +163,6 @@
 			children = (
 				ADFEFC7D276BD35700539B44 /* AppDelegate.swift */,
 				ADFEFC7F276BD35700539B44 /* SceneDelegate.swift */,
-				AD94189B27A05FCF002CA77F /* Extensions */,
 				ADEE88E1276BFA2F003D005D /* Model */,
 				ADEE88E0276BF9FA003D005D /* View */,
 				ADEE88DF276BF9D7003D005D /* Controller */,
@@ -420,10 +406,8 @@
 				ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */,
 				ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */,
 				AD9A9B9727A1BA4F000C74B6 /* SwipeTableViewController.swift in Sources */,
-				AD65A7882799D69500377DF3 /* TabBarController.swift in Sources */,
 				ADC28E72279B5037002B013B /* DataModel.xcdatamodeld in Sources */,
 				ADE18260276D16F1003AFFAB /* Handler.swift in Sources */,
-				AD94189D27A05FFA002CA77F /* Extensions.swift in Sources */,
 				ADFEFC88276BD35700539B44 /* ToDoList.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

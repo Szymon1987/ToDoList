@@ -11,6 +11,7 @@ import CoreData
 
 class CategoryTableViewController: SwipeTableViewController {
 
+
     var categories = [Category]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
    
@@ -39,9 +40,9 @@ class CategoryTableViewController: SwipeTableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
 
-        context.delete(categories[indexPath.row])
-        categories.remove(at: indexPath.row)
-        saveCategory()
+//        context.delete(categories[indexPath.row])
+//        categories.remove(at: indexPath.row)
+//        saveCategory()
 
 
         let category = categories[indexPath.row]

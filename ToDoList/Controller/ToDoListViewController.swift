@@ -45,7 +45,7 @@ class ToDoListViewController: SwipeTableViewController {
         super.viewDidLoad()
         
 //        setUpNavigationController()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 //
 //
