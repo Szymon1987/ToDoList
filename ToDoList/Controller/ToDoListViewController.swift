@@ -30,11 +30,7 @@ class ToDoListViewController: SwipeTableViewController {
         
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        items[indexPath.row].done = !items[indexPath.row].done
-        context.delete(items[indexPath.row])
-               items.remove(at: indexPath.row)
 
-        saveItems()
 //        tableView.deselectRow(at: indexPath, animated: true)
         
         
@@ -124,6 +120,18 @@ class ToDoListViewController: SwipeTableViewController {
             print("Error fetching data from context \(error) ")
         }
         tableView.reloadData()
+    }
+    
+    override func updateModel(indexPath: IndexPath) {
+        items[indexPath.row].done = !items[indexPath.row].done
+        context.delete(items[indexPath.row])
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context \(error)")
+        }
+        items.remove(at: indexPath.row)
+
     }
 }
 

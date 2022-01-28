@@ -28,11 +28,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
 
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [self] action, indexPath in
             
-//            context.delete(categories[indexPath.row])
-//            self.saveCategory()
-//            self.categories.remove(at: indexPath.row)
             
-//            self.tableView.reloadData()
+            self.updateModel(indexPath: indexPath)
             
         }
 
@@ -51,6 +48,8 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
         return options
     }
     
-    
+    func updateModel(indexPath: IndexPath) {
+        
+    }
     
 }

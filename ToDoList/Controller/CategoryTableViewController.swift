@@ -39,12 +39,6 @@ class CategoryTableViewController: SwipeTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-
-//        context.delete(categories[indexPath.row])
-//        categories.remove(at: indexPath.row)
-//        saveCategory()
-
-
         let category = categories[indexPath.row]
         let vc = ToDoListViewController()
         vc.title = category.name
@@ -52,7 +46,8 @@ class CategoryTableViewController: SwipeTableViewController {
         navigationController?.pushViewController(vc, animated: true)
 
     }
-        
+    
+
     private func setUpNavigationController() {
 //        navigationController?.navigationBar.backgroundColor = .blue
         navigationItem.title = "CATEGORIES"
@@ -121,6 +116,18 @@ class CategoryTableViewController: SwipeTableViewController {
             print("Error fetching data from context \(error)")
         }
         tableView.reloadData()
+    }
+    
+    override func updateModel(indexPath: IndexPath) {
+        
+        context.delete(categories[indexPath.row])
+        do {
+            try context.save()
+        } catch {
+            print("Error saving category \(error)")
+        }
+        categories.remove(at: indexPath.row)
+        
     }
     
     
