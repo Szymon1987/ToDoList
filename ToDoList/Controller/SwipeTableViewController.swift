@@ -10,34 +10,26 @@ import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
    
-//    let cell: UITableViewCell?
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: "CellId")
+        tableView.register(CustomCell.self, forCellReuseIdentifier: "CellId")
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as! SwipeTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as! CustomCell
         cell.delegate = self
         return cell
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
-
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { [self] action, indexPath in
-            
-            
-            self.updateModel(indexPath: indexPath)
-            
+        self.updateModel(indexPath: indexPath)
         }
 
-        // customize the action appearance
-
         deleteAction.image = UIImage(systemName: "trash.fill")
-        
-
         return [deleteAction]
     }
     
@@ -50,6 +42,15 @@ class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegat
     
     func updateModel(indexPath: IndexPath) {
         
+    }
+    
+    func saveData() {
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context \(error)")
+        }
+        tableView.reloadData()
     }
     
 }

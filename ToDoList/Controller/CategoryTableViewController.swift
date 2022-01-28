@@ -8,12 +8,9 @@
 import UIKit
 import CoreData
 
-
 class CategoryTableViewController: SwipeTableViewController {
 
-
     var categories = [Category]()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
    
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,20 +46,10 @@ class CategoryTableViewController: SwipeTableViewController {
     
 
     private func setUpNavigationController() {
-//        navigationController?.navigationBar.backgroundColor = .blue
+
         navigationItem.title = "CATEGORIES"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-        
-    
 
-        //this changes the titleColor, maybe there is better solution to this problem?
-//        if #available(iOS 13.0, *) {
-//            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        } else {
-//            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        }
-        
-//        navigationController?.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: nil, action: nil)
         navigationController?.navigationBar.backgroundColor = .lightGray
         navigationController?.tabBarController?.tabBar.backgroundColor = .lightGray
         navigationController?.tabBarItem.title = "Luna"
@@ -95,20 +82,9 @@ class CategoryTableViewController: SwipeTableViewController {
         let newCategory = Category(context: context)
         newCategory.name = category
         categories.append(newCategory)
-        saveCategory()
-        print(category)
+        super.saveData()
     }
-    
-    func saveCategory() {
-        do {
-            try context.save()
-        } catch {
-            print("Error saving category \(error)")
-        }
-        tableView.reloadData()
-    }
-    
-    
+
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
            categories = try context.fetch(request)

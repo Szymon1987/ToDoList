@@ -16,8 +16,6 @@ class ToDoListViewController: SwipeTableViewController {
         }
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         items.count
     }
@@ -29,12 +27,7 @@ class ToDoListViewController: SwipeTableViewController {
     }
         
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-
-//        tableView.deselectRow(at: indexPath, animated: true)
-        
-        
-
+ 
     }
    
     override func viewDidLoad() {
@@ -61,17 +54,6 @@ class ToDoListViewController: SwipeTableViewController {
 //        navigationController?.navigationBar.backgroundColor = .blue
         navigationItem.title = "MY LIST"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-        
-    
-
-        //this changes the titleColor, maybe there is better solution to this problem?
-//        if #available(iOS 13.0, *) {
-//            navigationController?.navigationBar.standardAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        } else {
-//            navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        }
-        
-        
        
     }
   
@@ -95,19 +77,9 @@ class ToDoListViewController: SwipeTableViewController {
         newItem.done = false
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
-        saveItems()
+        super.saveData()
     }
-    
-    
-    func saveItems() {
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context \(error)")
-        }
-        tableView.reloadData()
-    }
-    
+
     
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
