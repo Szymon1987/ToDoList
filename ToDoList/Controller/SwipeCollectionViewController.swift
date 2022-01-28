@@ -15,13 +15,13 @@ class SwipeCollectionViewController: UICollectionViewController, UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.register(CustomCell.self, forCellWithReuseIdentifier: "CellId")
+        collectionView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
     }
  
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! CustomCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as? CustomCell else {fatalError("Unable to dequeue the CustomCell")}
         cell.delegate = self
-        cell.backgroundColor = .red
         return cell
     }
 

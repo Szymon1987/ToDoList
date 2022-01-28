@@ -19,6 +19,7 @@ class CategoryCollectionViewController: SwipeCollectionViewController {
         
         loadCategory()
 
+        
     }
 
     // MARK: - Table view data source
@@ -33,8 +34,8 @@ class CategoryCollectionViewController: SwipeCollectionViewController {
     
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
-//        cell.textLabel?.text = categories[indexPath.row].name
+        guard let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as? CustomCell else { fatalError("Unable to acess the cell from the superclass") }
+        cell.titleLabel.text = categories[indexPath.row].name
         return cell
     }
    
