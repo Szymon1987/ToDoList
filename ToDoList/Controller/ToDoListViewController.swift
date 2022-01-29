@@ -7,7 +7,9 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: SwipeCollectionViewController {
+class ToDoListViewController: UICollectionViewController {
+
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var items = [Item]()
     var selectedCategory: Category? {
@@ -15,27 +17,27 @@ class ToDoListViewController: SwipeCollectionViewController {
             loadItems()
         }
     }
-    
+
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         items.count
     }
-    
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
 //        cell.textLabel?.text = items[indexPath.row].title
-        
+
         return cell
     }
-    
-    
+
+
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+
     }
-    
-   
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
 //        setUpNavigationController()
 //        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
@@ -52,16 +54,16 @@ class ToDoListViewController: SwipeCollectionViewController {
 //        loadItems()
 
     }
-    
+
     private func setUpNavigationController() {
 //        navigationController?.navigationBar.backgroundColor = .blue
         navigationItem.title = "MY LIST"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-       
+
     }
-  
+
     @objc func addTapped() {
-        
+
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -70,9 +72,20 @@ class ToDoListViewController: SwipeCollectionViewController {
             guard let item = alert?.textFields?[0].text else { return }
             self?.addItem(item)
         })
-        
+
     }
     
+    func saveData() {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving context \(error)")
+            }
+            collectionView.reloadData()
+        }
+        
+    
+
     func addItem(_ item: String) {
         if item == "" { return }
         let newItem = Item(context: context)
@@ -80,10 +93,12 @@ class ToDoListViewController: SwipeCollectionViewController {
         newItem.done = false
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
-        super.saveData()
+        saveData()
     }
-
     
+    
+
+
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
 
@@ -96,8 +111,8 @@ class ToDoListViewController: SwipeCollectionViewController {
         }
         collectionView.reloadData()
     }
-    
-    override func updateModel(indexPath: IndexPath) {
+
+        func updateModel(indexPath: IndexPath) {
         items[indexPath.row].done = !items[indexPath.row].done
         context.delete(items[indexPath.row])
         do {

@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import SwipeCellKit
 
-class CustomCell: SwipeCollectionViewCell {
+
+class CustomCell: UICollectionViewCell {
     
-    override public init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }

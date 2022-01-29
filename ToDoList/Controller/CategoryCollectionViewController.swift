@@ -8,13 +8,16 @@
 import UIKit
 import CoreData
 
-class CategoryCollectionViewController: SwipeCollectionViewController {
+class CategoryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     var categories = [Category]()
    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "CATEGORIES"
+        collectionView.register(CustomCell.self, forCellWithReuseIdentifier: "CellId")
         setUpNavigationController()
         
         loadCategory()
@@ -31,13 +34,17 @@ class CategoryCollectionViewController: SwipeCollectionViewController {
 
     }
     
-    
-    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as? CustomCell else { fatalError("Unable to acess the cell from the superclass") }
-        cell.titleLabel.text = categories[indexPath.row].name
-        return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as? CustomCell else {
+            fatalError("Unabele to dequeue the cell")
+        }
+            cell.titleLabel.text = categories[indexPath.row].name
+            return cell
+        
     }
+
+    
+    
    
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -91,8 +98,17 @@ class CategoryCollectionViewController: SwipeCollectionViewController {
         let newCategory = Category(context: context)
         newCategory.name = category
         categories.append(newCategory)
-        super.saveData()
+        saveData()
     }
+    
+    func saveData() {
+            do {
+                try context.save()
+            } catch {
+                print("Error saving context \(error)")
+            }
+            collectionView.reloadData()
+        }
 
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
@@ -103,7 +119,9 @@ class CategoryCollectionViewController: SwipeCollectionViewController {
         collectionView.reloadData()
     }
     
-    override func updateModel(indexPath: IndexPath) {
+    
+    
+        func updateModel(indexPath: IndexPath) {
         
         context.delete(categories[indexPath.row])
         do {
