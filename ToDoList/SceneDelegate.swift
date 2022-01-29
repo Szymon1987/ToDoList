@@ -20,9 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
         
-        let layout = UICollectionViewFlowLayout()
+//        let layout = UICollectionViewFlowLayout()
 
-        let rootVc = CategoryCollectionViewController(collectionViewLayout: layout)
+        let rootVc = CategoryViewController()
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
       

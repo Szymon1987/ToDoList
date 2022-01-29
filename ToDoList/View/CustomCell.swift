@@ -8,42 +8,50 @@
 import UIKit
 
 
-class CustomCell: UICollectionViewCell {
+class CustomCell: UITableViewCell {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
     }
   
     func setupViews() {
-        addSubview(cellView)
-        cellView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10).isActive = true
-        cellView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10).isActive = true
-        cellView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        cellView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        addSubview(cellBackgroundView)
+        cellBackgroundView.anchorSize(to: self)
+
+        cellBackgroundView.addSubview(cellView)
+        
+        cellView.anchorSize(to: cellBackgroundView)
         
         cellView.addSubview(titleLabel)
-        titleLabel.leftAnchor.constraint(equalTo: cellView.leftAnchor).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: cellView.leftAnchor, constant: 10).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-    
-        
     }
     
     let cellView: UIView = {
         let view = UIView()
-        view.backgroundColor = .blue
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 8
+        view.layer.borderWidth = 0.3
+        view.layer.borderColor = ColorManager.cellBorder
         return view
     }()
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .green
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

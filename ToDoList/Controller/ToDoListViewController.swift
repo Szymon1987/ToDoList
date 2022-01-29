@@ -7,7 +7,7 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: UICollectionViewController {
+class ToDoListViewController: UITableViewController {
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -17,29 +17,12 @@ class ToDoListViewController: UICollectionViewController {
             loadItems()
         }
     }
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = super.collectionView(collectionView, cellForItemAt: indexPath)
-//        cell.textLabel?.text = items[indexPath.row].title
-
-        return cell
-    }
-
-
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-    }
-
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
 //        setUpNavigationController()
-//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 //
 //
@@ -54,6 +37,33 @@ class ToDoListViewController: UICollectionViewController {
 //        loadItems()
 
     }
+    
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items.count
+    }
+
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath)
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            
+            context.delete(items[indexPath.row])
+            items.remove(at: indexPath.row)
+            saveData()
+            }
+        }
+
+ 
 
     private func setUpNavigationController() {
 //        navigationController?.navigationBar.backgroundColor = .blue
@@ -81,7 +91,7 @@ class ToDoListViewController: UICollectionViewController {
             } catch {
                 print("Error saving context \(error)")
             }
-            collectionView.reloadData()
+            tableView.reloadData()
         }
         
     
@@ -109,21 +119,29 @@ class ToDoListViewController: UICollectionViewController {
         } catch {
             print("Error fetching data from context \(error) ")
         }
-        collectionView.reloadData()
+        tableView.reloadData()
     }
 
-        func updateModel(indexPath: IndexPath) {
-        items[indexPath.row].done = !items[indexPath.row].done
-        context.delete(items[indexPath.row])
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context \(error)")
-        }
-        items.remove(at: indexPath.row)
 
-    }
 }
 
 
+
+
+
+
+
+
+
+//        func updateModel(indexPath: IndexPath) {
+//        items[indexPath.row].done = !items[indexPath.row].done
+//        context.delete(items[indexPath.row])
+//        do {
+//            try context.save()
+//        } catch {
+//            print("Error saving context \(error)")
+//        }
+//        items.remove(at: indexPath.row)
+//
+//    }
 
