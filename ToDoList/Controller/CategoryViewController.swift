@@ -35,15 +35,46 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         let tableView = UITableView()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = ColorManager.background
         return tableView
 }()
+    
+   
+    
+    let roundedButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = ColorManager.roundedButton
+        button.layer.cornerRadius = 30
+        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+        let configuration = UIImage.SymbolConfiguration(pointSize: 30, weight: .light, scale: .medium)
+        let image = UIImage(systemName: "plus", withConfiguration: configuration)
+        button.setImage(image, for: .normal)
+        
+        button.tintColor = .white
+//        button.layer.masksToBounds = true
+        button.layer.shadowRadius = 10
+        button.layer.shadowOpacity = 0.2
+//        button.layer.borderColor = UIColor.lightGray.cgColor
+//        button.layer.borderWidth = 0.5
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    
     
     
     private func setupViews() {
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+        view.addSubview(roundedButton)
+        
+       
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        
     }
     
     // MARK: - Table view data source
@@ -78,7 +109,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     }
         
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let category = categories[indexPath.row]
+        let category = categories[indexPath.section]
         let vc = ToDoListViewController()
         vc.title = category.name
         vc.selectedCategory = category
@@ -94,8 +125,8 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
 
         if editingStyle == .delete {
 
-            context.delete(categories[indexPath.row])
-            categories.remove(at: indexPath.row)
+            context.delete(categories[indexPath.section])
+            categories.remove(at: indexPath.section)
             saveData()
         }
     }
@@ -107,7 +138,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     private func setUpNavigationController() {
 
         navigationItem.title = "CATEGORIES"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 
         
         let appearance = UINavigationBarAppearance()

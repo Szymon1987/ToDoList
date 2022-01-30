@@ -38,6 +38,12 @@ class CustomCell: UITableViewCell {
         cellView.addSubview(titleLabel)
         titleLabel.leftAnchor.constraint(equalTo: cellView.leftAnchor, constant: 10).isActive = true
         titleLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        
+        cellView.addSubview(numberOfCategoriesLabel)
+        numberOfCategoriesLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
+        numberOfCategoriesLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        
+        
     }
     
     let cellView: UIView = {
@@ -52,6 +58,13 @@ class CustomCell: UITableViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let numberOfCategoriesLabel: UILabel = {
+        let label = UILabel()
+        label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
