@@ -22,7 +22,8 @@ class ToDoListViewController: UITableViewController {
         super.viewDidLoad()
 
 //        setUpNavigationController()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
+//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
+        tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 //
 //
@@ -45,7 +46,8 @@ class ToDoListViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
+        cell.itemLabel.text = items[indexPath.row].title
         return cell
     }
 

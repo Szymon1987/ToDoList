@@ -8,25 +8,21 @@
 import UIKit
 
 
-class CustomCell: UITableViewCell {
+class CategoryCell: UITableViewCell {
     
-    let cellBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
   
-    func setupViews() {
+    private func setupViews() {
         
         addSubview(cellBackgroundView)
         cellBackgroundView.anchorSize(to: self)
@@ -35,9 +31,9 @@ class CustomCell: UITableViewCell {
         
         cellView.anchorSize(to: cellBackgroundView)
         
-        cellView.addSubview(titleLabel)
-        titleLabel.leftAnchor.constraint(equalTo: cellView.leftAnchor, constant: 10).isActive = true
-        titleLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        cellView.addSubview(categoryLabel)
+        categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
+        categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         
         cellView.addSubview(numberOfCategoriesLabel)
         numberOfCategoriesLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
@@ -45,6 +41,13 @@ class CustomCell: UITableViewCell {
         
         
     }
+    
+    let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     let cellView: UIView = {
         let view = UIView()
@@ -56,11 +59,13 @@ class CustomCell: UITableViewCell {
         return view
     }()
     
-    let titleLabel: UILabel = {
+        let categoryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = true
         return label
     }()
+  
     
     let numberOfCategoriesLabel: UILabel = {
         let label = UILabel()
@@ -68,5 +73,14 @@ class CustomCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing == true {
+            
+            
+    
+        }
+    }
     
 }

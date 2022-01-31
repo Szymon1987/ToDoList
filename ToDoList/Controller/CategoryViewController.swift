@@ -25,7 +25,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "CATEGORIES"
-        tableView.register(CustomCell.self, forCellReuseIdentifier: "CellId")
+        tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
         setUpNavigationController()
         loadCategory()
     }
@@ -51,11 +51,15 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         button.setImage(image, for: .normal)
         
         button.tintColor = .white
-//        button.layer.masksToBounds = true
-        button.layer.shadowRadius = 10
-        button.layer.shadowOpacity = 0.2
-//        button.layer.borderColor = UIColor.lightGray.cgColor
-//        button.layer.borderWidth = 0.5
+
+        button.layer.shouldRasterize = true
+        button.layer.rasterizationScale = UIScreen.main.scale
+        button.layer.shadowRadius = 8
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowOffset = CGSize(width: 5, height: 5)
+//        button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
+        button.layer.borderColor = UIColor.lightGray.cgColor
+        button.layer.borderWidth = 0.5
         
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -101,10 +105,10 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CustomCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
-        cell.titleLabel.text = categories[indexPath.section].name
+        cell.categoryLabel.text = categories[indexPath.section].name
         return cell
     }
         
@@ -116,30 +120,63 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-
-        return .delete
-    }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-
-        if editingStyle == .delete {
-
-            context.delete(categories[indexPath.section])
-            categories.remove(at: indexPath.section)
-            saveData()
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//
+//        return .delete
+//    }
+//
+//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+//
+//        if editingStyle == .delete {
+//
+//            context.delete(categories[indexPath.section])
+//            categories.remove(at: indexPath.section)
+//            saveData()
+//        }
+//    }
+//
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let delete = UIContextualAction(style: .destructive, title: "LUNA") { action, view, handler in
+            self.context.delete(self.categories[indexPath.section])
+            self.categories.remove(at: indexPath.section)
+            self.saveData()
+            
         }
+        let rename = UIContextualAction(style: .normal, title: "Rename") { action, view, handler in
+            print("normal")
+            
+        }
+        rename.backgroundColor = .lightGray
+        rename.image = UIImage(systemName: "circle.fill")
+        return UISwipeActionsConfiguration(actions: [delete, rename])
     }
+
+ 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
+//        categories.swapAt(sourceIndexPath.section, destinationIndexPath.section)
+        
+        
+        
+        
+    }
+    
     private func setUpNavigationController() {
-
+        
         navigationItem.title = "CATEGORIES"
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editCategory))
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = .black
         
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = ColorManager.background
@@ -163,6 +200,15 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         self?.addCategory(newCategory)
         }))
     }
+    
+    @objc func editCategory() {
+        if categories.count == 0 { return }
+        tableView.isEditing.toggle()
+        // check if I can change the buttonTitle here
+        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
+
+    }
+    
     
     func addCategory(_ category: String) {
         if category == "" { return }
@@ -190,56 +236,14 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.reloadData()
     }
     
-
 }
-
-
-
-
-
-
-
-// MIGHT BE USEFUL IN THE FUTURE AS SWIPING ISN'T AS SMOOTH AS EXPECTED RIGHT NOW
-
-
 
 
     
 
         
 
-        
-//    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-//            let deleteAction = UITableViewRowAction(style: .destructive, title: "KUPA") { _, _ in
-//                self.categories.remove(at: indexPath.row)
-//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//                self.saveData()
-//            }
-//            deleteAction.backgroundColor = .red
-//            return [deleteAction]
-//        }
-//
-//
-//
-//
-//func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-//        let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") { _, _, complete in
-//            self.categories.remove(at: indexPath.row)
-//            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//            self.saveData()
-//
-//            complete(true)
-//        }
-//        deleteAction.backgroundColor = .systemRed
-//
-//
-//
-//        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-//
-//        configuration.performsFirstActionWithFullSwipe = true
-//        return configuration
-//    }
-//
+
 
 
 

@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootVc = CategoryViewController()
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
-      
+//        navVc.navigationBar.prefersLargeTitles = true
 
        
     }
