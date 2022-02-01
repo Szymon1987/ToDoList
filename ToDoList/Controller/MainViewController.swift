@@ -14,6 +14,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func loadView() {
         super.loadView()
         setupViews()
+        
     }
     
     override func viewDidLoad() {
@@ -33,7 +34,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
 
     }
-    
+   
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.dataSource = self

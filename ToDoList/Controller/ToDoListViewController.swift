@@ -9,16 +9,20 @@ import UIKit
 
 class ToDoListViewController: MainViewController {
     
+    let cell = ItemCell()
+    
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
+        
+
     }
     
     private let roundedButton: RoundedButton = {
@@ -37,13 +41,6 @@ class ToDoListViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
         cell.itemLabel.text = items[indexPath.row].title
         return cell
-    }
-
-
-    private func setUpNavigationController() {
-        navigationItem.title = "MY LIST"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-
     }
 
     @objc func addTapped() {
@@ -69,8 +66,6 @@ class ToDoListViewController: MainViewController {
         saveData()
     }
     
-    
-
 
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
@@ -103,24 +98,3 @@ class ToDoListViewController: MainViewController {
     }
 
 }
-
-
-
-
-
-
-
-
-
-//        func updateModel(indexPath: IndexPath) {
-//        items[indexPath.row].done = !items[indexPath.row].done
-//        context.delete(items[indexPath.row])
-//        do {
-//            try context.save()
-//        } catch {
-//            print("Error saving context \(error)")
-//        }
-//        items.remove(at: indexPath.row)
-//
-//    }
-

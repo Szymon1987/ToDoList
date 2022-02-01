@@ -22,8 +22,9 @@ class CategoryViewController: MainViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
-        setUpNavigationController()
         loadCategory()
+        navigationItem.title = "CATEGORIES"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
     }
 
     private let roundedButton: RoundedButton = {
@@ -33,7 +34,6 @@ class CategoryViewController: MainViewController {
     }()
 
     override func setupViews() {
-//        super.setupViews()
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
         
@@ -100,13 +100,12 @@ class CategoryViewController: MainViewController {
     
     private func setUpNavigationController() {
         navigationItem.title = "CATEGORIES"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editCategory))
     }
     
     @objc func addTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         ac.addTextField()
-        ac .addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
         
         ac.addAction(UIAlertAction(title: "Add ", style: .default, handler: { [weak self, weak ac] _ in
@@ -115,7 +114,7 @@ class CategoryViewController: MainViewController {
         }))
     }
     
-    @objc func editCategory() {
+    @objc func editButtonPressed() {
         if categories.count == 0 { return }
         tableView.isEditing.toggle()
         // check if I can change the buttonTitle here
