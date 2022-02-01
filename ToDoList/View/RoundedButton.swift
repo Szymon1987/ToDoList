@@ -1,0 +1,35 @@
+//
+//  RoundedButton.swift
+//  ToDoList
+//
+//  Created by Szymon Tadrzak on 01/02/2022.
+//
+
+import UIKit
+
+class RoundedButton: UIButton {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = ColorManager.roundedButton
+        layer.cornerRadius = 30
+        let configuration = UIImage.SymbolConfiguration(pointSize: 30, weight: .light, scale: .medium)
+        let image = UIImage(systemName: "plus", withConfiguration: configuration)
+        setImage(image, for: .normal)
+        tintColor = .white
+        layer.shouldRasterize = true
+        layer.rasterizationScale = UIScreen.main.scale
+        layer.shadowRadius = 8
+        layer.shadowOpacity = 0.3
+        layer.shadowOffset = CGSize(width: 5, height: 5)
+//        button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
+        layer.borderColor = UIColor.lightGray.cgColor
+        layer.borderWidth = 0.5
+        translatesAutoresizingMaskIntoConstraints = false
+        
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}

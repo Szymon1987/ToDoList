@@ -8,72 +8,36 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+class CategoryViewController: MainViewController {
     
     var categories = [Category]()
     
     override func loadView() {
         super.loadView()
         view.backgroundColor = ColorManager.background
-        setupViews()
         tableView.sectionHeaderTopPadding = 10
         tableView.separatorStyle = .none
     }
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "CATEGORIES"
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
         setUpNavigationController()
         loadCategory()
     }
-    
-    
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.backgroundColor = ColorManager.background
-        return tableView
-}()
-    
-   
-    
-    let roundedButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = ColorManager.roundedButton
-        button.layer.cornerRadius = 30
-        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        let configuration = UIImage.SymbolConfiguration(pointSize: 30, weight: .light, scale: .medium)
-        let image = UIImage(systemName: "plus", withConfiguration: configuration)
-        button.setImage(image, for: .normal)
-        
-        button.tintColor = .white
 
-        button.layer.shouldRasterize = true
-        button.layer.rasterizationScale = UIScreen.main.scale
-        button.layer.shadowRadius = 8
-        button.layer.shadowOpacity = 0.3
-        button.layer.shadowOffset = CGSize(width: 5, height: 5)
-//        button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
-        button.layer.borderColor = UIColor.lightGray.cgColor
-        button.layer.borderWidth = 0.5
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
+    private let roundedButton: RoundedButton = {
+        let button = RoundedButton()
+        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         return button
     }()
-    
-    
-    
-    
-    private func setupViews() {
+
+    override func setupViews() {
+//        super.setupViews()
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
-        view.addSubview(roundedButton)
         
-       
+        view.addSubview(roundedButton)
         roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
         roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
         roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
@@ -88,9 +52,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         return categories.count
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
     
     // Two methods belew help with the spacing between the cells
     
@@ -104,7 +65,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         return headerView
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
@@ -119,40 +80,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         vc.selectedCategory = category
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-//
-//        return .delete
-//    }
-//
-//    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//
-//        if editingStyle == .delete {
-//
-//            context.delete(categories[indexPath.section])
-//            categories.remove(at: indexPath.section)
-//            saveData()
-//        }
-//    }
-//
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "LUNA") { action, view, handler in
-            self.context.delete(self.categories[indexPath.section])
-            self.categories.remove(at: indexPath.section)
-            self.saveData()
-            
-        }
-        let rename = UIContextualAction(style: .normal, title: "Rename") { action, view, handler in
-            print("normal")
-            
-        }
-        rename.backgroundColor = .lightGray
-        rename.image = UIImage(systemName: "circle.fill")
-        return UISwipeActionsConfiguration(actions: [delete, rename])
-    }
 
- 
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
@@ -166,27 +94,13 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         
 //        categories.swapAt(sourceIndexPath.section, destinationIndexPath.section)
         
-        
-        
+
         
     }
     
     private func setUpNavigationController() {
-        
         navigationItem.title = "CATEGORIES"
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editCategory))
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: nil, style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = .black
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = ColorManager.background
-//                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-//                navigationController?.navigationBar.tintColor = .white
-//                navigationController?.navigationBar.standardAppearance = appearance
-//                navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     @objc func addTapped() {
@@ -218,15 +132,6 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         saveData()
     }
     
-    func saveData() {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving context \(error)")
-            }
-            tableView.reloadData()
-        }
-
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
            categories = try context.fetch(request)
@@ -234,6 +139,13 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
             print("Error fetching data from context \(error)")
         }
         tableView.reloadData()
+    }
+    
+    
+    override func updateModel(at indexPath: IndexPath) {
+        self.context.delete(self.categories[indexPath.section])
+        self.categories.remove(at: indexPath.section)
+        self.saveData()
     }
     
 }

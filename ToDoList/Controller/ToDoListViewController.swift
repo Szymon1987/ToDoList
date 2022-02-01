@@ -7,9 +7,7 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: UITableViewController {
-
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+class ToDoListViewController: MainViewController {
     
     var items = [Item]()
     var selectedCategory: Category? {
@@ -20,24 +18,14 @@ class ToDoListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        setUpNavigationController()
-//        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
-//
-//
-//        navigationController?.navigationBar.backgroundColor = .lightGray
-//
-//        navigationController?.tabBarController?.tabBar.backgroundColor = .lightGray
-//        navigationController?.tabBarItem.title = "Luna"
-//
-//        let appearance = UINavigationBarAppearance()
-//                appearance.backgroundColor = .lightGray
-//                navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//        loadItems()
-
     }
+    
+    private let roundedButton: RoundedButton = {
+        let button = RoundedButton()
+        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+        return button
+    }()
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -51,24 +39,8 @@ class ToDoListViewController: UITableViewController {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
-        if editingStyle == .delete {
-            
-            context.delete(items[indexPath.row])
-            items.remove(at: indexPath.row)
-            saveData()
-            }
-        }
-
- 
 
     private func setUpNavigationController() {
-//        navigationController?.navigationBar.backgroundColor = .blue
         navigationItem.title = "MY LIST"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
 
@@ -86,17 +58,6 @@ class ToDoListViewController: UITableViewController {
         })
 
     }
-    
-    func saveData() {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving context \(error)")
-            }
-            tableView.reloadData()
-        }
-        
-    
 
     func addItem(_ item: String) {
         if item == "" { return }
@@ -123,7 +84,23 @@ class ToDoListViewController: UITableViewController {
         }
         tableView.reloadData()
     }
-
+    
+    override func setupViews() {
+        view.addSubview(tableView)
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+        
+        view.addSubview(roundedButton)
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+    }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        self.context.delete(self.items[indexPath.row])
+        self.items.remove(at: indexPath.row)
+        self.saveData()
+    }
 
 }
 
