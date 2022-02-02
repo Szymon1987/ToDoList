@@ -10,6 +10,7 @@ import UIKit
 
 class CategoryCell: UITableViewCell {
     
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -33,9 +34,9 @@ class CategoryCell: UITableViewCell {
         categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
         categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         
-        cellView.addSubview(numberOfCategoriesLabel)
-        numberOfCategoriesLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
-        numberOfCategoriesLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        cellView.addSubview(quantityLabel)
+        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
+        quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         
         
     }
@@ -65,7 +66,7 @@ class CategoryCell: UITableViewCell {
     }()
   
     
-    let numberOfCategoriesLabel: UILabel = {
+    let quantityLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -76,8 +77,6 @@ class CategoryCell: UITableViewCell {
         super.setEditing(editing, animated: animated)
         if editing == true {
             
-            
-    
         }
     }
     

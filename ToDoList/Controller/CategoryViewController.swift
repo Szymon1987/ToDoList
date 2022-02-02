@@ -10,6 +10,11 @@ import CoreData
 
 class CategoryViewController: MainViewController {
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+
+    var quantity: Int = 0
     var categories = [Category]()
     
     override func loadView() {
@@ -70,6 +75,7 @@ class CategoryViewController: MainViewController {
             fatalError("Unable to dequeue the CustomCell")
         }
         cell.categoryLabel.text = categories[indexPath.section].name
+        cell.quantityLabel.text = "\(categories[indexPath.section].quantity)"
         return cell
     }
         

@@ -7,22 +7,31 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: MainViewController {
+class ToDoListViewController: MainViewController, ItemCellProtocol {
     
-    let cell = ItemCell()
-    
+    let categoryVC = CategoryViewController()
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-  
+    
+
+    func updateItemTitle(itemTitle: String, indexPath: IndexPath) {
+        items[indexPath.row].title = itemTitle
+        do {
+            try context.save()
+        } catch {
+            print("Error saving context \(error)")
+        }
+   
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        
-
+         
     }
     
     private let roundedButton: RoundedButton = {
@@ -31,16 +40,25 @@ class ToDoListViewController: MainViewController {
         return button
     }()
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("selected")
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
+    }
+    
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
-        cell.itemLabel.text = items[indexPath.row].title
-        return cell
+            cell.cellDelegate = self
+            cell.indexPath = indexPath
+            cell.itemTextField.text = items[indexPath.row].title
+            return cell
     }
 
     @objc func addTapped() {
@@ -61,8 +79,10 @@ class ToDoListViewController: MainViewController {
         let newItem = Item(context: context)
         newItem.title = item
         newItem.done = false
+        selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
+        categoryVC.quantity += 1
         saveData()
     }
     
@@ -92,8 +112,10 @@ class ToDoListViewController: MainViewController {
     }
     
     override func updateModel(at indexPath: IndexPath) {
+        
         self.context.delete(self.items[indexPath.row])
         self.items.remove(at: indexPath.row)
+        self.selectedCategory?.quantity -= 1
         self.saveData()
     }
 

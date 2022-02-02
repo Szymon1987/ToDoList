@@ -7,10 +7,19 @@
 
 import UIKit
 
-class ItemCell: UITableViewCell {
-    
+protocol ItemCellProtocol: AnyObject {
+    func updateItemTitle(itemTitle: String, indexPath: IndexPath)
+        
+}
+
+class ItemCell: UITableViewCell, UITextFieldDelegate {
+
+    weak var cellDelegate: ItemCellProtocol?
+    var indexPath: IndexPath?
+
     var isColorViewFilled = false
-    
+    var itemTitle: String?
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -22,14 +31,38 @@ class ItemCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let text = textField.text
+        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            if unwrappedTrimmedText == "" {
+                return false
+            } else {
+                itemTitle = unwrappedTrimmedText
+                return itemTextField.endEditing(true)
+            }
+        }
+
+        return true
+    }
     
+    func textFieldDidEndEditing(_ textField: UITextField) {
+
+        if let itemTitle = itemTitle, let indexPath = indexPath {
+            cellDelegate?.updateItemTitle(itemTitle: itemTitle, indexPath: indexPath)
+        }
+
+    }
     
-    let itemLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.isUserInteractionEnabled = true
-        return label
+    lazy var itemTextField: UITextField = {
+        let textfield = UITextField()
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.font = UIFont.preferredFont(forTextStyle: .headline)
+        textfield.backgroundColor = .yellow
+        textfield.delegate = self
+        return textfield
     }()
+    
+    
     
 //    let circleView: UIView = {
 //        let view = UIView()
@@ -70,42 +103,37 @@ class ItemCell: UITableViewCell {
     
     func animate() {
         UIView.animate(withDuration: 0.5, delay: 0, options: []) {
-            
             if self.isColorViewFilled == false {
                 self.colorView.transform = .identity
             } else {
                 self.colorView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
             }
-            
-        } completion: { finished in
-            print("animation done")
-//            self.colorView.transform = .identity
-
         }
     }
     
     @objc func cicrcleButtonTapped() {
-        
         colorView.backgroundColor = ColorManager.roundedButton
         animate()
         isColorViewFilled.toggle()
-        
     }
     
     func setupViews() {
         
-        contentView.addSubview(itemLabel)
-        itemLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
-        itemLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        contentView.addSubview(itemTextField)
+        
+        itemTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
+        itemTextField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
+        itemTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        itemTextField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
   
         addSubview(colorView)
-        colorView.trailingAnchor.constraint(equalTo: itemLabel.leadingAnchor, constant: -10).isActive = true
+        colorView.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -10).isActive = true
         colorView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         colorView.widthAnchor.constraint(equalToConstant: 28).isActive = true
         colorView.heightAnchor.constraint(equalToConstant: 28).isActive = true
         
         addSubview(button)
-        button.trailingAnchor.constraint(equalTo: itemLabel.leadingAnchor, constant: -10).isActive = true
+        button.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -10).isActive = true
         button.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         button.widthAnchor.constraint(equalToConstant: 28).isActive = true
         button.heightAnchor.constraint(equalToConstant: 28).isActive = true

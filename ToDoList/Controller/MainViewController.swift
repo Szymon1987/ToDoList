@@ -10,7 +10,7 @@ import UIKit
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-
+    
     override func loadView() {
         super.loadView()
         setupViews()
@@ -56,14 +56,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
 
             self.updateModel(at: indexPath)
+
             
         }
         let rename = UIContextualAction(style: .normal, title: "Rename") { action, view, handler in
             print("normal")
             
         }
-        rename.backgroundColor = .lightGray
-        rename.image = UIImage(systemName: "circle.fill")
+        rename.backgroundColor = ColorManager.roundedButton
+//        rename.image = UIImage(systemName: "circle.fill")
         return UISwipeActionsConfiguration(actions: [delete, rename])
     }
 
