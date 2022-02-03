@@ -53,18 +53,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
 
             self.updateModel(at: indexPath)
-
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
             
         }
         let rename = UIContextualAction(style: .normal, title: "Rename") { action, view, handler in
-            print("normal")
-            
+
         }
         rename.backgroundColor = ColorManager.roundedButton
-//        rename.image = UIImage(systemName: "circle.fill")
         return UISwipeActionsConfiguration(actions: [delete, rename])
     }
 

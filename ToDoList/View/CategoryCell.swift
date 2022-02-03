@@ -10,6 +10,12 @@ import UIKit
 
 class CategoryCell: UITableViewCell {
     
+    var oldLeftAnchor: NSLayoutConstraint?
+    var newLeftAnchor: NSLayoutConstraint?
+    var oldTrailingAnchor: NSLayoutConstraint?
+    var newTrailingAnchor: NSLayoutConstraint?
+    let move = 50
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,26 +27,6 @@ class CategoryCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
   
-    private func setupViews() {
-        
-        addSubview(cellBackgroundView)
-        cellBackgroundView.anchorSize(to: self)
-
-        cellBackgroundView.addSubview(cellView)
-        
-        cellView.anchorSize(to: cellBackgroundView)
-        
-        cellView.addSubview(categoryLabel)
-        categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
-        categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
-        cellView.addSubview(quantityLabel)
-        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
-        quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
-        
-    }
-    
     let cellBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -64,7 +50,6 @@ class CategoryCell: UITableViewCell {
         label.isUserInteractionEnabled = true
         return label
     }()
-  
     
     let quantityLabel: UILabel = {
         let label = UILabel()
@@ -79,5 +64,41 @@ class CategoryCell: UITableViewCell {
             
         }
     }
-    
+    private func setupViews() {
+        
+        addSubview(cellBackgroundView)
+        cellBackgroundView.anchorSize(to: self)
+
+        cellBackgroundView.addSubview(cellView)
+        
+        cellView.anchorSize(to: cellBackgroundView)
+        
+        cellView.addSubview(categoryLabel)
+//         old
+//        categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
+        categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        
+        
+//        new
+        oldLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
+        oldLeftAnchor?.isActive = true
+        
+        newLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 60)
+        newLeftAnchor?.isActive = false
+
+      
+        
+        
+        cellView.addSubview(quantityLabel)
+//        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
+        quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        
+        //new
+        oldTrailingAnchor = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
+        oldTrailingAnchor?.isActive = true
+        newTrailingAnchor = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -60)
+        newTrailingAnchor?.isActive = false
+        
+        
+    }
 }

@@ -23,7 +23,8 @@ class ItemCell: UITableViewCell, UITextFieldDelegate {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
-        colorView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
+        checkmarkView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
+        self.selectionStyle = .none
 //        drawCircle()
     }
     
@@ -57,96 +58,67 @@ class ItemCell: UITableViewCell, UITextFieldDelegate {
         let textfield = UITextField()
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.font = UIFont.preferredFont(forTextStyle: .headline)
-        textfield.backgroundColor = .yellow
         textfield.delegate = self
         return textfield
     }()
     
-    
-    
-//    let circleView: UIView = {
-//        let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
-//
-//    func drawCircle() {
-//        let shapeLayer = CAShapeLayer()
-////        let radious = circleView.frame.height / 2
-//        let path = UIBezierPath(arcCenter: circleView.center, radius: 14, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-//
-//        shapeLayer.path = path.cgPath
-//        shapeLayer.lineWidth = 1
-//        shapeLayer.fillColor = UIColor.clear.cgColor
-//        shapeLayer.strokeColor = ColorManager.roundedButton.cgColor
-//        circleView.layer.addSublayer(shapeLayer)
-//    }
-    
-    lazy var button: UIButton = {
+    lazy var checkmarkButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .clear
-        button.layer.cornerRadius = 14
-        button.layer.borderWidth = 2
+        button.layer.cornerRadius = 16
+        button.layer.borderWidth = 1.5
         button.layer.borderColor = ColorManager.roundedButton.cgColor
         button.addTarget(self, action: #selector(cicrcleButtonTapped), for: .touchUpInside)
         return button
     }()
     
-    let colorView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .clear
-        view.layer.cornerRadius = 14
-        return view
+    let checkmarkView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "checkmark"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 16
+        return imageView
     }()
     
     func animate() {
-        UIView.animate(withDuration: 0.5, delay: 0, options: []) {
+        UIView.animate(withDuration: 0.2, delay: 0, options: []) {
             if self.isColorViewFilled == false {
-                self.colorView.transform = .identity
+                self.checkmarkView.transform = .identity
             } else {
-                self.colorView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
+                self.checkmarkView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
             }
         }
     }
     
     @objc func cicrcleButtonTapped() {
-        colorView.backgroundColor = ColorManager.roundedButton
+        checkmarkView.backgroundColor = ColorManager.roundedButton
         animate()
         isColorViewFilled.toggle()
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred(intensity: 1.0)
     }
     
     func setupViews() {
         
         contentView.addSubview(itemTextField)
         
-        itemTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 60).isActive = true
+        itemTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
         itemTextField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
         itemTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         itemTextField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-  
-        addSubview(colorView)
-        colorView.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -10).isActive = true
-        colorView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        colorView.widthAnchor.constraint(equalToConstant: 28).isActive = true
-        colorView.heightAnchor.constraint(equalToConstant: 28).isActive = true
+   
+        addSubview(checkmarkButton)
+        checkmarkButton.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -30).isActive = true
+        checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
-        addSubview(button)
-        button.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -10).isActive = true
-        button.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 28).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        
-        
-//        addSubview(circleView)
-//        circleView.trailingAnchor.constraint(equalTo: itemLabel.leadingAnchor).isActive = true
-//        circleView.topAnchor.constraint(equalTo: itemLabel.centerYAnchor).isActive = true
-//        circleView.heightAnchor.constraint(equalToConstant: 20).isActive = true
-//        circleView.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        
-      
-        
+        addSubview(checkmarkView)
+        checkmarkView.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -30).isActive = true
+        checkmarkView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        checkmarkView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        checkmarkView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+
     }
     
     

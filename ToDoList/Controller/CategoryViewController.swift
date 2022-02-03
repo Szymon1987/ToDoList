@@ -98,11 +98,10 @@ class CategoryViewController: MainViewController {
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
-//        categories.swapAt(sourceIndexPath.section, destinationIndexPath.section)
-        
-
-        
+        categories.swapAt(sourceIndexPath.section, destinationIndexPath.section)
+      
     }
+
     
     private func setUpNavigationController() {
         navigationItem.title = "CATEGORIES"
@@ -123,9 +122,34 @@ class CategoryViewController: MainViewController {
     @objc func editButtonPressed() {
         if categories.count == 0 { return }
         tableView.isEditing.toggle()
+        
         // check if I can change the buttonTitle here
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
+        
+    
+        tableView.visibleCells.forEach { cell in
+            if let cell = cell as? CategoryCell {
+                
+                if tableView.isEditing {
+                    cell.oldLeftAnchor?.isActive = false
+                    cell.oldTrailingAnchor?.isActive = false
+                    cell.newLeftAnchor?.isActive = true
+                    cell.newTrailingAnchor?.isActive = true
+                    roundedButton.isUserInteractionEnabled = false
+                    
+                } else {
+                    cell.oldLeftAnchor?.isActive = true
+                    cell.oldTrailingAnchor?.isActive = true
+                    cell.newLeftAnchor?.isActive = false
+                    cell.newTrailingAnchor?.isActive = false
+                    roundedButton.isUserInteractionEnabled = true
+                }
+                
+            }
+        
+        }
 
+        view.layoutIfNeeded()
     }
     
     
@@ -145,7 +169,6 @@ class CategoryViewController: MainViewController {
         }
         tableView.reloadData()
     }
-    
     
     override func updateModel(at indexPath: IndexPath) {
         self.context.delete(self.categories[indexPath.section])
