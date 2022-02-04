@@ -17,6 +17,8 @@ class CategoryCell: UITableViewCell {
     let move = 50
     
     
+    lazy var middle = frame.size.width / 2
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -27,12 +29,12 @@ class CategoryCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
   
-    let cellBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+//    let cellBackgroundView: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = .white
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        return view
+//    }()
     
     let cellView: UIView = {
         let view = UIView()
@@ -48,6 +50,7 @@ class CategoryCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.isUserInteractionEnabled = true
+            label.backgroundColor = .red
         return label
     }()
     
@@ -55,6 +58,7 @@ class CategoryCell: UITableViewCell {
         let label = UILabel()
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .green
         return label
     }()
     
@@ -66,23 +70,23 @@ class CategoryCell: UITableViewCell {
     }
     private func setupViews() {
         
-        addSubview(cellBackgroundView)
-        cellBackgroundView.anchorSize(to: self)
+//        addSubview(cellBackgroundView)
+//        cellBackgroundView.anchorSize(to: self)
 
-        cellBackgroundView.addSubview(cellView)
+        addSubview(cellView)
         
-        cellView.anchorSize(to: cellBackgroundView)
+        cellView.anchorSize(to: self)
         
         cellView.addSubview(categoryLabel)
 //         old
 //        categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
         categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
+        categoryLabel.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
         
 //        new
         oldLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
         oldLeftAnchor?.isActive = true
-        
+
         newLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 60)
         newLeftAnchor?.isActive = false
 
@@ -92,7 +96,7 @@ class CategoryCell: UITableViewCell {
         cellView.addSubview(quantityLabel)
 //        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
         quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        
+
         //new
         oldTrailingAnchor = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
         oldTrailingAnchor?.isActive = true

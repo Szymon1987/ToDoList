@@ -54,17 +54,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
 
-            self.updateModel(at: indexPath)
+            self.remove(at: indexPath)
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.success)
             
         }
-        let rename = UIContextualAction(style: .normal, title: "Rename") { action, view, handler in
-
+        let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
+            self.rename(at: indexPath)
         }
-        rename.backgroundColor = ColorManager.roundedButton
+        rename.backgroundColor = .black
         return UISwipeActionsConfiguration(actions: [delete, rename])
     }
 
@@ -75,12 +76,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             } catch {
                 print("Error saving context \(error)")
             }
-            tableView.reloadData()
         }
     
-    func updateModel(at indexPath: IndexPath) {
+    func remove(at indexPath: IndexPath) {
     }
     func setupViews() {
+    }
+    func rename(at indexPatx: IndexPath) {
+        
     }
     
 }

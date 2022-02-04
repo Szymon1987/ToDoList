@@ -8,50 +8,24 @@
 import UIKit
 
 protocol ItemCellProtocol: AnyObject {
-    func updateItemTitle(itemTitle: String, indexPath: IndexPath)
-        
+    func updateItemTitle(sender: ItemCell, title: String)
+    func toggleDone(sender: ItemCell)
 }
 
-class ItemCell: UITableViewCell, UITextFieldDelegate {
+class ItemCell: UITableViewCell {
 
     weak var cellDelegate: ItemCellProtocol?
-    var indexPath: IndexPath?
-
-    var isColorViewFilled = false
     var itemTitle: String?
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
-        checkmarkView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
         self.selectionStyle = .none
-//        drawCircle()
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let text = textField.text
-        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            if unwrappedTrimmedText == "" {
-                return false
-            } else {
-                itemTitle = unwrappedTrimmedText
-                return itemTextField.endEditing(true)
-            }
-        }
-
-        return true
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-
-        if let itemTitle = itemTitle, let indexPath = indexPath {
-            cellDelegate?.updateItemTitle(itemTitle: itemTitle, indexPath: indexPath)
-        }
-
     }
     
     lazy var itemTextField: UITextField = {
@@ -65,39 +39,47 @@ class ItemCell: UITableViewCell, UITextFieldDelegate {
     lazy var checkmarkButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .clear
+//        button.backgroundColor = .clear
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1.5
         button.layer.borderColor = ColorManager.roundedButton.cgColor
-        button.addTarget(self, action: #selector(cicrcleButtonTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(checkmarkButtonTapped), for: .touchUpInside)
+        let selectedImage = UIImage(named: "checkmark")
+        let clearImage = UIImage(named: "clear")
+        button.setImage(selectedImage, for: .selected)
+        button.setImage(clearImage, for: .normal)
         return button
     }()
     
-    let checkmarkView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "checkmark"))
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 16
-        return imageView
-    }()
+//    let checkmarkView: UIImageView = {
+//        let imageView = UIImageView(image: UIImage(named: "checkmark"))
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        imageView.layer.cornerRadius = 16
+//        return imageView
+//    }()
     
-    func animate() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: []) {
-            if self.isColorViewFilled == false {
-                self.checkmarkView.transform = .identity
-            } else {
-                self.checkmarkView.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
-            }
-        }
-    }
+//    func animate() {
+//        UIView.animate(withDuration: 2, delay: 0, options: []) {
+//            self.checkmarkView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+//            if self.checkmarkButton.isSelected {
+//                self.checkmarkView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+//            } else {
+//                self.checkmarkView.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+//            }
+//        }
+//    }
+
     
-    @objc func cicrcleButtonTapped() {
-        checkmarkView.backgroundColor = ColorManager.roundedButton
-        animate()
-        isColorViewFilled.toggle()
+    @objc func checkmarkButtonTapped() {
+//        animate()
+        
+        
+        self.cellDelegate?.toggleDone(sender: self)
+   
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred(intensity: 1.0)
     }
-    
+
     func setupViews() {
         
         contentView.addSubview(itemTextField)
@@ -113,16 +95,42 @@ class ItemCell: UITableViewCell, UITextFieldDelegate {
         checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
-        addSubview(checkmarkView)
-        checkmarkView.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -30).isActive = true
-        checkmarkView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        checkmarkView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        checkmarkView.heightAnchor.constraint(equalToConstant: 32).isActive = true
+//        addSubview(checkmarkView)
+//        checkmarkView.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -30).isActive = true
+//        checkmarkView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+//        checkmarkView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+//        checkmarkView.heightAnchor.constraint(equalToConstant: 32).isActive = true
 
     }
     
-    
 }
     
+
+extension ItemCell: UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let itemTitle = itemTitle {
+            cellDelegate?.updateItemTitle(sender: self, title: itemTitle)
+            print("called")
+        
+        }
+          
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+
+        let text = textField.text
+        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+            if unwrappedTrimmedText == "" {
+                return false
+            } else {
+                itemTitle = unwrappedTrimmedText
+                return itemTextField.endEditing(true)
+            }
+        }
+        return true
+
+    }
+
+}
     
 

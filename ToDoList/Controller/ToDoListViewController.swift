@@ -8,29 +8,46 @@ import CoreData
 import UIKit
 
 class ToDoListViewController: MainViewController, ItemCellProtocol {
-    
-    let categoryVC = CategoryViewController()
+
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-    
 
-    func updateItemTitle(itemTitle: String, indexPath: IndexPath) {
-        items[indexPath.row].title = itemTitle
-        do {
-            try context.save()
-        } catch {
-            print("Error saving context \(error)")
+    
+    func updateItemTitle(sender: ItemCell, title: String) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            items[selectedIndexPath.row].title = title
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            saveData()
         }
-   
+
     }
+    
+    
+    func toggleDone(sender: ItemCell) {
+        if let seleCtedIndexPath = tableView.indexPath(for: sender) {
+            items[seleCtedIndexPath.row].done.toggle()
+            tableView.reloadRows(at: [seleCtedIndexPath], with: .automatic)
+            saveData()
+        }
+    }
+    
+    //    func updateDone(isDone: Bool, indexPath: IndexPath) {
+    //        items[indexPath.row].done.toggle()
+    //        tableView.reloadData()
+    //        do {
+    //            try context.save()
+    //        } catch {
+    //            print("Error saving context \(error)")
+    //        }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
+        
          
     }
     
@@ -41,7 +58,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }()
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected")
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,8 +73,9 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
             cell.cellDelegate = self
-            cell.indexPath = indexPath
+//            cell.isColorViewFilled = items[indexPath.row].done
             cell.itemTextField.text = items[indexPath.row].title
+            cell.checkmarkButton.isSelected = items[indexPath.row].done
             return cell
     }
 
@@ -82,7 +100,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
-        categoryVC.quantity += 1
+        tableView.reloadData()
         saveData()
     }
     
@@ -111,12 +129,19 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
-    override func updateModel(at indexPath: IndexPath) {
+    override func remove(at indexPath: IndexPath) {
         
         self.context.delete(self.items[indexPath.row])
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
+        tableView.reloadData()
         self.saveData()
+    }
+    
+    override func rename(at indexPatx: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPatx) as? ItemCell {
+            cell.itemTextField.text = "luna"
+        }
     }
 
 }

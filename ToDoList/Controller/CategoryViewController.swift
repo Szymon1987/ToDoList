@@ -14,7 +14,6 @@ class CategoryViewController: MainViewController {
         tableView.reloadData()
     }
 
-    var quantity: Int = 0
     var categories = [Category]()
     
     override func loadView() {
@@ -126,7 +125,7 @@ class CategoryViewController: MainViewController {
         // check if I can change the buttonTitle here
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
         
-    
+    // rethink the code below, maybe visibleCell isnt good solution
         tableView.visibleCells.forEach { cell in
             if let cell = cell as? CategoryCell {
                 
@@ -149,7 +148,7 @@ class CategoryViewController: MainViewController {
         
         }
 
-        view.layoutIfNeeded()
+//        view.layoutIfNeeded()
     }
     
     
@@ -159,6 +158,7 @@ class CategoryViewController: MainViewController {
         newCategory.name = category
         categories.append(newCategory)
         saveData()
+        tableView.reloadData()
     }
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
@@ -170,10 +170,16 @@ class CategoryViewController: MainViewController {
         tableView.reloadData()
     }
     
-    override func updateModel(at indexPath: IndexPath) {
+    override func remove(at indexPath: IndexPath) {
         self.context.delete(self.categories[indexPath.section])
         self.categories.remove(at: indexPath.section)
+        tableView.reloadData()
         self.saveData()
+    }
+    override func rename(at indexPatx: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPatx) as? CategoryCell {
+            
+        }
     }
     
 }
