@@ -10,11 +10,14 @@ import UIKit
 
 class CategoryCell: UITableViewCell {
     
-    var oldLeftAnchor: NSLayoutConstraint?
-    var newLeftAnchor: NSLayoutConstraint?
-    var oldTrailingAnchor: NSLayoutConstraint?
-    var newTrailingAnchor: NSLayoutConstraint?
-    let move = 50
+//    var oldLeftAnchor: NSLayoutConstraint?
+//    var newLeftAnchor: NSLayoutConstraint?
+//    var oldTrailingAnchor: NSLayoutConstraint?
+//    var newTrailingAnchor: NSLayoutConstraint?
+//    let move = 50
+    
+    var left: NSLayoutConstraint?
+    var right: NSLayoutConstraint?
     
     
     lazy var middle = frame.size.width / 2
@@ -78,31 +81,16 @@ class CategoryCell: UITableViewCell {
         cellView.anchorSize(to: self)
         
         cellView.addSubview(categoryLabel)
-//         old
-//        categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
+        
+        left = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
+        left?.isActive = true
         categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         categoryLabel.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
-        
-//        new
-        oldLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
-        oldLeftAnchor?.isActive = true
 
-        newLeftAnchor = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 60)
-        newLeftAnchor?.isActive = false
-
-      
-        
-        
         cellView.addSubview(quantityLabel)
-//        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10).isActive = true
-        quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
 
-        //new
-        oldTrailingAnchor = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
-        oldTrailingAnchor?.isActive = true
-        newTrailingAnchor = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -60)
-        newTrailingAnchor?.isActive = false
-        
-        
+        quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        right = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
+        right?.isActive = true
     }
 }

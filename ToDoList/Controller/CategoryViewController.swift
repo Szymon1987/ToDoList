@@ -128,26 +128,15 @@ class CategoryViewController: MainViewController {
     // rethink the code below, maybe visibleCell isnt good solution
         tableView.visibleCells.forEach { cell in
             if let cell = cell as? CategoryCell {
-                
                 if tableView.isEditing {
-                    cell.oldLeftAnchor?.isActive = false
-                    cell.oldTrailingAnchor?.isActive = false
-                    cell.newLeftAnchor?.isActive = true
-                    cell.newTrailingAnchor?.isActive = true
-                    roundedButton.isUserInteractionEnabled = false
-                    
+                    cell.left?.constant = 60
+                    cell.right?.constant = -60
                 } else {
-                    cell.oldLeftAnchor?.isActive = true
-                    cell.oldTrailingAnchor?.isActive = true
-                    cell.newLeftAnchor?.isActive = false
-                    cell.newTrailingAnchor?.isActive = false
-                    roundedButton.isUserInteractionEnabled = true
+                    cell.left?.constant = 10
+                    cell.right?.constant = -10
                 }
-                
             }
-        
         }
-
 //        view.layoutIfNeeded()
     }
     

@@ -34,15 +34,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             saveData()
         }
     }
-    
-    //    func updateDone(isDone: Bool, indexPath: IndexPath) {
-    //        items[indexPath.row].done.toggle()
-    //        tableView.reloadData()
-    //        do {
-    //            try context.save()
-    //        } catch {
-    //            print("Error saving context \(error)")
-    //        }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,8 +131,10 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }
     
     override func rename(at indexPatx: IndexPath) {
+        
+        tableView.isEditing = false
         if let cell = tableView.cellForRow(at: indexPatx) as? ItemCell {
-            cell.itemTextField.text = "luna"
+            cell.itemTextField.becomeFirstResponder()
         }
     }
 

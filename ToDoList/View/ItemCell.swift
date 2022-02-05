@@ -21,7 +21,7 @@ class ItemCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
         self.selectionStyle = .none
-        
+    
     }
     
     required init?(coder: NSCoder) {
