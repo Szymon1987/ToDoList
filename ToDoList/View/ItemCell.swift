@@ -29,11 +29,11 @@ class ItemCell: UITableViewCell {
     }
     
     lazy var itemTextField: UITextField = {
-        let textfield = UITextField()
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.font = UIFont.preferredFont(forTextStyle: .headline)
-        textfield.delegate = self
-        return textfield
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.font = UIFont.preferredFont(forTextStyle: .headline)
+        textField.delegate = self
+        return textField
     }()
     
     lazy var checkmarkButton: UIButton = {
@@ -130,7 +130,7 @@ extension ItemCell: UITextFieldDelegate {
         return true
 
     }
-
+    
 }
     
 

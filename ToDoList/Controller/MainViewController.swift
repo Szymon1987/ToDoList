@@ -83,6 +83,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func setupViews() {
     }
     func rename(at indexPatx: IndexPath) {
+        tableView.isEditing = false
     }
     
 }

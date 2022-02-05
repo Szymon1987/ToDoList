@@ -8,7 +8,7 @@
 import UIKit
 
 
-class CategoryCell: UITableViewCell {
+class CategoryCell: UITableViewCell, UITextFieldDelegate {
     
 //    var oldLeftAnchor: NSLayoutConstraint?
 //    var newLeftAnchor: NSLayoutConstraint?
@@ -49,12 +49,13 @@ class CategoryCell: UITableViewCell {
         return view
     }()
     
-        let categoryLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.isUserInteractionEnabled = true
-            label.backgroundColor = .red
-        return label
+        lazy var categoryTextField: UITextField = {
+        let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.isUserInteractionEnabled = true
+        textField.backgroundColor = .red
+        textField.delegate = self
+        return textField
     }()
     
     let quantityLabel: UILabel = {
@@ -80,12 +81,12 @@ class CategoryCell: UITableViewCell {
         
         cellView.anchorSize(to: self)
         
-        cellView.addSubview(categoryLabel)
+        cellView.addSubview(categoryTextField)
         
-        left = categoryLabel.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
+        left = categoryTextField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
         left?.isActive = true
-        categoryLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        categoryLabel.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
+        categoryTextField.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        categoryTextField.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
 
         cellView.addSubview(quantityLabel)
 

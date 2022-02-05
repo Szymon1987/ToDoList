@@ -131,11 +131,20 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }
     
     override func rename(at indexPatx: IndexPath) {
-        
-        tableView.isEditing = false
+        super.rename(at: indexPatx)
         if let cell = tableView.cellForRow(at: indexPatx) as? ItemCell {
-            cell.itemTextField.becomeFirstResponder()
+        
+    // this is workaround, find better solution
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                cell.itemTextField.becomeFirstResponder()
+            }
+            
+           
+            
+            
         }
+        
+        
     }
-
+    
 }

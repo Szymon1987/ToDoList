@@ -73,7 +73,7 @@ class CategoryViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
-        cell.categoryLabel.text = categories[indexPath.section].name
+        cell.categoryTextField.text = categories[indexPath.section].name
         cell.quantityLabel.text = "\(categories[indexPath.section].quantity)"
         return cell
     }
@@ -131,9 +131,12 @@ class CategoryViewController: MainViewController {
                 if tableView.isEditing {
                     cell.left?.constant = 60
                     cell.right?.constant = -60
+                    roundedButton.isUserInteractionEnabled = false
+                    
                 } else {
                     cell.left?.constant = 10
                     cell.right?.constant = -10
+                    roundedButton.isUserInteractionEnabled = true
                 }
             }
         }
@@ -166,8 +169,11 @@ class CategoryViewController: MainViewController {
         self.saveData()
     }
     override func rename(at indexPatx: IndexPath) {
+        super.rename(at: indexPatx)
         if let cell = tableView.cellForRow(at: indexPatx) as? CategoryCell {
-            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                cell.categoryTextField.becomeFirstResponder()
+            }
         }
     }
     
