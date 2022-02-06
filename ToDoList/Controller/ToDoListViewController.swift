@@ -7,40 +7,35 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: MainViewController, ItemCellProtocol {
-
+class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProtocol {
+    
+    func updateTitle(sender: BaseCell, title: String) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            items[selectedIndexPath.row].title = title
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            saveData()
+            
+        }
+    }
+    
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-
     
-    func updateItemTitle(sender: ItemCell, title: String) {
+    func toggleDone(sender: ItemCell) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
-            items[selectedIndexPath.row].title = title
+            items[selectedIndexPath.row].done.toggle()
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             saveData()
         }
-
-    }
-    
-    
-    func toggleDone(sender: ItemCell) {
-        if let seleCtedIndexPath = tableView.indexPath(for: sender) {
-            items[seleCtedIndexPath.row].done.toggle()
-            tableView.reloadRows(at: [seleCtedIndexPath], with: .automatic)
-            saveData()
-        }
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        
-         
     }
     
     private let roundedButton: RoundedButton = {
@@ -64,9 +59,9 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
-            cell.cellDelegate = self
-//            cell.isColorViewFilled = items[indexPath.row].done
-            cell.itemTextField.text = items[indexPath.row].title
+            cell.baseCellDelegate = self
+            cell.itemCellDelegate = self
+            cell.textField.text = items[indexPath.row].title
             cell.checkmarkButton.isSelected = items[indexPath.row].done
             return cell
     }
@@ -129,22 +124,5 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         tableView.reloadData()
         self.saveData()
     }
-    
-    override func rename(at indexPatx: IndexPath) {
-        super.rename(at: indexPatx)
-        if let cell = tableView.cellForRow(at: indexPatx) as? ItemCell {
-        
-    // this is workaround, find better solution
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                cell.itemTextField.becomeFirstResponder()
-            }
-            
-           
-            
-            
-        }
-        
-        
-    }
-    
+
 }

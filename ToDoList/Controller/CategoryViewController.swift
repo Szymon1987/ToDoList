@@ -8,7 +8,19 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: MainViewController {
+class CategoryViewController: MainViewController, BaseCellProtocol {
+  
+    func updateTitle(sender: BaseCell, title: String) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            categories[selectedIndexPath.section].name = title
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            saveData()
+        }
+    }
+    
+    func toggleDone(sender: BaseCell) {
+        
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -73,7 +85,8 @@ class CategoryViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
-        cell.categoryTextField.text = categories[indexPath.section].name
+        cell.baseCellDelegate = self
+        cell.textField.text = categories[indexPath.section].name
         cell.quantityLabel.text = "\(categories[indexPath.section].quantity)"
         return cell
     }
@@ -118,8 +131,7 @@ class CategoryViewController: MainViewController {
         }))
     }
     
-    @objc func editButtonPressed() {
-        if categories.count == 0 { return }
+    func toggleEditingMode() {
         tableView.isEditing.toggle()
         
         // check if I can change the buttonTitle here
@@ -140,6 +152,11 @@ class CategoryViewController: MainViewController {
                 }
             }
         }
+    }
+    
+    @objc func editButtonPressed() {
+        if categories.count == 0 { return }
+        toggleEditingMode()
 //        view.layoutIfNeeded()
     }
     
@@ -167,14 +184,6 @@ class CategoryViewController: MainViewController {
         self.categories.remove(at: indexPath.section)
         tableView.reloadData()
         self.saveData()
-    }
-    override func rename(at indexPatx: IndexPath) {
-        super.rename(at: indexPatx)
-        if let cell = tableView.cellForRow(at: indexPatx) as? CategoryCell {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                cell.categoryTextField.becomeFirstResponder()
-            }
-        }
     }
     
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+   
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func loadView() {
@@ -48,7 +48,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
+            fatalError("Unable to dequeue the cell as BaseCell")
+        }
+
         return cell
     }
     
@@ -82,8 +85,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     func setupViews() {
     }
+
     func rename(at indexPatx: IndexPath) {
         tableView.isEditing = false
+        if let cell = tableView.cellForRow(at: indexPatx) as? BaseCell {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                cell.textField.becomeFirstResponder()
+            }
+        }
     }
     
 }

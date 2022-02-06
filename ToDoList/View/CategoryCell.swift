@@ -7,30 +7,16 @@
 
 import UIKit
 
+//protocol CategoryCellProtocol: AnyObject {
+//    func updateCategoryTitle(sender: CategoryCell, title: String)
+//}
 
-class CategoryCell: UITableViewCell, UITextFieldDelegate {
-    
-//    var oldLeftAnchor: NSLayoutConstraint?
-//    var newLeftAnchor: NSLayoutConstraint?
-//    var oldTrailingAnchor: NSLayoutConstraint?
-//    var newTrailingAnchor: NSLayoutConstraint?
-//    let move = 50
+class CategoryCell: BaseCell {
     
     var left: NSLayoutConstraint?
     var right: NSLayoutConstraint?
-    
-    
-    lazy var middle = frame.size.width / 2
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
-        
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
+    var categoryTitle: String?
+
   
 //    let cellBackgroundView: UIView = {
 //        let view = UIView()
@@ -49,14 +35,13 @@ class CategoryCell: UITableViewCell, UITextFieldDelegate {
         return view
     }()
     
-        lazy var categoryTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.isUserInteractionEnabled = true
-        textField.backgroundColor = .red
-        textField.delegate = self
-        return textField
-    }()
+//    lazy var textField: UITextField = {
+//        let textField = UITextField()
+//        textField.translatesAutoresizingMaskIntoConstraints = false
+//        textField.backgroundColor = .red
+//        textField.delegate = self
+//        return textField
+//    }()
     
     let quantityLabel: UILabel = {
         let label = UILabel()
@@ -72,7 +57,7 @@ class CategoryCell: UITableViewCell, UITextFieldDelegate {
             
         }
     }
-    private func setupViews() {
+    override func setupViews() {
         
 //        addSubview(cellBackgroundView)
 //        cellBackgroundView.anchorSize(to: self)
@@ -81,12 +66,12 @@ class CategoryCell: UITableViewCell, UITextFieldDelegate {
         
         cellView.anchorSize(to: self)
         
-        cellView.addSubview(categoryTextField)
+        cellView.addSubview(textField)
         
-        left = categoryTextField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
+        left = textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
         left?.isActive = true
-        categoryTextField.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        categoryTextField.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
+        textField.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
+        textField.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
 
         cellView.addSubview(quantityLabel)
 
@@ -95,3 +80,32 @@ class CategoryCell: UITableViewCell, UITextFieldDelegate {
         right?.isActive = true
     }
 }
+
+
+//extension CategoryCell: UITextFieldDelegate {
+//    
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+////        if let categoryTitle = categoryTitle {
+////            cellDelegate?.updateCategoryTitle(sender: self, title: categoryTitle)
+////            print("called")
+////
+////        }
+//          
+//    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//
+//        let text = textField.text
+//        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+//            if unwrappedTrimmedText == "" {
+//                return false
+//            } else {
+//                categoryTitle = unwrappedTrimmedText
+//                return textField.endEditing(true)
+//            }
+//        }
+//        return true
+//
+//    }
+//    
+//}
+  

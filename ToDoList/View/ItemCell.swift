@@ -8,33 +8,12 @@
 import UIKit
 
 protocol ItemCellProtocol: AnyObject {
-    func updateItemTitle(sender: ItemCell, title: String)
     func toggleDone(sender: ItemCell)
 }
 
-class ItemCell: UITableViewCell {
-
-    weak var cellDelegate: ItemCellProtocol?
-    var itemTitle: String?
+class ItemCell: BaseCell {
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
-        self.selectionStyle = .none
-    
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    lazy var itemTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.font = UIFont.preferredFont(forTextStyle: .headline)
-        textField.delegate = self
-        return textField
-    }()
+    weak var itemCellDelegate: ItemCellProtocol?
     
     lazy var checkmarkButton: UIButton = {
         let button = UIButton()
@@ -74,23 +53,24 @@ class ItemCell: UITableViewCell {
 //        animate()
         
         
-        self.cellDelegate?.toggleDone(sender: self)
+//        self.cellDelegate?.toggleDone(sender: self)
+        itemCellDelegate?.toggleDone(sender: self)
    
         let generator = UIImpactFeedbackGenerator(style: .light)
         generator.impactOccurred(intensity: 1.0)
     }
 
-    func setupViews() {
+    override func setupViews() {
+        self.selectionStyle = .none
+        contentView.addSubview(textField)
         
-        contentView.addSubview(itemTextField)
-        
-        itemTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
-        itemTextField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
-        itemTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        itemTextField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
+        textField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
+        textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        textField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
    
         addSubview(checkmarkButton)
-        checkmarkButton.trailingAnchor.constraint(equalTo: itemTextField.leadingAnchor, constant: -30).isActive = true
+        checkmarkButton.trailingAnchor.constraint(equalTo: textField.leadingAnchor, constant: -30).isActive = true
         checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
@@ -106,31 +86,5 @@ class ItemCell: UITableViewCell {
 }
     
 
-extension ItemCell: UITextFieldDelegate {
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let itemTitle = itemTitle {
-            cellDelegate?.updateItemTitle(sender: self, title: itemTitle)
-            print("called")
-        
-        }
-          
-    }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
-        let text = textField.text
-        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            if unwrappedTrimmedText == "" {
-                return false
-            } else {
-                itemTitle = unwrappedTrimmedText
-                return itemTextField.endEditing(true)
-            }
-        }
-        return true
-
-    }
-    
-}
     
 
