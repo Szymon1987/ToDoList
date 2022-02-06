@@ -9,18 +9,36 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController, BaseCellProtocol {
+    
+    // FIX THE FUNCTION BELOW, IT IS A MESS
+    // REMOVE WHOLE EDIT MODE FUNCTIONALITY
+    // FIX THE BUG WHILE EDITING THE INPUT 
   
     func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+
+            tableView.visibleCells.forEach { cell in
+            if let cell = cell as? CategoryCell {
+                if tableView.isEditing == false {
+                    cell.left?.constant = 10
+                    cell.right?.constant = -10
+                    navigationItem.rightBarButtonItem?.title = "Edit"
+                    
+                }
+            }
+            
+                
+             
+            }
+            
+            roundedButton.isUserInteractionEnabled = true
+            tableView.reloadData()
             saveData()
         }
     }
-    
-    func toggleDone(sender: BaseCell) {
-        
-    }
+ 
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -156,6 +174,7 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
     
     @objc func editButtonPressed() {
         if categories.count == 0 { return }
+        
         toggleEditingMode()
 //        view.layoutIfNeeded()
     }

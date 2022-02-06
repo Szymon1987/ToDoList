@@ -15,7 +15,6 @@ class CategoryCell: BaseCell {
     
     var left: NSLayoutConstraint?
     var right: NSLayoutConstraint?
-    var categoryTitle: String?
 
   
 //    let cellBackgroundView: UIView = {
@@ -34,15 +33,7 @@ class CategoryCell: BaseCell {
         view.layer.borderColor = ColorManager.cellBorder
         return view
     }()
-    
-//    lazy var textField: UITextField = {
-//        let textField = UITextField()
-//        textField.translatesAutoresizingMaskIntoConstraints = false
-//        textField.backgroundColor = .red
-//        textField.delegate = self
-//        return textField
-//    }()
-    
+
     let quantityLabel: UILabel = {
         let label = UILabel()
         label.text = "0"
@@ -57,6 +48,12 @@ class CategoryCell: BaseCell {
             
         }
     }
+    
+//     func textFieldDidBeginEditing(_ textField: UITextField) {
+//        left = textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: -10)
+//        right = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
+//    }
+    
     override func setupViews() {
         
 //        addSubview(cellBackgroundView)
@@ -80,32 +77,3 @@ class CategoryCell: BaseCell {
         right?.isActive = true
     }
 }
-
-
-//extension CategoryCell: UITextFieldDelegate {
-//    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-////        if let categoryTitle = categoryTitle {
-////            cellDelegate?.updateCategoryTitle(sender: self, title: categoryTitle)
-////            print("called")
-////
-////        }
-//          
-//    }
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//
-//        let text = textField.text
-//        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
-//            if unwrappedTrimmedText == "" {
-//                return false
-//            } else {
-//                categoryTitle = unwrappedTrimmedText
-//                return textField.endEditing(true)
-//            }
-//        }
-//        return true
-//
-//    }
-//    
-//}
-  
