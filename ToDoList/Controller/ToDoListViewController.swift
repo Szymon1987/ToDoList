@@ -14,7 +14,9 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             saveData()
-            
+            if navigationItem.rightBarButtonItem != nil {
+                navigationItem.setRightBarButton(nil, animated: true)
+            }
         }
     }
     
@@ -43,11 +45,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
         button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         return button
     }()
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
-    
+ 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -56,7 +54,6 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
         return 50
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
             cell.baseCellDelegate = self
@@ -67,7 +64,6 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     }
 
     @objc func addTapped() {
-
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -76,7 +72,6 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             guard let item = alert?.textFields?[0].text else { return }
             self?.addItem(item)
         })
-
     }
 
     func addItem(_ item: String) {
@@ -91,7 +86,6 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
         saveData()
     }
     
-
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
 
@@ -117,12 +111,10 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     }
     
     override func remove(at indexPath: IndexPath) {
-        
         self.context.delete(self.items[indexPath.row])
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
         self.saveData()
     }
-
 }

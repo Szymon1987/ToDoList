@@ -34,6 +34,8 @@ class BaseCell: UITableViewCell {
     }
 
     func setupViews() {
+        textField.autocorrectionType = .no
+        textField.isUserInteractionEnabled = false
     }
 }
 
@@ -43,7 +45,6 @@ extension BaseCell: UITextFieldDelegate {
         if let title = title {
             baseCellDelegate?.updateTitle(sender: self, title: title)
         }
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

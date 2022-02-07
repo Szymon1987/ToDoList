@@ -7,22 +7,7 @@
 
 import UIKit
 
-//protocol CategoryCellProtocol: AnyObject {
-//    func updateCategoryTitle(sender: CategoryCell, title: String)
-//}
-
 class CategoryCell: BaseCell {
-    
-    var left: NSLayoutConstraint?
-    var right: NSLayoutConstraint?
-
-  
-//    let cellBackgroundView: UIView = {
-//        let view = UIView()
-//        view.backgroundColor = .white
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        return view
-//    }()
     
     let cellView: UIView = {
         let view = UIView()
@@ -38,42 +23,25 @@ class CategoryCell: BaseCell {
         let label = UILabel()
         label.text = "0"
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .green
         return label
     }()
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        if editing == true {
-            
-        }
-    }
-    
-//     func textFieldDidBeginEditing(_ textField: UITextField) {
-//        left = textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: -10)
-//        right = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
-//    }
-    
     override func setupViews() {
-        
-//        addSubview(cellBackgroundView)
-//        cellBackgroundView.anchorSize(to: self)
+        super.setupViews()
 
         addSubview(cellView)
         
         cellView.anchorSize(to: self)
         
         cellView.addSubview(textField)
-        
-        left = textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10)
-        left?.isActive = true
+
+        textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
         textField.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
 
         cellView.addSubview(quantityLabel)
 
         quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
-        right = quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -10)
-        right?.isActive = true
+        quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -20).isActive = true
     }
 }

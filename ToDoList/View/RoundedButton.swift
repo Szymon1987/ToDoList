@@ -22,11 +22,9 @@ class RoundedButton: UIButton {
         layer.shadowRadius = 8
         layer.shadowOpacity = 0.3
         layer.shadowOffset = CGSize(width: 5, height: 5)
-//        button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
         layer.borderColor = UIColor.lightGray.cgColor
         layer.borderWidth = 0.5
         translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
     required init?(coder: NSCoder) {

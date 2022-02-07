@@ -9,37 +9,18 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController, BaseCellProtocol {
-    
-    // FIX THE FUNCTION BELOW, IT IS A MESS
-    // REMOVE WHOLE EDIT MODE FUNCTIONALITY
-    // FIX THE BUG WHILE EDITING THE INPUT 
-  
+
     func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
-//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-
-            tableView.visibleCells.forEach { cell in
-            if let cell = cell as? CategoryCell {
-                if tableView.isEditing == false {
-                    cell.left?.constant = 10
-                    cell.right?.constant = -10
-                    navigationItem.rightBarButtonItem?.title = "Edit"
-                    
-                }
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            if navigationItem.rightBarButtonItem != nil {
+                navigationItem.setRightBarButton(nil, animated: true)
             }
-            
-                
-             
-            }
-            
-            roundedButton.isUserInteractionEnabled = true
-            tableView.reloadData()
             saveData()
         }
     }
  
-    
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }
@@ -58,7 +39,6 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
         loadCategory()
         navigationItem.title = "CATEGORIES"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editButtonPressed))
     }
 
     private let roundedButton: RoundedButton = {
@@ -116,25 +96,9 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         vc.selectedCategory = category
         navigationController?.pushViewController(vc, animated: true)
     }
-
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
-    }
-    
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
-        categories.swapAt(sourceIndexPath.section, destinationIndexPath.section)
-      
-    }
-
-    
-    private func setUpNavigationController() {
-        navigationItem.title = "CATEGORIES"
     }
     
     @objc func addTapped() {
@@ -148,37 +112,6 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         self?.addCategory(newCategory)
         }))
     }
-    
-    func toggleEditingMode() {
-        tableView.isEditing.toggle()
-        
-        // check if I can change the buttonTitle here
-        navigationItem.rightBarButtonItem?.title = tableView.isEditing ? "Done" : "Edit"
-        
-    // rethink the code below, maybe visibleCell isnt good solution
-        tableView.visibleCells.forEach { cell in
-            if let cell = cell as? CategoryCell {
-                if tableView.isEditing {
-                    cell.left?.constant = 60
-                    cell.right?.constant = -60
-                    roundedButton.isUserInteractionEnabled = false
-                    
-                } else {
-                    cell.left?.constant = 10
-                    cell.right?.constant = -10
-                    roundedButton.isUserInteractionEnabled = true
-                }
-            }
-        }
-    }
-    
-    @objc func editButtonPressed() {
-        if categories.count == 0 { return }
-        
-        toggleEditingMode()
-//        view.layoutIfNeeded()
-    }
-    
     
     func addCategory(_ category: String) {
         if category == "" { return }
