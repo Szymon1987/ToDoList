@@ -30,6 +30,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return tableView
     }()
 
+    let roundedButton: RoundedButton = {
+        let button = RoundedButton()
+        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func addTapped() {
+        
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -92,12 +101,24 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func remove(at indexPath: IndexPath) {
     }
+    
     func setupViews() {
+        
+        view.addSubview(tableView)
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+        
+        view.addSubview(roundedButton)
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        
     }
 
     func rename(at indexPath: IndexPath) {
         tableView.isEditing = false
         if let cell = tableView.cellForRow(at: indexPath) as? BaseCell {
+            // solution below is questionable, find better one
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()

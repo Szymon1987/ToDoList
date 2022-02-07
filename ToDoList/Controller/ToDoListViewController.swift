@@ -46,13 +46,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
     }
-    
-    private let roundedButton: RoundedButton = {
-        let button = RoundedButton()
-        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        return button
-    }()
- 
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -70,7 +64,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             return cell
     }
 
-    @objc func addTapped() {
+    @objc override func addTapped() {
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -107,6 +101,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     }
     
     override func setupViews() {
+
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
         

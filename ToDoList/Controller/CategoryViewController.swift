@@ -40,24 +40,6 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         loadCategory()
         navigationItem.title = "CATEGORIES"
     }
-
-    private let roundedButton: RoundedButton = {
-        let button = RoundedButton()
-        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        return button
-    }()
-
-    override func setupViews() {
-        view.addSubview(tableView)
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
-        
-        view.addSubview(roundedButton)
-        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
-        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
-        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        
-    }
     
     // MARK: - Table view data source
     
@@ -109,7 +91,7 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         return 60
     }
     
-    @objc func addTapped() {
+    @objc override func addTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         ac.addTextField()
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))

@@ -21,7 +21,6 @@ class CategoryCell: BaseCell {
 
     let quantityLabel: UILabel = {
         let label = UILabel()
-        label.textColor = ColorManager.roundedButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
