@@ -9,13 +9,13 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController, BaseCellProtocol {
-
+// duplicate code, change the protocol probably
     func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             if navigationItem.rightBarButtonItem != nil {
-                navigationItem.setRightBarButton(nil, animated: true)
+                navigationItem.setRightBarButton(nil, animated: false)
             }
             saveData()
         }
@@ -88,6 +88,12 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
         let quantityDone = categories[indexPath.section].quantityDone
         cell.textField.text = categories[indexPath.section].name
         cell.quantityLabel.text = "\(quantityDone) / \(quantity)"
+        let progress = Float(quantityDone) / Float(quantity)
+        if quantityDone == 0 && quantity == 0 {
+            cell.progressView.progress = 0
+        } else {
+            cell.progressView.progress = progress
+        }
         return cell
     }
         

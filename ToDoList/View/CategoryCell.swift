@@ -21,9 +21,19 @@ class CategoryCell: BaseCell {
 
     let quantityLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
+        label.textColor = ColorManager.roundedButton
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    let progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressViewStyle = .bar
+        progressView.trackTintColor = ColorManager.background
+        progressView.progressTintColor = ColorManager.roundedButton
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.progress = 0
+        return progressView
     }()
     
     override func setupViews() {
@@ -34,14 +44,17 @@ class CategoryCell: BaseCell {
         cellView.anchorSize(to: self)
         
         cellView.addSubview(textField)
-
         textField.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 10).isActive = true
         textField.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: cellView.centerXAnchor, constant: 30).isActive = true
 
         cellView.addSubview(quantityLabel)
-
         quantityLabel.centerYAnchor.constraint(equalTo: cellView.centerYAnchor).isActive = true
         quantityLabel.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -20).isActive = true
+        
+        cellView.addSubview(progressView)
+        progressView.leadingAnchor.constraint(equalTo: textField.leadingAnchor).isActive = true
+        progressView.trailingAnchor.constraint(equalTo: quantityLabel.trailingAnchor).isActive = true
+        progressView.topAnchor.constraint(equalTo: quantityLabel.bottomAnchor, constant: 10).isActive = true
     }
 }

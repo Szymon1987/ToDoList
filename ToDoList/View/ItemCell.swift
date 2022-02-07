@@ -14,13 +14,13 @@ protocol ItemCellProtocol: AnyObject {
 class ItemCell: BaseCell {
     
     weak var itemCellDelegate: ItemCellProtocol?
+    
     lazy var checkmarkButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.backgroundColor = .clear
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1.5
-        button.layer.borderColor = ColorManager.roundedButton.cgColor
+        button.layer.borderColor = ColorManager.checkmarkButton.cgColor
         button.addTarget(self, action: #selector(checkmarkButtonTapped), for: .touchUpInside)
         let selectedImage = UIImage(named: "checkmark")
         let clearImage = UIImage(named: "clear")

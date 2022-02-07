@@ -58,6 +58,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     @objc func doneButtonPressed() {
+        // not sure if this code is correct (tableview.visibleCells.forEach???, might not be efficient)
         tableView.visibleCells.forEach { cell in
             if let cell = cell as? BaseCell, let title = cell.textField.text {
                 cell.textField.isUserInteractionEnabled = false

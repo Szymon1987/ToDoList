@@ -22,7 +22,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             saveData()
             if navigationItem.rightBarButtonItem != nil {
-                navigationItem.setRightBarButton(nil, animated: true)
+                navigationItem.setRightBarButton(nil, animated: false)
             }
         }
     }
