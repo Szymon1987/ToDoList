@@ -30,14 +30,13 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     func toggleDone(sender: ItemCell) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].done.toggle()
-            
             if items[selectedIndexPath.row].done == true {
                 selectedCategory?.quantityDone += 1
             } else {
                 selectedCategory?.quantityDone -= 1
             }
-            
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            tableView.reloadData()
             saveData()
         }
     }
@@ -61,6 +60,11 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             cell.itemCellDelegate = self
             cell.textField.text = items[indexPath.row].title
             cell.checkmarkButton.isSelected = items[indexPath.row].done
+            if items[indexPath.row].done {
+                cell.textField.textColor = .black.withAlphaComponent(0.5)
+            } else {
+                cell.textField.textColor = .black.withAlphaComponent(1)
+        }
             return cell
     }
 
