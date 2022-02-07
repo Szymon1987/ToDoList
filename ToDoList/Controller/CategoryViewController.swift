@@ -84,8 +84,10 @@ class CategoryViewController: MainViewController, BaseCellProtocol {
             fatalError("Unable to dequeue the CustomCell")
         }
         cell.baseCellDelegate = self
+        let quantity = categories[indexPath.section].quantity
+        let quantityDone = categories[indexPath.section].quantityDone
         cell.textField.text = categories[indexPath.section].name
-        cell.quantityLabel.text = "\(categories[indexPath.section].quantity)"
+        cell.quantityLabel.text = "\(quantityDone) / \(quantity)"
         return cell
     }
         

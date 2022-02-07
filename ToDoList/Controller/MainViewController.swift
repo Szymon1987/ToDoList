@@ -11,7 +11,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    let navigationDone = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
+    let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
     
     override func loadView() {
         super.loadView()
@@ -101,7 +101,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
                 if self.navigationItem.rightBarButtonItem == nil {
-                    self.navigationItem.setRightBarButton(self.navigationDone, animated: true)
+                    self.navigationItem.setRightBarButton(self.navDoneButton, animated: true)
                 }
                 
             }

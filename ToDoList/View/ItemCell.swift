@@ -31,7 +31,6 @@ class ItemCell: BaseCell {
 
     
     @objc func checkmarkButtonTapped() {
-    
         if textField.isEditing == false {
             itemCellDelegate?.toggleDone(sender: self)
             let generator = UIImpactFeedbackGenerator(style: .light)

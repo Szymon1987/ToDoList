@@ -9,6 +9,13 @@ import UIKit
 
 class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProtocol {
     
+    var items = [Item]()
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
+    
     func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].title = title
@@ -19,17 +26,17 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             }
         }
     }
-    
-    var items = [Item]()
-    var selectedCategory: Category? {
-        didSet {
-            loadItems()
-        }
-    }
-    
+  
     func toggleDone(sender: ItemCell) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].done.toggle()
+            
+            if items[selectedIndexPath.row].done == true {
+                selectedCategory?.quantityDone += 1
+            } else {
+                selectedCategory?.quantityDone -= 1
+            }
+            
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             saveData()
         }
@@ -112,6 +119,9 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     
     override func remove(at indexPath: IndexPath) {
         self.context.delete(self.items[indexPath.row])
+        if items[indexPath.row].done {
+            selectedCategory?.quantityDone -= 1
+        }
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
