@@ -12,15 +12,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
+//    let binButton = UIBarButtonItem(image: UIImage(named: "bin"), landscapeImagePhone: UIImage(named: "bin"), style: .plain, target: self, action: #selector(binPressed))
     
     override func loadView() {
         super.loadView()
         setupViews()
     }
-    
+//    @objc func binPressed() {
+//        
+//    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
+        setupNavigationButtons()
     }
    
     lazy var tableView: UITableView = {
@@ -91,6 +95,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
+    func setupNavigationButtons() {
+        navigationItem.rightBarButtonItems = []
+    }
+    
     func saveData() {
             do {
                 try context.save()
@@ -123,7 +131,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
                 if self.navigationItem.rightBarButtonItem == nil {
-                    self.navigationItem.setRightBarButton(self.navDoneButton, animated: true)
+//                    self.navigationItem.setRightBarButton(self.navDoneButton, animated: true)
+                    self.navigationItem.rightBarButtonItems?.append(self.navDoneButton)
                 }
                 
             }

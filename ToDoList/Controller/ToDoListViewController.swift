@@ -8,7 +8,7 @@ import CoreData
 import UIKit
 
 class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProtocol {
-    
+        
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
@@ -28,6 +28,7 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     }
   
     func toggleDone(sender: ItemCell) {
+        
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].done.toggle()
             if items[selectedIndexPath.row].done == true {
@@ -35,15 +36,34 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             } else {
                 selectedCategory?.quantityDone -= 1
             }
-//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-            tableView.reloadData()
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+//            tableView.reloadData()
+            showBinIcon()
             saveData()
         }
+    }
+    
+
+    func showBinIcon() {
+        // checks, if all items in the array have been selected
+        if items.allSatisfy({ $0.done == true }) {
+            let image = UIImage(named: "bin")?.withRenderingMode(.alwaysOriginal)
+            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binPressed))
+//            navigationItem.rightBarButtonItems?.append(binButton)
+            navigationItem.setRightBarButton(binButton, animated: true)
+        }
+    }
+    
+    @objc func binPressed() {
+        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
+        for item in items {
+            print(item.done)
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
