@@ -45,18 +45,20 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         // checks, if all items in the array have been selected
         if items.allSatisfy({ $0.done == true }) {
             let image = UIImage(named: "bin")?.withRenderingMode(.alwaysOriginal)
-            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binPressed))
+            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
                 navigationItem.rightBarButtonItems = [binButton]
         } else {
             navigationItem.rightBarButtonItems = []
         }
     }
     
-    @objc func binPressed() {
-//        let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-//        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>))
-//        present(alert, animated: true)
+    @objc func binTapped() {
+        let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak alert, weak self] _ in
+            self?.removeAllItems()
+        }))
+        present(alert, animated: true)
     }
 
     override func viewDidLoad() {
@@ -144,5 +146,20 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
         self.saveData()
+    }
+    
+    func removeAllItems() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            try context.execute(batchDeleteRequest)
+        } catch {
+            print("Error removing all Items")
+        }
+        selectedCategory?.quantity = 0
+        selectedCategory?.quantityDone = 0
+        items.removeAll()
+        tableView.reloadData()
+        saveData()
     }
 }
