@@ -84,6 +84,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     private func setupNavigationController() {
+        navigationItem.backButtonTitle = ""
+        navigationController?.navigationBar.tintColor = .black
         navigationItem.backBarButtonItem?.tintColor = .black
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = ColorManager.background
