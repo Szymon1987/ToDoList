@@ -8,17 +8,14 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: MainViewController, BaseCellProtocol {
+class CategoryViewController: MainViewController {
 // duplicate code, change the protocol probably
-    func updateTitle(sender: BaseCell, title: String) {
+    override func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-            if navigationItem.rightBarButtonItem != nil {
-                navigationItem.setRightBarButton(nil, animated: false)
-            }
-            saveData()
         }
+        super.updateTitle(sender: sender, title: title)
     }
  
     override func viewWillAppear(_ animated: Bool) {

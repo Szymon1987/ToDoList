@@ -7,7 +7,7 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProtocol {
+class ToDoListViewController: MainViewController, ItemCellProtocol {
         
     var items = [Item]()
     var selectedCategory: Category? {
@@ -15,16 +15,12 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
             loadItems()
         }
     }
-    
-    func updateTitle(sender: BaseCell, title: String) {
+    override func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-            saveData()
-            if navigationItem.rightBarButtonItem != nil {
-                navigationItem.setRightBarButton(nil, animated: false)
-            }
         }
+        super.updateTitle(sender: sender, title: title)
     }
   
     func toggleDone(sender: ItemCell) {
@@ -61,9 +57,6 @@ class ToDoListViewController: MainViewController, BaseCellProtocol, ItemCellProt
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        for item in items {
-            print(item.done)
-        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

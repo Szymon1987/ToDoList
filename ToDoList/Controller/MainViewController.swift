@@ -7,8 +7,14 @@
 
 import UIKit
 
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-   
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BaseCellProtocol {
+    func updateTitle(sender: BaseCell, title: String) {
+            if navigationItem.rightBarButtonItem != nil {
+                navigationItem.setRightBarButton(nil, animated: false)
+        }
+        saveData()
+    }
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
