@@ -36,7 +36,6 @@ class ItemCell: BaseCell {
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred(intensity: 1.0)
             textField.endEditing(true)
-            
         }
     }
 

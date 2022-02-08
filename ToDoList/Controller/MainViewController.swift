@@ -9,28 +9,24 @@ import UIKit
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BaseCellProtocol {
     func updateTitle(sender: BaseCell, title: String) {
-            if navigationItem.rightBarButtonItem != nil {
-                navigationItem.setRightBarButton(nil, animated: false)
-        }
+//        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItems = []
         saveData()
     }
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
-//    let binButton = UIBarButtonItem(image: UIImage(named: "bin"), landscapeImagePhone: UIImage(named: "bin"), style: .plain, target: self, action: #selector(binPressed))
-    
+ 
     override func loadView() {
         super.loadView()
         setupViews()
     }
-//    @objc func binPressed() {
-//        
-//    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
-        setupNavigationButtons()
+//        setupNavigationButtons()
     }
    
     lazy var tableView: UITableView = {
@@ -82,14 +78,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if let cell = cell as? BaseCell, let title = cell.textField.text {
                 cell.textField.isUserInteractionEnabled = false
                 cell.baseCellDelegate?.updateTitle(sender: cell, title: title)
+
             }
         }
     }
     
     private func setupNavigationController() {
         navigationItem.backBarButtonItem?.tintColor = .black
-        navigationItem.setRightBarButton(nil, animated: true)
-        
         let appearance = UINavigationBarAppearance()
         appearance.backgroundColor = ColorManager.background
 //                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -101,9 +96,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
-    func setupNavigationButtons() {
-        navigationItem.rightBarButtonItems = []
-    }
+//    func setupNavigationButtons() {
+//        navigationItem.rightBarButtonItems = []
+//    }
     
     func saveData() {
             do {
@@ -136,14 +131,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
-                if self.navigationItem.rightBarButtonItem == nil {
-//                    self.navigationItem.setRightBarButton(self.navDoneButton, animated: true)
-                    self.navigationItem.rightBarButtonItems?.append(self.navDoneButton)
-                }
-                
+                self.navigationItem.rightBarButtonItem = self.navDoneButton
             }
         }
-        
+        print(tableView.isEditing)
     }
     
 }

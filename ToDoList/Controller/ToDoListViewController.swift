@@ -21,10 +21,10 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
         super.updateTitle(sender: sender, title: title)
+        shouldShowBinButton()
     }
   
     func toggleDone(sender: ItemCell) {
-        
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].done.toggle()
             if items[selectedIndexPath.row].done == true {
@@ -34,29 +34,35 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             }
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
 //            tableView.reloadData()
-            showBinIcon()
+            shouldShowBinButton()
             saveData()
         }
     }
     
 
-    func showBinIcon() {
+    func shouldShowBinButton() {
+        if items.isEmpty { return }
         // checks, if all items in the array have been selected
         if items.allSatisfy({ $0.done == true }) {
             let image = UIImage(named: "bin")?.withRenderingMode(.alwaysOriginal)
             let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binPressed))
-//            navigationItem.rightBarButtonItems?.append(binButton)
-            navigationItem.setRightBarButton(binButton, animated: true)
+                navigationItem.rightBarButtonItems = [binButton]
+        } else {
+            navigationItem.rightBarButtonItems = []
         }
     }
     
     @objc func binPressed() {
-        
+//        let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+//        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: <#T##((UIAlertAction) -> Void)?##((UIAlertAction) -> Void)?##(UIAlertAction) -> Void#>))
+//        present(alert, animated: true)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
+        shouldShowBinButton()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -77,7 +83,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
                 cell.textField.textColor = .black.withAlphaComponent(0.5)
             } else {
                 cell.textField.textColor = .black.withAlphaComponent(1)
-        }
+            }
             return cell
     }
 
@@ -85,11 +91,11 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(alert, animated: true)
         alert.addAction(UIAlertAction(title: "Add Item", style: .default) { [weak self, weak alert] _ in
             guard let item = alert?.textFields?[0].text else { return }
             self?.addItem(item)
         })
+        present(alert, animated: true)
     }
 
     func addItem(_ item: String) {
