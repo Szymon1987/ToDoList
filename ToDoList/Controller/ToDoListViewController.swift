@@ -148,18 +148,36 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         self.saveData()
     }
     
-    func removeAllItems() {
+    private func removeAllItems() {
+        
+
+
+        
+        guard let selectedCategory = selectedCategory else { return }
+        
+        // refactor, understand why whats the mergepolicy
+        
+        
+        // fix the BUG the same category
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
+        fetchRequest.predicate = predicate
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
         do {
             try context.execute(batchDeleteRequest)
+            print("fired")
         } catch {
             print("Error removing all Items")
         }
-        selectedCategory?.quantity = 0
-        selectedCategory?.quantityDone = 0
         items.removeAll()
         tableView.reloadData()
+//        context.refreshAllObjects()
+        selectedCategory.quantity = 0
+        selectedCategory.quantityDone = 0
         saveData()
+        print(selectedCategory)
+        print(items.count)
     }
 }

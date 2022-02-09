@@ -136,7 +136,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.navigationItem.rightBarButtonItem = self.navDoneButton
             }
         }
-        print(tableView.isEditing)
     }
     
 }
