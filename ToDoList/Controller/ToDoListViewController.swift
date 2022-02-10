@@ -55,10 +55,10 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     @objc func binTapped() {
         let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak alert, weak self] _ in
+        present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak self, weak alert] _ in
             self?.removeAllItems()
         }))
-        present(alert, animated: true)
     }
 
     override func viewDidLoad() {
@@ -86,6 +86,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             } else {
                 cell.textField.textColor = .black.withAlphaComponent(1)
             }
+        print(items.count)
             return cell
     }
 
@@ -149,16 +150,8 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }
     
     private func removeAllItems() {
-        
-
-
-        
         guard let selectedCategory = selectedCategory else { return }
-        
-        // refactor, understand why whats the mergepolicy
-        
-        
-        // fix the BUG the same category
+        // probably we can use func load() here
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
@@ -173,11 +166,8 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         }
         items.removeAll()
         tableView.reloadData()
-//        context.refreshAllObjects()
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
         saveData()
-        print(selectedCategory)
-        print(items.count)
     }
 }

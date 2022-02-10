@@ -99,7 +99,7 @@ class CategoryViewController: MainViewController {
         self?.addCategory(newCategory)
         }))
     }
-    
+ 
     func addCategory(_ category: String) {
         if category == "" { return }
         let newCategory = Category(context: context)
@@ -107,6 +107,7 @@ class CategoryViewController: MainViewController {
         categories.append(newCategory)
         saveData()
         tableView.reloadData()
+        
     }
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
