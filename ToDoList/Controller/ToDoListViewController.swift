@@ -58,6 +58,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         present(alert, animated: true)
         alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak self, weak alert] _ in
             self?.removeAllItems()
+            self?.navigationItem.setRightBarButton(nil, animated: true)
         }))
     }
 
@@ -138,6 +139,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }
     
     override func remove(at indexPath: IndexPath) {
+        super.remove(at: indexPath)
         self.context.delete(self.items[indexPath.row])
         if items[indexPath.row].done {
             selectedCategory?.quantityDone -= 1

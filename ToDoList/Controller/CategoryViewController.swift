@@ -104,9 +104,15 @@ class CategoryViewController: MainViewController {
         if category == "" { return }
         let newCategory = Category(context: context)
         newCategory.name = category
-        categories.append(newCategory)
-        saveData()
-        tableView.reloadData()
+        
+        if categories.contains(where: {$0.name == category}) {
+            return
+        } else {
+            categories.append(newCategory)
+            saveData()
+            tableView.reloadData()
+        }
+        
     }
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
@@ -119,6 +125,7 @@ class CategoryViewController: MainViewController {
     }
     
     override func remove(at indexPath: IndexPath) {
+        super.remove(at: indexPath)
         self.context.delete(self.categories[indexPath.section])
         self.categories.remove(at: indexPath.section)
         tableView.reloadData()

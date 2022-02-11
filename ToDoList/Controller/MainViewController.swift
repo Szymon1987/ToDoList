@@ -111,6 +111,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     
     func remove(at indexPath: IndexPath) {
+        if navigationItem.rightBarButtonItems != nil {
+            navigationItem.setRightBarButton(nil, animated: true)
+        }
     }
     
     func setupViews() {
