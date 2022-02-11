@@ -86,7 +86,6 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             } else {
                 cell.textField.textColor = .black.withAlphaComponent(1)
             }
-        print(items.count)
             return cell
     }
 
@@ -151,7 +150,6 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     
     private func removeAllItems() {
         guard let selectedCategory = selectedCategory else { return }
-        // probably we can use func load() here
         context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
@@ -160,14 +158,13 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         
         do {
             try context.execute(batchDeleteRequest)
-            print("fired")
         } catch {
-            print("Error removing all Items")
+            print("Error removing all Items \(error)")
         }
         items.removeAll()
-        tableView.reloadData()
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
+        tableView.reloadData()
         saveData()
     }
 }

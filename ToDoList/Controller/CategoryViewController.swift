@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController {
-// duplicate code, change the protocol probably
+
     override func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
@@ -107,7 +107,6 @@ class CategoryViewController: MainViewController {
         categories.append(newCategory)
         saveData()
         tableView.reloadData()
-        
     }
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
