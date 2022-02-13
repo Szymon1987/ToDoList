@@ -19,6 +19,7 @@ class BaseCell: UITableViewCell {
     lazy var textField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textColor = .label
         textField.font = UIFont.preferredFont(forTextStyle: .headline)
         textField.delegate = self
         return textField
@@ -34,6 +35,7 @@ class BaseCell: UITableViewCell {
     }
 
     func setupViews() {
+        backgroundColor = .tertiarySystemBackground
         textField.autocorrectionType = .no
         textField.isUserInteractionEnabled = false
     }

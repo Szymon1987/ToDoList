@@ -9,17 +9,18 @@ import UIKit
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BaseCellProtocol {
     func updateTitle(sender: BaseCell, title: String) {
-//        navigationItem.rightBarButtonItem = nil
         navigationItem.rightBarButtonItems = []
         saveData()
     }
-    
+
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
  
     override func loadView() {
-        super.loadView()
+        // never call super.loadView()
+        view = UIView()
+        view.backgroundColor = .secondarySystemBackground
         setupViews()
     }
 
@@ -31,6 +32,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.backgroundColor = .secondarySystemBackground
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
@@ -85,17 +87,21 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     private func setupNavigationController() {
         navigationItem.backButtonTitle = ""
-        navigationController?.navigationBar.tintColor = .black
-        navigationItem.backBarButtonItem?.tintColor = .black
-        let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = ColorManager.background
-//                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.tintColor = .label
+//        navigationItem.backBarButtonItem?.tintColor = .black
+//        let appearance = UINavigationBarAppearance()
+//        appearance.backgroundColor = ColorManager.background
+//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+//
+        
+        
+        
+        //                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        //                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
-//                navigationController?.navigationBar.tintColor = .white
-//                navigationController?.navigationBar.standardAppearance = appearance
-//                navigationController?.navigationBar.compactAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        //                navigationController?.navigationBar.tintColor = .white
+        //                navigationController?.navigationBar.standardAppearance = appearance
+        //                navigationController?.navigationBar.compactAppearance = appearance
     }
     
 //    func setupNavigationButtons() {
@@ -117,7 +123,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func setupViews() {
-        
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
         
@@ -126,7 +131,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
         roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
-        
     }
 
     func rename(at indexPath: IndexPath) {

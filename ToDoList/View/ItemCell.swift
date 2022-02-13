@@ -38,6 +38,7 @@ class ItemCell: BaseCell {
             textField.endEditing(true)
         }
     }
+    
 
     override func setupViews() {
         super.setupViews()

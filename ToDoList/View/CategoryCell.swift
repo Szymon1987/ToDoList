@@ -11,7 +11,6 @@ class CategoryCell: BaseCell {
     
     let cellView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 8
         view.layer.borderWidth = 0.3

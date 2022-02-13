@@ -15,6 +15,13 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             loadItems()
         }
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
+        shouldShowBinButton()
+    }
+    
     override func updateTitle(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].title = title
@@ -44,7 +51,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         if items.isEmpty { return }
         // checks, if all items in the array have been selected
         if items.allSatisfy({ $0.done == true }) {
-            let image = UIImage(named: "bin")?.withRenderingMode(.alwaysOriginal)
+            let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
             let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
                 navigationItem.rightBarButtonItems = [binButton]
         } else {
@@ -62,11 +69,7 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         }))
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        shouldShowBinButton()
-    }
+    
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -83,9 +86,9 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
             cell.textField.text = items[indexPath.row].title
             cell.checkmarkButton.isSelected = items[indexPath.row].done
             if items[indexPath.row].done {
-                cell.textField.textColor = .black.withAlphaComponent(0.5)
+                cell.textField.textColor = .label.withAlphaComponent(0.5)
             } else {
-                cell.textField.textColor = .black.withAlphaComponent(1)
+                cell.textField.textColor = .label.withAlphaComponent(1)
             }
             return cell
     }

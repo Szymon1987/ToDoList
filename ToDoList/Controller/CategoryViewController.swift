@@ -24,18 +24,19 @@ class CategoryViewController: MainViewController {
 
     var categories = [Category]()
     
-    override func loadView() {
-        super.loadView()
-        view.backgroundColor = ColorManager.background
-        tableView.sectionHeaderTopPadding = 10
-        tableView.separatorStyle = .none
-    }
+//    override func loadView() {
+//        super.loadView()
+//        tableView.sectionHeaderTopPadding = 10
+//        tableView.separatorStyle = .none
+//    }
    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
         loadCategory()
         navigationItem.title = "CATEGORIES"
+        tableView.sectionHeaderTopPadding = 10
+        tableView.separatorStyle = .none
     }
     
     // MARK: - Table view data source
