@@ -18,10 +18,6 @@ class CategoryViewController: MainViewController {
         super.updateTitle(sender: sender, title: title)
     }
  
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-
     var categories = [Category]()
 
     override func viewDidLoad() {
@@ -33,13 +29,16 @@ class CategoryViewController: MainViewController {
         tableView.separatorStyle = .none
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     // MARK: - Table view data source
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return categories.count
     }
-    
     
     // Two methods belew help with the spacing between the cells
     
@@ -101,14 +100,17 @@ class CategoryViewController: MainViewController {
         newCategory.name = category
         
         if categories.contains(where: {$0.name == category}) {
-            return
+            let ac = UIAlertController(title: "The category already exists", message: "Please insert unique catefory name", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+//            return
         } else {
             categories.append(newCategory)
             saveData()
             tableView.reloadData()
         }
-        
     }
+
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
