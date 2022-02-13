@@ -20,21 +20,46 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func loadView() {
         // never call super.loadView()
         view = UIView()
-        view.backgroundColor = .secondarySystemBackground
+        view.backgroundColor = ColorManager.viewBackground
         setupViews()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
-//        setupNavigationButtons()
+        notificationForKeyboard()
     }
-   
+    
+    func notificationForKeyboard() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        else {
+          // if keyboard size is not available for some reason, dont do anything
+          return
+        }
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height , right: 0)
+        tableView.contentInset = contentInsets
+        tableView.scrollIndicatorInsets = contentInsets
+      }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        // reset back the content inset to zero after keyboard is gone
+        tableView.contentInset = contentInsets
+        tableView.scrollIndicatorInsets = contentInsets
+      }
+    
     lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = .secondarySystemBackground
+        tableView.backgroundColor = ColorManager.viewBackground
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 300, right: 0)
         return tableView
     }()
 
@@ -88,26 +113,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     private func setupNavigationController() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = .label
-//        navigationItem.backBarButtonItem?.tintColor = .black
-//        let appearance = UINavigationBarAppearance()
-//        appearance.backgroundColor = ColorManager.background
-//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-//
-        
-        
-        
-        //                appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        //                appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
-        //                navigationController?.navigationBar.tintColor = .white
-        //                navigationController?.navigationBar.standardAppearance = appearance
-        //                navigationController?.navigationBar.compactAppearance = appearance
     }
-    
-//    func setupNavigationButtons() {
-//        navigationItem.rightBarButtonItems = []
-//    }
-    
+
     func saveData() {
             do {
                 try context.save()

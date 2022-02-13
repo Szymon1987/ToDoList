@@ -23,13 +23,7 @@ class CategoryViewController: MainViewController {
     }
 
     var categories = [Category]()
-    
-//    override func loadView() {
-//        super.loadView()
-//        tableView.sectionHeaderTopPadding = 10
-//        tableView.separatorStyle = .none
-//    }
-   
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
