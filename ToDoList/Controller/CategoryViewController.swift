@@ -28,7 +28,7 @@ class CategoryViewController: MainViewController {
         tableView.sectionHeaderTopPadding = 10
         tableView.separatorStyle = .none
     }
-    
+   
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }

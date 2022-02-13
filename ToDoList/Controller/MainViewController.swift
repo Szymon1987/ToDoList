@@ -8,15 +8,13 @@
 import UIKit
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BaseCellProtocol {
+    
     func updateTitle(sender: BaseCell, title: String) {
         navigationItem.rightBarButtonItems = []
         saveData()
     }
-
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    let navDoneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneButtonPressed))
- 
     override func loadView() {
         // never call super.loadView()
         view = UIView()
@@ -29,7 +27,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         setupNavigationController()
         notificationForKeyboard()
     }
-    
+ 
     func notificationForKeyboard() {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -59,18 +57,38 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.backgroundColor = ColorManager.viewBackground
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 300, right: 0)
         return tableView
     }()
 
-    let roundedButton: RoundedButton = {
+   lazy var roundedButton: RoundedButton = {
         let button = RoundedButton()
         button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+        button.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(dragged)))
         return button
     }()
     
     @objc func addTapped() {
         
+    }
+    
+    private var initialCenter: CGPoint = .zero
+    
+    @objc func dragged(_ gesture: UIPanGestureRecognizer) {
+//        let location = gesture.location(in: self.view)
+//        roundedButton.center = location
+        
+        // improved moving of the button, sanpping effect is gone
+        switch gesture.state {
+            case .began:
+                initialCenter = roundedButton.center
+            case .changed:
+                let translation = gesture.translation(in: view)
+
+                roundedButton.center = CGPoint(x: initialCenter.x + translation.x,
+                                              y: initialCenter.y + translation.y)
+            default:
+                break
+            }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,7 +123,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if let cell = cell as? BaseCell, let title = cell.textField.text {
                 cell.textField.isUserInteractionEnabled = false
                 cell.baseCellDelegate?.updateTitle(sender: cell, title: title)
-
             }
         }
     }
@@ -139,6 +156,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
+    
 
     func rename(at indexPath: IndexPath) {
         tableView.isEditing = false
@@ -147,9 +165,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
-                self.navigationItem.rightBarButtonItem = self.navDoneButton
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonPressed))
             }
         }
     }
-    
 }
