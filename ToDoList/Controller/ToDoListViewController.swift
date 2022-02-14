@@ -8,7 +8,7 @@ import CoreData
 import UIKit
 
 class ToDoListViewController: MainViewController, ItemCellProtocol {
-        
+
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
@@ -69,8 +69,6 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         }))
     }
 
-    
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
@@ -130,15 +128,8 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
     }
     
     override func setupViews() {
-
-        view.addSubview(tableView)
+        super.setupViews()
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
-        
-        view.addSubview(roundedButton)
-        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
-        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
-        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     override func remove(at indexPath: IndexPath) {

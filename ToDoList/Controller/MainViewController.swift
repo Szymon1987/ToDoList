@@ -14,18 +14,29 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         saveData()
     }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var buttonPosition: CGPoint?
+    private var initialCenter: CGPoint = .zero
+    
+    var right: NSLayoutConstraint?
+    var bottom: NSLayoutConstraint?
     
     override func loadView() {
-        // never call super.loadView()
         view = UIView()
         view.backgroundColor = ColorManager.viewBackground
         setupViews()
+       
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
         notificationForKeyboard()
+        if let buttonPosition = buttonPosition {
+            right?.constant = CGFloat(buttonPosition.x)
+            bottom?.constant = CGFloat(buttonPosition.y)
+            print("cos")
+        }
+        
     }
  
     func notificationForKeyboard() {
@@ -68,10 +79,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }()
     
     @objc func addTapped() {
-        
     }
-    
-    private var initialCenter: CGPoint = .zero
     
     @objc func dragged(_ gesture: UIPanGestureRecognizer) {
 //        let location = gesture.location(in: self.view)
@@ -83,9 +91,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 initialCenter = roundedButton.center
             case .changed:
                 let translation = gesture.translation(in: view)
-
-                roundedButton.center = CGPoint(x: initialCenter.x + translation.x,
-                                              y: initialCenter.y + translation.y)
+            buttonPosition = CGPoint(x: initialCenter.x + translation.x,
+                                     y: initialCenter.y + translation.y)
+            if let buttonPosition = buttonPosition {
+                roundedButton.center = buttonPosition
+            }
             default:
                 break
             }
@@ -148,16 +158,20 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func setupViews() {
         view.addSubview(tableView)
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
-        
         view.addSubview(roundedButton)
-        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        
+        right = roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70)
+        right?.isActive = true
+        
+//        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        
+        bottom = roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150)
+        bottom?.isActive = true
         roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
         roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
-
     func rename(at indexPath: IndexPath) {
         tableView.isEditing = false
         if let cell = tableView.cellForRow(at: indexPath) as? BaseCell {

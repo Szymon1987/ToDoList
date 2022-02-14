@@ -110,7 +110,6 @@ class CategoryViewController: MainViewController {
             tableView.reloadData()
         }
     }
-
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
@@ -129,6 +128,10 @@ class CategoryViewController: MainViewController {
         self.saveData()
     }
     
+    override func setupViews() {
+        super.setupViews()
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+    }
 }
 
 
