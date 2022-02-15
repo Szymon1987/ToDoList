@@ -7,61 +7,22 @@
 
 import UIKit
 
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BaseCellProtocol {
-    
-    func updateTitle(sender: BaseCell, title: String) {
-        navigationItem.rightBarButtonItems = []
-        saveData()
-    }
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var buttonPosition: CGPoint?
     private var initialCenter: CGPoint = .zero
-    
-    var right: NSLayoutConstraint?
-    var bottom: NSLayoutConstraint?
     
     override func loadView() {
         view = UIView()
         view.backgroundColor = ColorManager.viewBackground
         setupViews()
-       
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
         notificationForKeyboard()
-        if let buttonPosition = buttonPosition {
-            right?.constant = CGFloat(buttonPosition.x)
-            bottom?.constant = CGFloat(buttonPosition.y)
-            print("cos")
-        }
-        
     }
- 
-    func notificationForKeyboard() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func keyboardWillShow(notification: NSNotification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
-        else {
-          // if keyboard size is not available for some reason, dont do anything
-          return
-        }
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height , right: 0)
-        tableView.contentInset = contentInsets
-        tableView.scrollIndicatorInsets = contentInsets
-      }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        // reset back the content inset to zero after keyboard is gone
-        tableView.contentInset = contentInsets
-        tableView.scrollIndicatorInsets = contentInsets
-      }
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -70,36 +31,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.delegate = self
         return tableView
     }()
-
-   lazy var roundedButton: RoundedButton = {
-        let button = RoundedButton()
-        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        button.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(dragged)))
-        return button
-    }()
-    
-    @objc func addTapped() {
-    }
-    
-    @objc func dragged(_ gesture: UIPanGestureRecognizer) {
-//        let location = gesture.location(in: self.view)
-//        roundedButton.center = location
-        
-        // improved moving of the button, sanpping effect is gone
-        switch gesture.state {
-            case .began:
-                initialCenter = roundedButton.center
-            case .changed:
-                let translation = gesture.translation(in: view)
-            buttonPosition = CGPoint(x: initialCenter.x + translation.x,
-                                     y: initialCenter.y + translation.y)
-            if let buttonPosition = buttonPosition {
-                roundedButton.center = buttonPosition
-            }
-            default:
-                break
-            }
-    }
+ 
+    // MARK: - TableView data source
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -126,13 +59,46 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         rename.backgroundColor = .black
         return UISwipeActionsConfiguration(actions: [delete, rename])
     }
+    
+    func notificationForKeyboard() {
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        else {
+          // if keyboard size is not available for some reason, dont do anything
+          return
+        }
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height , right: 0)
+        tableView.contentInset = contentInsets
+        tableView.scrollIndicatorInsets = contentInsets
+      }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        // reset back the content inset to zero after keyboard is gone
+        tableView.contentInset = contentInsets
+        tableView.scrollIndicatorInsets = contentInsets
+      }
+    
+   lazy var roundedButton: RoundedButton = {
+        let button = RoundedButton()
+        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func addTapped() {
+    }
 
     @objc func doneButtonPressed() {
         // not sure if this code is correct (tableview.visibleCells.forEach???, might not be efficient)
         tableView.visibleCells.forEach { cell in
             if let cell = cell as? BaseCell, let title = cell.textField.text {
                 cell.textField.isUserInteractionEnabled = false
-                cell.baseCellDelegate?.updateTitle(sender: cell, title: title)
+                cell.baseCellDelegate?.updateUI(sender: cell, title: title)
             }
         }
     }
@@ -160,13 +126,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.addSubview(tableView)
         view.addSubview(roundedButton)
         
-        right = roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70)
-        right?.isActive = true
-        
-//        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
-        
-        bottom = roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150)
-        bottom?.isActive = true
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
         roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
         roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
@@ -182,5 +142,16 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonPressed))
             }
         }
+    }
+}
+
+
+//MARK: - BaseCellProtocol
+
+extension MainViewController: BaseCellProtocol {
+   // @objc is added here to enable override this method in CategoryViewController and ToDoListViewController classes as the protocol was introuced in the extension not in the main class body
+    @objc func updateUI(sender: BaseCell, title: String) {
+        navigationItem.rightBarButtonItems = []
+        saveData()
     }
 }

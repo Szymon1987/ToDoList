@@ -8,8 +8,9 @@
 import UIKit
 
 protocol BaseCellProtocol: AnyObject {
-    func updateTitle(sender: BaseCell, title: String)
+    func updateUI(sender: BaseCell, title: String)
 }
+
 
 class BaseCell: UITableViewCell {
     
@@ -45,7 +46,7 @@ extension BaseCell: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {        
         if let title = title {
-            baseCellDelegate?.updateTitle(sender: self, title: title)
+            baseCellDelegate?.updateUI(sender: self, title: title)
         }
     }
     

@@ -7,7 +7,7 @@
 import CoreData
 import UIKit
 
-class ToDoListViewController: MainViewController, ItemCellProtocol {
+class ToDoListViewController: MainViewController {
 
     var items = [Item]()
     var selectedCategory: Category? {
@@ -22,31 +22,16 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         shouldShowBinButton()
     }
     
-    override func updateTitle(sender: BaseCell, title: String) {
+    override func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-        super.updateTitle(sender: sender, title: title)
+        super.updateUI(sender: sender, title: title)
         shouldShowBinButton()
     }
   
-    func toggleDone(sender: ItemCell) {
-        if let selectedIndexPath = tableView.indexPath(for: sender) {
-            items[selectedIndexPath.row].done.toggle()
-            if items[selectedIndexPath.row].done == true {
-                selectedCategory?.quantityDone += 1
-            } else {
-                selectedCategory?.quantityDone -= 1
-            }
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-//            tableView.reloadData()
-            shouldShowBinButton()
-            saveData()
-        }
-    }
     
-
     func shouldShowBinButton() {
         if items.isEmpty { return }
         // checks, if all items in the array have been selected
@@ -162,5 +147,22 @@ class ToDoListViewController: MainViewController, ItemCellProtocol {
         selectedCategory.quantityDone = 0
         tableView.reloadData()
         saveData()
+    }
+}
+
+extension ToDoListViewController: ItemCellProtocol {
+    func toggleDone(sender: ItemCell) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            items[selectedIndexPath.row].done.toggle()
+            if items[selectedIndexPath.row].done == true {
+                selectedCategory?.quantityDone += 1
+            } else {
+                selectedCategory?.quantityDone -= 1
+            }
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+//            tableView.reloadData()
+            shouldShowBinButton()
+            saveData()
+        }
     }
 }

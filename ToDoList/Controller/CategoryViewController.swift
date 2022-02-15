@@ -9,17 +9,21 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController {
+    
+    var categories = [Category]()
 
-    override func updateTitle(sender: BaseCell, title: String) {
+    @objc override func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             categories[selectedIndexPath.section].name = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-        super.updateTitle(sender: sender, title: title)
+        super.updateUI(sender: sender, title: title)
     }
  
-    var categories = [Category]()
-
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
@@ -29,11 +33,7 @@ class CategoryViewController: MainViewController {
         tableView.separatorStyle = .none
     }
    
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
-    }
-    
-    // MARK: - Table view data source
+    // MARK: - TableView data source
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -93,7 +93,9 @@ class CategoryViewController: MainViewController {
         self?.addCategory(newCategory)
         }))
     }
- 
+
+    
+    
     func addCategory(_ category: String) {
         if category == "" { return }
         let newCategory = Category(context: context)

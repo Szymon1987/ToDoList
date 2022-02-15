@@ -39,7 +39,6 @@ class ItemCell: BaseCell {
         }
     }
     
-
     override func setupViews() {
         super.setupViews()
         self.selectionStyle = .none
