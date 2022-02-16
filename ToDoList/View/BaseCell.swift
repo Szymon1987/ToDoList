@@ -11,7 +11,6 @@ protocol BaseCellProtocol: AnyObject {
     func updateUI(sender: BaseCell, title: String)
 }
 
-
 class BaseCell: UITableViewCell {
     
     weak var baseCellDelegate: BaseCellProtocol?
@@ -41,6 +40,7 @@ class BaseCell: UITableViewCell {
         textField.isUserInteractionEnabled = false
     }
 }
+    //MARK: - Textfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
     

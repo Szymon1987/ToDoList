@@ -9,17 +9,14 @@ import UIKit
 import CoreData
 
 class CategoryViewController: MainViewController {
+
+    // MARK: - Properties
     
     var categories = [Category]()
 
-    @objc override func updateUI(sender: BaseCell, title: String) {
-        if let selectedIndexPath = tableView.indexPath(for: sender) {
-            categories[selectedIndexPath.section].name = title
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-        }
-        super.updateUI(sender: sender, title: title)
-    }
- 
+    
+ // MARK: - LifeCycle
+    
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
     }
@@ -82,6 +79,8 @@ class CategoryViewController: MainViewController {
         return 60
     }
     
+    // MARK: - Helpers
+    
     @objc override func addTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         ac.addTextField()
@@ -94,8 +93,6 @@ class CategoryViewController: MainViewController {
         }))
     }
 
-    
-    
     func addCategory(_ category: String) {
         if category == "" { return }
         let newCategory = Category(context: context)
@@ -112,6 +109,13 @@ class CategoryViewController: MainViewController {
             tableView.reloadData()
         }
     }
+    
+    override func setupViews() {
+        super.setupViews()
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+    }
+    
+    // MARK: - CoreData
     
     func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
@@ -130,13 +134,19 @@ class CategoryViewController: MainViewController {
         self.saveData()
     }
     
-    override func setupViews() {
-        super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
-    }
 }
 
+    // MARK: - BaseCellDelegate
 
+extension CategoryViewController {
+    override func updateUI(sender: BaseCell, title: String) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            categories[selectedIndexPath.section].name = title
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+        }
+        super.updateUI(sender: sender, title: title)
+    }
+}
     
 
         

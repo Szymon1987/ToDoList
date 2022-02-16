@@ -8,9 +8,13 @@
 import UIKit
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+    // MARK: - Properties
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var initialCenter: CGPoint = .zero
+    
+    // MARK: - LifeCycle
     
     override func loadView() {
         view = UIView()
@@ -23,6 +27,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         setupNavigationController()
         notificationForKeyboard()
     }
+    // MARK: - UIComponents
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -31,6 +36,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.delegate = self
         return tableView
     }()
+    
+    lazy var roundedButton: RoundedButton = {
+         let button = RoundedButton()
+         button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+         return button
+     }()
  
     // MARK: - TableView data source
     
@@ -60,6 +71,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return UISwipeActionsConfiguration(actions: [delete, rename])
     }
     
+    // MARK: - Helpers
+    
     func notificationForKeyboard() {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -84,12 +97,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.scrollIndicatorInsets = contentInsets
       }
     
-   lazy var roundedButton: RoundedButton = {
-        let button = RoundedButton()
-        button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-        return button
-    }()
-    
     @objc func addTapped() {
     }
 
@@ -108,6 +115,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.navigationBar.tintColor = .label
     }
 
+    func setupViews() {
+        view.addSubview(tableView)
+        view.addSubview(roundedButton)
+        
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
+        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+    }
+    
+    // MARK: - CoreData
+    
     func saveData() {
             do {
                 try context.save()
@@ -120,16 +139,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if navigationItem.rightBarButtonItems != nil {
             navigationItem.setRightBarButton(nil, animated: true)
         }
-    }
-    
-    func setupViews() {
-        view.addSubview(tableView)
-        view.addSubview(roundedButton)
-        
-        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
-        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
-        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     func rename(at indexPath: IndexPath) {
@@ -146,7 +155,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 }
 
 
-//MARK: - BaseCellProtocol
+    //MARK: - BaseCellProtocol
 
 extension MainViewController: BaseCellProtocol {
    // @objc is added here to enable override this method in CategoryViewController and ToDoListViewController classes as the protocol was introuced in the extension not in the main class body

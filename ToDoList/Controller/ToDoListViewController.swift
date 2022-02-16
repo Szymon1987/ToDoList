@@ -8,6 +8,8 @@ import CoreData
 import UIKit
 
 class ToDoListViewController: MainViewController {
+    
+    // MARK: Properties
 
     var items = [Item]()
     var selectedCategory: Category? {
@@ -16,43 +18,16 @@ class ToDoListViewController: MainViewController {
         }
     }
     
+    // MARK: - LifeCycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
         shouldShowBinButton()
     }
     
-    override func updateUI(sender: BaseCell, title: String) {
-        if let selectedIndexPath = tableView.indexPath(for: sender) {
-            items[selectedIndexPath.row].title = title
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-        }
-        super.updateUI(sender: sender, title: title)
-        shouldShowBinButton()
-    }
-  
-    
-    func shouldShowBinButton() {
-        if items.isEmpty { return }
-        // checks, if all items in the array have been selected
-        if items.allSatisfy({ $0.done == true }) {
-            let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
-            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
-                navigationItem.rightBarButtonItems = [binButton]
-        } else {
-            navigationItem.rightBarButtonItems = []
-        }
-    }
-    
-    @objc func binTapped() {
-        let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(alert, animated: true)
-        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak self, weak alert] _ in
-            self?.removeAllItems()
-            self?.navigationItem.setRightBarButton(nil, animated: true)
-        }))
-    }
+ 
+    // MARK: - TableView Datasource
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -74,6 +49,30 @@ class ToDoListViewController: MainViewController {
                 cell.textField.textColor = .label.withAlphaComponent(1)
             }
             return cell
+    }
+    
+    // MARK: - Helpers
+    
+    func shouldShowBinButton() {
+        if items.isEmpty { return }
+        // checks, if all items in the array have been selected
+        if items.allSatisfy({ $0.done == true }) {
+            let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
+            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
+                navigationItem.rightBarButtonItems = [binButton]
+        } else {
+            navigationItem.rightBarButtonItems = []
+        }
+    }
+    
+    @objc func binTapped() {
+        let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak self, weak alert] _ in
+            self?.removeAllItems()
+            self?.navigationItem.setRightBarButton(nil, animated: true)
+        }))
     }
 
     @objc override func addTapped() {
@@ -99,6 +98,13 @@ class ToDoListViewController: MainViewController {
         saveData()
     }
     
+    override func setupViews() {
+        super.setupViews()
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+    }
+    
+    // MARK: - CoreData
+    
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
 
@@ -110,11 +116,6 @@ class ToDoListViewController: MainViewController {
             print("Error fetching data from context \(error) ")
         }
         tableView.reloadData()
-    }
-    
-    override func setupViews() {
-        super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
     }
     
     override func remove(at indexPath: IndexPath) {
@@ -149,6 +150,7 @@ class ToDoListViewController: MainViewController {
         saveData()
     }
 }
+    // MARK: - ItemCellProtocol
 
 extension ToDoListViewController: ItemCellProtocol {
     func toggleDone(sender: ItemCell) {
@@ -164,5 +166,18 @@ extension ToDoListViewController: ItemCellProtocol {
             shouldShowBinButton()
             saveData()
         }
+    }
+}
+
+    // MARK: - BaseCellProtocol
+
+extension ToDoListViewController {
+    override func updateUI(sender: BaseCell, title: String) {
+        if let selectedIndexPath = tableView.indexPath(for: sender) {
+            items[selectedIndexPath.row].title = title
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+        }
+        super.updateUI(sender: sender, title: title)
+        shouldShowBinButton()
     }
 }

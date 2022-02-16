@@ -14,7 +14,7 @@ protocol ItemCellProtocol: AnyObject {
 class ItemCell: BaseCell {
     
     weak var itemCellDelegate: ItemCellProtocol?
-    
+
     lazy var checkmarkButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
