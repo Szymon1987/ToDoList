@@ -81,6 +81,7 @@ class CategoryViewController: MainViewController {
     
     // MARK: - Helpers
     
+    
     @objc override func addTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         ac.addTextField()
@@ -92,21 +93,42 @@ class CategoryViewController: MainViewController {
         self?.addCategory(newCategory)
         }))
     }
-
+    
     func addCategory(_ category: String) {
         if category == "" { return }
         let newCategory = Category(context: context)
         newCategory.name = category
         
-        if categories.contains(where: {$0.name == category}) {
-            let ac = UIAlertController(title: "The category already exists", message: "Please insert unique catefory name", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "OK", style: .default))
-            present(ac, animated: true)
-//            return
-        } else {
+        if categoryAlreadyExists(category) == false {
             categories.append(newCategory)
             saveData()
             tableView.reloadData()
+        } else {
+            
+        }
+
+//        if categories.contains(where: {$0.name == category}) {
+//            let alert = UIAlertController(title: "The category already exists", message: "Please insert unique category name", preferredStyle: .alert)
+//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self, weak alert] _ in self?.addTapped()}))
+//            present(alert, animated: true)
+//
+////            return
+//        } else {
+//            categories.append(newCategory)
+//            saveData()
+//            tableView.reloadData()
+//        }
+    }
+    
+    func categoryAlreadyExists(_ category: String) -> Bool {
+        if categories.contains(where: {$0.name == category}) {
+            let alert = UIAlertController(title: "The category already exists", message: "Please, insert unique category name", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            tableView.reloadData()
+            return true
+        } else {
+            return false
         }
     }
     
@@ -141,10 +163,19 @@ class CategoryViewController: MainViewController {
 extension CategoryViewController {
     override func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
-            categories[selectedIndexPath.section].name = title
-            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
+            
+            if categoryAlreadyExists(title) {
+                return
+            } else {
+                categories[selectedIndexPath.section].name = title
+                super.updateUI(sender: sender, title: title)
+            }
+            
+//            categories[selectedIndexPath.section].name = title
+            
+//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-        super.updateUI(sender: sender, title: title)
+//        super.updateUI(sender: sender, title: title)
     }
 }
     
