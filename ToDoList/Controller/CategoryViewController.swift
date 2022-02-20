@@ -96,28 +96,19 @@ class CategoryViewController: MainViewController {
     
     func addCategory(_ category: String) {
         if category == "" { return }
-        let newCategory = Category(context: context)
-        newCategory.name = category
+//        let newCategory = Category(context: context)
+//        newCategory.name = category
         
         if categoryAlreadyExists(category) == false {
+            let newCategory = Category(context: context)
+            newCategory.name = category
             categories.append(newCategory)
             saveData()
             tableView.reloadData()
         } else {
-            
-        }
-
-//        if categories.contains(where: {$0.name == category}) {
-//            let alert = UIAlertController(title: "The category already exists", message: "Please insert unique category name", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self, weak alert] _ in self?.addTapped()}))
-//            present(alert, animated: true)
-//
-////            return
-//        } else {
-//            categories.append(newCategory)
-//            saveData()
 //            tableView.reloadData()
-//        }
+            return
+        }
     }
     
     func categoryAlreadyExists(_ category: String) -> Bool {
@@ -160,22 +151,19 @@ class CategoryViewController: MainViewController {
 
     // MARK: - BaseCellDelegate
 
-extension CategoryViewController {
-    override func updateUI(sender: BaseCell, title: String) {
+extension CategoryViewController: BaseCellProtocol {
+    func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
-            
+            navigationItem.rightBarButtonItems = []
             if categoryAlreadyExists(title) {
                 return
             } else {
                 categories[selectedIndexPath.section].name = title
-                super.updateUI(sender: sender, title: title)
+                saveData()
             }
-            
-//            categories[selectedIndexPath.section].name = title
-            
 //            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-//        super.updateUI(sender: sender, title: title)
+
     }
 }
     

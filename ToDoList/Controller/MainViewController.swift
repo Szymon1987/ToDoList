@@ -7,12 +7,12 @@
 
 import UIKit
 
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MainViewController: UIViewController {
     
     // MARK: - Properties
 
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var initialCenter: CGPoint = .zero
+    var selectedIndexPath: IndexPath?
     
     // MARK: - LifeCycle
     
@@ -42,34 +42,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
          button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
          return button
      }()
- 
-    // MARK: - TableView data source
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
-            fatalError("Unable to dequeue the cell as BaseCell")
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
-            self.remove(at: indexPath)
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-            
-        }
-        let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
-            self.rename(at: indexPath)
-        }
-        rename.backgroundColor = .black
-        return UISwipeActionsConfiguration(actions: [delete, rename])
-    }
     
     // MARK: - Helpers
     
@@ -99,11 +71,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @objc func addTapped() {
     }
-
+   
     @objc func doneButtonPressed() {
-        // not sure if this code is correct (tableview.visibleCells.forEach???, might not be efficient)
-        tableView.visibleCells.forEach { cell in
-            if let cell = cell as? BaseCell, let title = cell.textField.text {
+        if let selectedIndexPath = selectedIndexPath {
+            if let cell = tableView.cellForRow(at: selectedIndexPath) as? BaseCell, let title = cell.textField.text {
                 cell.textField.isUserInteractionEnabled = false
                 cell.baseCellDelegate?.updateUI(sender: cell, title: title)
             }
@@ -151,16 +122,37 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonPressed))
             }
         }
+        selectedIndexPath = indexPath
     }
 }
 
+// MARK: - UITableViewDataSource and UITableViewDelegate Methods
 
-    //MARK: - BaseCellProtocol
-
-extension MainViewController: BaseCellProtocol {
-   // @objc is added here to enable override this method in CategoryViewController and ToDoListViewController classes as the protocol was introuced in the extension not in the main class body
-    @objc func updateUI(sender: BaseCell, title: String) {
-        navigationItem.rightBarButtonItems = []
-        saveData()
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
+            fatalError("Unable to dequeue the cell as BaseCell")
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
+            self.remove(at: indexPath)
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            
+        }
+        let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
+            self.rename(at: indexPath)
+        }
+        rename.backgroundColor = .black
+        return UISwipeActionsConfiguration(actions: [delete, rename])
     }
 }
+

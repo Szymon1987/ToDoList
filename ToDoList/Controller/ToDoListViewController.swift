@@ -171,13 +171,14 @@ extension ToDoListViewController: ItemCellProtocol {
 
     // MARK: - BaseCellProtocol
 
-extension ToDoListViewController {
-    override func updateUI(sender: BaseCell, title: String) {
+extension ToDoListViewController: BaseCellProtocol {
+    func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-        super.updateUI(sender: sender, title: title)
+        navigationItem.rightBarButtonItems = []
+        saveData()
         shouldShowBinButton()
     }
 }

@@ -61,7 +61,6 @@ extension BaseCell: UITextFieldDelegate {
             }
         }
         return true
-
     }
     
 }
