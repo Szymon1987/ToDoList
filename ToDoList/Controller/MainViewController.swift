@@ -141,7 +141,6 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
             self.remove(at: indexPath)
             let generator = UINotificationFeedbackGenerator()
@@ -152,7 +151,11 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
             self.rename(at: indexPath)
         }
         rename.backgroundColor = .black
-        return UISwipeActionsConfiguration(actions: [delete, rename])
+        if tableView.isEditing == false {
+            return UISwipeActionsConfiguration(actions: [delete, rename])
+        } else {
+            return UISwipeActionsConfiguration(actions: [])
+        }
     }
 }
 

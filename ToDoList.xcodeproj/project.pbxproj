@@ -117,9 +117,9 @@
 			isa = PBXGroup;
 			children = (
 				ADE1825F276D16F1003AFFAB /* Handler.swift */,
+				AD8B1AE427A850CB0029A70D /* BaseCell.swift */,
 				AD069F0F27A45DE5007ED69E /* CategoryCell.swift */,
 				AD8B1AE227A84B320029A70D /* ItemCell.swift */,
-				AD8B1AE427A850CB0029A70D /* BaseCell.swift */,
 				AD8B1AF627A977C60029A70D /* RoundedButton.swift */,
 			);
 			path = View;

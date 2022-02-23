@@ -14,7 +14,7 @@ protocol BaseCellProtocol: AnyObject {
 class BaseCell: UITableViewCell {
     
     weak var baseCellDelegate: BaseCellProtocol?
-    var title: String?
+//    var title: String?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
@@ -43,24 +43,47 @@ class BaseCell: UITableViewCell {
     //MARK: - Textfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {        
-        if let title = title {
-            baseCellDelegate?.updateUI(sender: self, title: title)
+        
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        if let title = title {
+//            baseCellDelegate?.updateUI(sender: self, title: title)
+//        }
+//    }
+//
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        let text = textField.text
+//        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
+//            if unwrappedTrimmedText == "" {
+//                print("Fired empty")
+//                return false
+//            } else {
+//                title = unwrappedTrimmedText
+//                return textField.endEditing(true)
+//            }
+//        }
+//        return true
+//    }
+
+
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        let trimmedTitle = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        textField.text = trimmedTitle
+        if trimmedTitle == nil || trimmedTitle == "" {
+            return false
+        } else {
+            return true
         }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        let text = textField.text
-        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
-            if unwrappedTrimmedText == "" {
-                return false
-            } else {
-                title = unwrappedTrimmedText
-                return textField.endEditing(true)
-            }
+        return textField.endEditing(true)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let title = textField.text {
+            baseCellDelegate?.updateUI(sender: self, title: title)
         }
-        return true
+
     }
     
 }

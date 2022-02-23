@@ -32,7 +32,6 @@ class CategoryViewController: MainViewController {
    
     // MARK: - TableView data source
     
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return categories.count
     }

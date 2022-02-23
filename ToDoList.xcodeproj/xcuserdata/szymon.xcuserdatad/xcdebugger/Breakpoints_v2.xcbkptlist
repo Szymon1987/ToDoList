@@ -14,10 +14,10 @@
             filePath = "ToDoList/Controller/CategoryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
-            landmarkName = "CategoryViewController"
-            landmarkType = "21">
+            startingLineNumber = "154"
+            endingLineNumber = "154"
+            landmarkName = "updateUI(sender:title:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
