@@ -111,9 +111,17 @@ class CategoryViewController: MainViewController {
     }
     
     func categoryAlreadyExists(_ category: String) -> Bool {
-//        print(selectedIndexPath?.section)
-//        print(categories[selectedIndexPath!.section])
-        if categories.contains(where: {$0.name == category}) {
+        
+    // make sure to refactor this code
+        let titleOne = categories[selectedIndexPath!.section].name
+        var titleTwo: String = ""
+        if let cell = tableView.cellForRow(at: selectedIndexPath!) as? BaseCell {
+            titleTwo = cell.textField.text!
+        }
+        print(titleOne)
+        print(titleTwo)
+        
+        if categories.contains(where: {$0.name == category}) && titleOne != titleTwo {
             let alert = UIAlertController(title: "The category already exists", message: "Please, insert unique category name", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             present(alert, animated: true)

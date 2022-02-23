@@ -63,9 +63,6 @@ extension BaseCell: UITextFieldDelegate {
             baseCellDelegate?.updateUI(sender: self, title: title)
         }
     }
-    
-    
-    
 }
 
 
