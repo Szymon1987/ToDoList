@@ -74,9 +74,9 @@ class MainViewController: UIViewController {
    
     @objc func doneButtonPressed() {
         if let selectedIndexPath = selectedIndexPath {
-            if let cell = tableView.cellForRow(at: selectedIndexPath) as? BaseCell, let title = cell.textField.text {
+            if let cell = tableView.cellForRow(at: selectedIndexPath) as? BaseCell {
                 cell.textField.isUserInteractionEnabled = false
-                cell.baseCellDelegate?.updateUI(sender: cell, title: title)
+                cell.textField.endEditing(true)
             }
         }
     }

@@ -43,7 +43,33 @@ class BaseCell: UITableViewCell {
     //MARK: - Textfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
-        
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        let trimmedTitle = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+        textField.text = trimmedTitle
+        if trimmedTitle == nil || trimmedTitle == "" {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return textField.endEditing(true)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if let title = textField.text {
+            baseCellDelegate?.updateUI(sender: self, title: title)
+        }
+    }
+    
+    
+    
+}
+
+
+
 //    func textFieldDidEndEditing(_ textField: UITextField) {
 //        if let title = title {
 //            baseCellDelegate?.updateUI(sender: self, title: title)
@@ -63,27 +89,3 @@ extension BaseCell: UITextFieldDelegate {
 //        }
 //        return true
 //    }
-
-
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        let trimmedTitle = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        textField.text = trimmedTitle
-        if trimmedTitle == nil || trimmedTitle == "" {
-            return false
-        } else {
-            return true
-        }
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return textField.endEditing(true)
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if let title = textField.text {
-            baseCellDelegate?.updateUI(sender: self, title: title)
-        }
-
-    }
-    
-}

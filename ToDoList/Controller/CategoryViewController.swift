@@ -89,28 +89,30 @@ class CategoryViewController: MainViewController {
         
         ac.addAction(UIAlertAction(title: "Add ", style: .default, handler: { [weak self, weak ac] _ in
         guard let newCategory = ac?.textFields?[0].text else { return }
+//        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespacesAndNewlines)
         self?.addCategory(newCategory)
         }))
     }
     
     func addCategory(_ category: String) {
-        if category == "" { return }
+//        if category == "" { return }
 //        let newCategory = Category(context: context)
 //        newCategory.name = category
         
-        if categoryAlreadyExists(category) == false {
+        if categoryAlreadyExists(category) || category == "" {
+            return
+        } else {
             let newCategory = Category(context: context)
             newCategory.name = category
             categories.append(newCategory)
             saveData()
             tableView.reloadData()
-        } else {
-//            tableView.reloadData()
-            return
         }
     }
     
     func categoryAlreadyExists(_ category: String) -> Bool {
+//        print(selectedIndexPath?.section)
+//        print(categories[selectedIndexPath!.section])
         if categories.contains(where: {$0.name == category}) {
             let alert = UIAlertController(title: "The category already exists", message: "Please, insert unique category name", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
