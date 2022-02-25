@@ -95,31 +95,24 @@ class CategoryViewController: MainViewController {
     }
     
     func addCategory(_ category: String) {
-//        if category == "" { return }
-//        let newCategory = Category(context: context)
-//        newCategory.name = category
-        
         if categoryAlreadyExists(category) || category == "" {
             return
         } else {
             let newCategory = Category(context: context)
+//            let trimmedCategory = newCategory.name?.trimmingCharacters(in: .whitespacesAndNewlines)
             newCategory.name = category
             categories.append(newCategory)
             saveData()
             tableView.reloadData()
         }
     }
-    // Double check this function
+    
     func categoryAlreadyExists(_ category: String) -> Bool {
-        let titleForSelectedIndexPath: String?
-        if let selectedIndexPath = selectedIndexPath {
-            titleForSelectedIndexPath = categories[selectedIndexPath.section].name
-        } else { return false }
-        if titleForSelectedIndexPath != category && categories.contains(where: { $0.name == category}) {
-            let alert = UIAlertController(title: "The category already exists", message: "Please enter unique category name", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            tableView.reloadData()
+        if categories.contains(where: { $0.name == category}) {
+        let alert = UIAlertController(title: "The category already exists", message: "Please enter unique category name", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+        tableView.reloadData()
             return true
         } else {
             return false
@@ -149,7 +142,6 @@ class CategoryViewController: MainViewController {
         tableView.reloadData()
         self.saveData()
     }
-    
 }
 
     // MARK: - BaseCellDelegate
@@ -158,15 +150,16 @@ extension CategoryViewController: BaseCellProtocol {
     func updateUI(sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             navigationItem.rightBarButtonItems = []
-            if categoryAlreadyExists(title) {
+            guard let name = categories[selectedIndexPath.section].name else { return }
+            if name == title {
+                return
+            } else if categoryAlreadyExists(title) {
                 return
             } else {
                 categories[selectedIndexPath.section].name = title
                 saveData()
             }
-//            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
-
     }
 }
     

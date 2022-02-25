@@ -15,6 +15,7 @@ class ToDoListViewController: MainViewController {
     var selectedCategory: Category? {
         didSet {
             loadItems()
+//            items.sort{$0.title! < $1.title!}
         }
     }
     
@@ -69,10 +70,10 @@ class ToDoListViewController: MainViewController {
         let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
-        alert.addAction(UIAlertAction(title: "Delete all", style: .default, handler: { [weak self, weak alert] _ in
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default) { [weak self, weak alert] _ in
             self?.removeAllItems()
             self?.navigationItem.setRightBarButton(nil, animated: true)
-        }))
+        })
     }
 
     @objc override func addTapped() {
@@ -173,7 +174,7 @@ extension ToDoListViewController: ItemCellProtocol {
 
 extension ToDoListViewController: BaseCellProtocol {
     func updateUI(sender: BaseCell, title: String) {
-        if let selectedIndexPath = tableView.indexPath(for: sender) {
+        if let selectedIndexPath = selectedIndexPath {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
