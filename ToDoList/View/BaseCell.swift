@@ -14,7 +14,6 @@ protocol BaseCellProtocol: AnyObject {
 class BaseCell: UITableViewCell {
     
     weak var baseCellDelegate: BaseCellProtocol?
-//    var title: String?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
@@ -65,24 +64,3 @@ extension BaseCell: UITextFieldDelegate {
     }
 }
 
-
-
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        if let title = title {
-//            baseCellDelegate?.updateUI(sender: self, title: title)
-//        }
-//    }
-//
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        let text = textField.text
-//        if let unwrappedTrimmedText = text?.trimmingCharacters(in: .whitespacesAndNewlines) {
-//            if unwrappedTrimmedText == "" {
-//                print("Fired empty")
-//                return false
-//            } else {
-//                title = unwrappedTrimmedText
-//                return textField.endEditing(true)
-//            }
-//        }
-//        return true
-//    }

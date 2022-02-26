@@ -89,8 +89,8 @@ class CategoryViewController: MainViewController {
         
         ac.addAction(UIAlertAction(title: "Add ", style: .default, handler: { [weak self, weak ac] _ in
         guard let newCategory = ac?.textFields?[0].text else { return }
-//        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespacesAndNewlines)
-        self?.addCategory(newCategory)
+        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespacesAndNewlines)
+        self?.addCategory(trimmedCategory)
         }))
     }
     

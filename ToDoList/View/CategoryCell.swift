@@ -17,6 +17,7 @@ class CategoryCell: BaseCell {
         layer.cornerRadius = 8
         contentView.layer.borderWidth = 0.3
         contentView.layer.borderColor = ColorManager.cellBorder
+//        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
     }
     
     let quantityLabel: UILabel = {
@@ -52,5 +53,13 @@ class CategoryCell: BaseCell {
         progressView.leadingAnchor.constraint(equalTo: textField.leadingAnchor).isActive = true
         progressView.trailingAnchor.constraint(equalTo: quantityLabel.trailingAnchor).isActive = true
         progressView.topAnchor.constraint(equalTo: quantityLabel.bottomAnchor, constant: 10).isActive = true
+        
+        
+//        contentView.layer.masksToBounds = true
+//        contentView.layer.cornerRadius = 8
+//        layer.masksToBounds = true
+//        layer.cornerRadius = 8
+//        contentView.layer.borderWidth = 0.3
+//        contentView.layer.borderColor = ColorManager.cellBorder
     }
 }

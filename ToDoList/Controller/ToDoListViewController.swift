@@ -82,7 +82,8 @@ class ToDoListViewController: MainViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Add Item", style: .default) { [weak self, weak alert] _ in
             guard let item = alert?.textFields?[0].text else { return }
-            self?.addItem(item)
+            let trimmedItem = item.trimmingCharacters(in: .whitespacesAndNewlines)
+            self?.addItem(trimmedItem)
         })
         present(alert, animated: true)
     }

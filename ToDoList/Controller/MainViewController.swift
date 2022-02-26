@@ -101,7 +101,6 @@ class MainViewController: UIViewController {
     func saveData() {
             do {
                 try context.save()
-                print("executed")
             } catch {
                 print("Error saving context \(error)")
             }
