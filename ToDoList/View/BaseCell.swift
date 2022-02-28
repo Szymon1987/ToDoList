@@ -34,7 +34,7 @@ class BaseCell: UITableViewCell {
     }
 
     func setupViews() {
-        backgroundColor = ColorManager.cellBackground
+//        backgroundColor = ColorManager.cellBackground
         textField.autocorrectionType = .no
         textField.isUserInteractionEnabled = false
     }

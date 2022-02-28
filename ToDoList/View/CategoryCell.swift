@@ -8,17 +8,16 @@
 import UIKit
 
 class CategoryCell: BaseCell {
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 8
-        layer.masksToBounds = false
-        layer.cornerRadius = 8
-        contentView.layer.borderWidth = 0.3
-        contentView.layer.borderColor = ColorManager.cellBorder
-//        layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
-    }
+    
+    let cellBackgroundView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ColorManager.cellBackground
+        view.layer.cornerRadius = 8
+        view.layer.borderWidth = 0.3
+        view.layer.borderColor = ColorManager.cellBorder
+        return view
+    }()
     
     let quantityLabel: UILabel = {
         let label = UILabel()
@@ -38,13 +37,19 @@ class CategoryCell: BaseCell {
     
     override func setupViews() {
         super.setupViews()
-
-        addSubview(textField)
         
+        addSubview(cellBackgroundView)
+        cellBackgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        cellBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        cellBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        cellBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        addSubview(textField)
+
         textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
         textField.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: centerXAnchor, constant: 30).isActive = true
-        
+
         addSubview(quantityLabel)
         quantityLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         quantityLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
@@ -53,13 +58,5 @@ class CategoryCell: BaseCell {
         progressView.leadingAnchor.constraint(equalTo: textField.leadingAnchor).isActive = true
         progressView.trailingAnchor.constraint(equalTo: quantityLabel.trailingAnchor).isActive = true
         progressView.topAnchor.constraint(equalTo: quantityLabel.bottomAnchor, constant: 10).isActive = true
-        
-        
-//        contentView.layer.masksToBounds = true
-//        contentView.layer.cornerRadius = 8
-//        layer.masksToBounds = true
-//        layer.cornerRadius = 8
-//        contentView.layer.borderWidth = 0.3
-//        contentView.layer.borderColor = ColorManager.cellBorder
     }
 }

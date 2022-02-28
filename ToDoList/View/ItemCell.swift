@@ -42,6 +42,7 @@ class ItemCell: BaseCell {
     override func setupViews() {
         super.setupViews()
         self.selectionStyle = .none
+        backgroundColor = ColorManager.cellBackground
         contentView.addSubview(textField)
         
         textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true

@@ -36,7 +36,7 @@ class CategoryViewController: MainViewController {
         return categories.count
     }
     
-    // Two methods belew help with the spacing between the cells
+    // Two methods below help with the spacing between the cells
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude
@@ -52,6 +52,8 @@ class CategoryViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
+//        cell.contentView.layer.cornerRadius = 8
+//        cell.layer.cornerRadius = 8
         cell.baseCellDelegate = self
         let quantity = categories[indexPath.section].quantity
         let quantityDone = categories[indexPath.section].quantityDone
