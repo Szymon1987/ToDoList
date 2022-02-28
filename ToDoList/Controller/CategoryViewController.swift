@@ -52,8 +52,6 @@ class CategoryViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
         }
-//        cell.contentView.layer.cornerRadius = 8
-//        cell.layer.cornerRadius = 8
         cell.baseCellDelegate = self
         let quantity = categories[indexPath.section].quantity
         let quantityDone = categories[indexPath.section].quantityDone
@@ -83,8 +81,10 @@ class CategoryViewController: MainViewController {
     // MARK: - Helpers
     
     @objc override func sortTapped() {
-        categories.sort{$0.name! < $1.name!}
-        tableView.reloadData()
+        if categories.count > 1 {
+            categories.sort{$0.name! < $1.name!}
+            tableView.reloadData()
+        }
     }
     
     @objc override func addTapped() {
@@ -105,7 +105,6 @@ class CategoryViewController: MainViewController {
             return
         } else {
             let newCategory = Category(context: context)
-//            let trimmedCategory = newCategory.name?.trimmingCharacters(in: .whitespacesAndNewlines)
             newCategory.name = category
             categories.append(newCategory)
             saveData()

@@ -55,11 +55,10 @@ class ToDoListViewController: MainViewController {
     // MARK: - Helpers
 
     @objc override func sortTapped() {
-        if items.isEmpty == false {
-            items.sort{$0.title! < $1.title!}
-            tableView.reloadData()
-        }
-        
+            if items.count > 1 {
+                items.sort{$0.title! < $1.title!}
+                tableView.reloadData()
+            }
     }
     
     func shouldShowBinButton() {
