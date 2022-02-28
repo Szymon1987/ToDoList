@@ -13,7 +13,7 @@ class CategoryCell: BaseCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = ColorManager.cellBackground
-        view.layer.cornerRadius = 8
+        view.layer.cornerRadius = 10
         view.layer.borderWidth = 0.3
         view.layer.borderColor = ColorManager.cellBorder
         return view

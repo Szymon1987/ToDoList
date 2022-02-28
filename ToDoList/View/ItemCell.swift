@@ -41,7 +41,6 @@ class ItemCell: BaseCell {
     
     override func setupViews() {
         super.setupViews()
-        self.selectionStyle = .none
         backgroundColor = ColorManager.cellBackground
         contentView.addSubview(textField)
         

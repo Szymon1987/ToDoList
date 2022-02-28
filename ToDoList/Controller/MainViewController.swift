@@ -81,9 +81,16 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func setupNavigationController() {
+    func setupNavigationController() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = .label
+        let image = UIImage(systemName: "arrow.up.arrow.down.circle")?.withRenderingMode(.alwaysTemplate)
+        let sortButton = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sortTapped))
+        navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.leftBarButtonItem = sortButton
+    }
+    
+    @objc func sortTapped() {
     }
 
     func setupViews() {

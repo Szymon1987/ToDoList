@@ -82,6 +82,10 @@ class CategoryViewController: MainViewController {
     
     // MARK: - Helpers
     
+    @objc override func sortTapped() {
+        categories.sort{$0.name! < $1.name!}
+        tableView.reloadData()
+    }
     
     @objc override func addTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
