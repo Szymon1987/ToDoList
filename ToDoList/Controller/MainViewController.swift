@@ -7,7 +7,37 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    
+
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            return 1
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
+                fatalError("Unable to dequeue the cell as BaseCell")
+            }
+            return cell
+        }
+        
+        func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+            let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
+                self.remove(at: indexPath)
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                
+            }
+            let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
+                self.rename(at: indexPath)
+            }
+            rename.backgroundColor = .black
+            if tableView.isEditing == false {
+                return UISwipeActionsConfiguration(actions: [delete, rename])
+            } else {
+                return UISwipeActionsConfiguration(actions: [])
+            }
+        }
     
     // MARK: - Properties
 
@@ -54,7 +84,7 @@ class MainViewController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         else {
-          // if keyboard size is not available for some reason, dont do anything
+          /// if keyboard size is not available for some reason, don't do anything
           return
         }
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height , right: 0)
@@ -64,7 +94,7 @@ class MainViewController: UIViewController {
 
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        // reset back the content inset to zero after keyboard is gone
+        /// reset back the content inset to zero after keyboard is gone
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
       }
@@ -84,6 +114,7 @@ class MainViewController: UIViewController {
     }
     
     //MARK: - View Methods
+    
     func setupNavigationController() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = .label
@@ -136,34 +167,35 @@ class MainViewController: UIViewController {
 
 // MARK: - UITableViewDataSource and UITableViewDelegate Methods
 
-extension MainViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
-            fatalError("Unable to dequeue the cell as BaseCell")
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
-            self.remove(at: indexPath)
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-            
-        }
-        let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
-            self.rename(at: indexPath)
-        }
-        rename.backgroundColor = .black
-        if tableView.isEditing == false {
-            return UISwipeActionsConfiguration(actions: [delete, rename])
-        } else {
-            return UISwipeActionsConfiguration(actions: [])
-        }
-    }
-}
+//extension MainViewController: UITableViewDataSource, UITableViewDelegate {
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? BaseCell else {
+//            fatalError("Unable to dequeue the cell as BaseCell")
+//        }
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+//        let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
+//            self.remove(at: indexPath)
+//            let generator = UINotificationFeedbackGenerator()
+//            generator.notificationOccurred(.success)
+//
+//        }
+//        let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
+//            self.rename(at: indexPath)
+//        }
+//        rename.backgroundColor = .black
+//        if tableView.isEditing == false {
+//            return UISwipeActionsConfiguration(actions: [delete, rename])
+//        } else {
+//            return UISwipeActionsConfiguration(actions: [])
+//        }
+//    }
+//}
 

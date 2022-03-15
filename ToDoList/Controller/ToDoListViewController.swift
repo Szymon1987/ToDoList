@@ -173,7 +173,7 @@ extension ToDoListViewController: BaseCellProtocol {
 
 extension ToDoListViewController {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
@@ -181,7 +181,7 @@ extension ToDoListViewController {
         return 50
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
             cell.baseCellDelegate = self
             cell.itemCellDelegate = self
