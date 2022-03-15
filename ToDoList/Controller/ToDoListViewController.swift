@@ -77,9 +77,10 @@ class ToDoListViewController: MainViewController {
         let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
-        alert.addAction(UIAlertAction(title: "Delete all", style: .default) { [weak self, weak alert] _ in
-            self?.removeAllItems()
-            self?.navigationItem.setRightBarButton(nil, animated: true)
+        // probaly [weak self, weak alert isnt't needed as we aren't passing any parameters in removeAllItems]
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default) { _ in
+            self.removeAllItems()
+            self.navigationItem.setRightBarButton(nil, animated: true)
         })
     }
 
