@@ -71,6 +71,8 @@ class MainViewController: UIViewController {
     
     @objc func addTapped() {
     }
+    @objc func sortTapped() {
+    }
    
     @objc func doneButtonPressed() {
         if let selectedIndexPath = selectedIndexPath {
@@ -81,6 +83,7 @@ class MainViewController: UIViewController {
         }
     }
     
+    //MARK: - View Methods
     func setupNavigationController() {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = .label
@@ -90,8 +93,6 @@ class MainViewController: UIViewController {
         navigationItem.leftBarButtonItem = sortButton
     }
     
-    @objc func sortTapped() {
-    }
 
     func setupViews() {
         view.addSubview(tableView)
