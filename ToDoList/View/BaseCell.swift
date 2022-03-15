@@ -12,6 +12,7 @@ protocol BaseCellProtocol: AnyObject {
 }
 
 class BaseCell: UITableViewCell {
+    
     weak var baseCellDelegate: BaseCellProtocol?
     
     lazy var textField: UITextField = {

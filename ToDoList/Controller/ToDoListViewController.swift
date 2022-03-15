@@ -15,6 +15,7 @@ class ToDoListViewController: MainViewController {
     var selectedCategory: Category? {
         didSet {
             loadItems()
+//            items.sort{$0.title! < $1.title!}
         }
     }
     
@@ -26,6 +27,30 @@ class ToDoListViewController: MainViewController {
         shouldShowBinButton()
     }
     
+ 
+    // MARK: - TableView Datasource
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
+            cell.baseCellDelegate = self
+            cell.itemCellDelegate = self
+            cell.textField.text = items[indexPath.row].title
+            cell.checkmarkButton.isSelected = items[indexPath.row].done
+            if items[indexPath.row].done {
+                cell.textField.textColor = .label.withAlphaComponent(0.5)
+            } else {
+                cell.textField.textColor = .label.withAlphaComponent(1)
+            }
+            return cell
+    }
     
     // MARK: - Helpers
 
@@ -70,13 +95,6 @@ class ToDoListViewController: MainViewController {
         })
         present(alert, animated: true)
     }
-    
-    override func setupViews() {
-        super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
-    }
-    
-    //MARK: - CoreData
 
     func addItem(_ item: String) {
         if item == "" { return }
@@ -89,7 +107,14 @@ class ToDoListViewController: MainViewController {
         tableView.reloadData()
         saveData()
     }
-
+    
+    override func setupViews() {
+        super.setupViews()
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+    }
+    
+    // MARK: - CoreData
+    
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
 
@@ -165,33 +190,5 @@ extension ToDoListViewController: BaseCellProtocol {
         navigationItem.rightBarButtonItems = []
         saveData()
         shouldShowBinButton()
-    }
-}
-
-
-    // MARK: - TableView Datasource
-
-extension ToDoListViewController {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
-            cell.baseCellDelegate = self
-            cell.itemCellDelegate = self
-            cell.textField.text = items[indexPath.row].title
-            cell.checkmarkButton.isSelected = items[indexPath.row].done
-            if items[indexPath.row].done {
-                cell.textField.textColor = .label.withAlphaComponent(0.5)
-            } else {
-                cell.textField.textColor = .label.withAlphaComponent(1)
-            }
-            return cell
     }
 }

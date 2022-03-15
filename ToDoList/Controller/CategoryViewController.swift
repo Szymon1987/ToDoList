@@ -17,6 +17,10 @@ class CategoryViewController: MainViewController {
     
  // MARK: - LifeCycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
@@ -25,9 +29,53 @@ class CategoryViewController: MainViewController {
         tableView.sectionHeaderTopPadding = 10
         tableView.separatorStyle = .none
     }
+   
+    // MARK: - TableView data source
     
-    override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return categories.count
+    }
+    
+    // Two methods below help with the spacing between the cells
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return .leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        return headerView
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
+            fatalError("Unable to dequeue the CustomCell")
+        }
+        cell.baseCellDelegate = self
+        let quantity = categories[indexPath.section].quantity
+        let quantityDone = categories[indexPath.section].quantityDone
+        cell.textField.text = categories[indexPath.section].name
+        cell.quantityLabel.text = "\(quantityDone) / \(quantity)"
+        let progress = Float(quantityDone) / Float(quantity)
+        if quantityDone == 0 && quantity == 0 {
+            cell.progressView.progress = 0
+        } else {
+            cell.progressView.progress = progress
+        }
+        return cell
+    }
+        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let category = categories[indexPath.section]
+        let vc = ToDoListViewController()
+        vc.title = category.name
+        vc.selectedCategory = category
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
     
     // MARK: - Helpers
@@ -119,58 +167,7 @@ extension CategoryViewController: BaseCellProtocol {
         }
     }
 }
-
-
- // MARK: - TableView data source
-
-extension CategoryViewController {
     
-     func numberOfSections(in tableView: UITableView) -> Int {
-         return categories.count
-     }
-     
-     /// correct spacing between the rows
-     
-     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-         return .leastNormalMagnitude
-     }
-
-     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-         let headerView = UIView()
-         headerView.backgroundColor = .clear
-         return headerView
-     }
-
-     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
-             fatalError("Unable to dequeue the CustomCell")
-         }
-         cell.baseCellDelegate = self
-         let quantity = categories[indexPath.section].quantity
-         let quantityDone = categories[indexPath.section].quantityDone
-         cell.textField.text = categories[indexPath.section].name
-         cell.quantityLabel.text = "\(quantityDone) / \(quantity)"
-         let progress = Float(quantityDone) / Float(quantity)
-         if quantityDone == 0 && quantity == 0 {
-             cell.progressView.progress = 0
-         } else {
-             cell.progressView.progress = progress
-         }
-         return cell
-     }
-         
-     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-         let category = categories[indexPath.section]
-         let vc = ToDoListViewController()
-         vc.title = category.name
-         vc.selectedCategory = category
-         navigationController?.pushViewController(vc, animated: true)
-     }
-     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-         return 60
-     }
-}
 
         
 

@@ -9,8 +9,6 @@ import UIKit
 
 class CategoryCell: BaseCell {
     
-    //MARK: - UIComponents
-    
     let cellBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -36,8 +34,6 @@ class CategoryCell: BaseCell {
         progressView.progress = 0
         return progressView
     }()
-    
-    // MARK: - Views set up methods
     
     override func setupViews() {
         super.setupViews()
