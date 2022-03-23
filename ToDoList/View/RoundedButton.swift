@@ -11,7 +11,7 @@ class RoundedButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = ColorManager.roundedButton
+        backgroundColor = .roundedButton
         layer.cornerRadius = 30
         let configuration = UIImage.SymbolConfiguration(pointSize: 30, weight: .light, scale: .medium)
         let image = UIImage(systemName: "plus", withConfiguration: configuration)

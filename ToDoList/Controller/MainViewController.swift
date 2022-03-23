@@ -18,7 +18,7 @@ class MainViewController: UIViewController {
     
     override func loadView() {
         view = UIView()
-        view.backgroundColor = ColorManager.viewBackground
+        view.backgroundColor = .viewBackground
         setupViews()
     }
 
@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
     
     lazy var tableView: UITableView = {
         let tableView = UITableView()
-        tableView.backgroundColor = ColorManager.viewBackground
+        tableView.backgroundColor = .viewBackground
         tableView.dataSource = self
         tableView.delegate = self
         return tableView

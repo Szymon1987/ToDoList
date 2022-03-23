@@ -35,7 +35,7 @@ class BaseCell: UITableViewCell {
 
     func setupViews() {
         self.selectionStyle = .none
-        backgroundColor = ColorManager.viewBackground
+        backgroundColor = .viewBackground
         textField.autocorrectionType = .no
         textField.isUserInteractionEnabled = false
     }

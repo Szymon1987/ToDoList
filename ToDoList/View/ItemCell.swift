@@ -20,7 +20,7 @@ class ItemCell: BaseCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 16
         button.layer.borderWidth = 1.5
-        button.layer.borderColor = ColorManager.checkmarkButton.cgColor
+        button.layer.borderColor = UIColor.checkmarkButton.cgColor
         button.addTarget(self, action: #selector(checkmarkButtonTapped), for: .touchUpInside)
         let selectedImage = UIImage(named: "checkmark")
         let clearImage = UIImage(named: "clear")
@@ -41,7 +41,7 @@ class ItemCell: BaseCell {
     
     override func setupViews() {
         super.setupViews()
-        backgroundColor = ColorManager.cellBackground
+        backgroundColor = .cellBackground
         contentView.addSubview(textField)
         
         textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true

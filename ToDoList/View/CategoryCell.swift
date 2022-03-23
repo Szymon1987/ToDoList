@@ -12,10 +12,10 @@ class CategoryCell: BaseCell {
     let cellBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ColorManager.cellBackground
+        view.backgroundColor = .cellBackground
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 0.3
-        view.layer.borderColor = ColorManager.cellBorder
+        view.layer.borderColor = UIColor.cellBorder.cgColor
         return view
     }()
     
@@ -28,8 +28,8 @@ class CategoryCell: BaseCell {
     let progressView: UIProgressView = {
         let progressView = UIProgressView()
         progressView.progressViewStyle = .bar
-        progressView.trackTintColor = ColorManager.viewBackground
-        progressView.progressTintColor = ColorManager.roundedButton
+        progressView.trackTintColor = .viewBackground
+        progressView.progressTintColor = .roundedButton
         progressView.translatesAutoresizingMaskIntoConstraints = false
         progressView.progress = 0
         return progressView
