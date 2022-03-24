@@ -29,7 +29,6 @@ class ItemCell: BaseCell {
         return button
     }()
 
-    
     @objc func checkmarkButtonTapped() {
         if textField.isEditing == false {
             itemCellDelegate?.toggleDone(sender: self)
@@ -42,8 +41,8 @@ class ItemCell: BaseCell {
     override func setupViews() {
         super.setupViews()
         backgroundColor = .cellBackground
-        contentView.addSubview(textField)
         
+        contentView.addSubview(textField)
         textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
         textField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true

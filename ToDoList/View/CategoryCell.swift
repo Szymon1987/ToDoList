@@ -9,7 +9,7 @@ import UIKit
 
 class CategoryCell: BaseCell {
     
-    let cellBackgroundView: UIView = {
+    private let cellBackgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .cellBackground
@@ -19,7 +19,7 @@ class CategoryCell: BaseCell {
         return view
     }()
     
-    let quantityLabel: UILabel = {
+    public let quantityLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -39,13 +39,9 @@ class CategoryCell: BaseCell {
         super.setupViews()
         
         addSubview(cellBackgroundView)
-        cellBackgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        cellBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        cellBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        cellBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        cellBackgroundView.anchorSize(to: self)
         
         addSubview(textField)
-
         textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10).isActive = true
         textField.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         textField.trailingAnchor.constraint(equalTo: centerXAnchor, constant: 30).isActive = true

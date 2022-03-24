@@ -29,9 +29,16 @@ extension UIView {
             heightAnchor.constraint(equalToConstant: size.height).isActive = true
         }
     }
-    
     func anchorSize(to view: UIView) {
         widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
         heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
     }
+}
+
+extension UIColor {
+    public static let cellBorder = UIColor.lightGray
+    public static let checkmarkButton = UIColor(red: 47/255, green: 128/255, blue: 64/255, alpha: 1)
+    public static let cellBackground = UIColor(named: "cellBackground")
+    public static let viewBackground = UIColor(named: "viewBackground")
+    public static let roundedButton = UIColor(named: "roundedButton")
 }

@@ -40,7 +40,7 @@ class BaseCell: UITableViewCell {
         textField.isUserInteractionEnabled = false
     }
 }
-    //MARK: - Textfield Delegate
+    //MARK: - UITextfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
     

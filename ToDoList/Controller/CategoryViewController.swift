@@ -13,7 +13,6 @@ class CategoryViewController: MainViewController {
     // MARK: - Properties
     
     var categories = [Category]()
-
     
  // MARK: - LifeCycle
     
@@ -80,14 +79,14 @@ class CategoryViewController: MainViewController {
     
     // MARK: - Helpers
     
-    @objc override func sortTapped() {
+    @objc override func sortButtonTapped() {
         if categories.count > 1 {
             categories.sort{$0.name! < $1.name!}
             tableView.reloadData()
         }
     }
     
-    @objc override func addTapped() {
+    @objc override func addButtonTapped() {
         let ac = UIAlertController(title: "Add New Category", message: nil, preferredStyle: .alert)
         ac.addTextField()
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))

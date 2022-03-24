@@ -39,7 +39,7 @@ class MainViewController: UIViewController {
     
     lazy var roundedButton: RoundedButton = {
          let button = RoundedButton()
-         button.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
          return button
      }()
     
@@ -69,7 +69,7 @@ class MainViewController: UIViewController {
         tableView.scrollIndicatorInsets = contentInsets
       }
     
-    @objc func addTapped() {
+    @objc func addButtonTapped() {
     }
    
     @objc func doneButtonPressed() {
@@ -85,22 +85,19 @@ class MainViewController: UIViewController {
         navigationItem.backButtonTitle = ""
         navigationController?.navigationBar.tintColor = .label
         let image = UIImage(systemName: "arrow.up.arrow.down.circle")?.withRenderingMode(.alwaysTemplate)
-        let sortButton = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sortTapped))
+        let sortButton = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(sortButtonTapped))
         navigationItem.leftItemsSupplementBackButton = true
         navigationItem.leftBarButtonItem = sortButton
     }
     
-    @objc func sortTapped() {
+    @objc func sortButtonTapped() {
     }
 
     func setupViews() {
         view.addSubview(tableView)
         view.addSubview(roundedButton)
-        
-        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
-        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
-        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        roundedButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+
+        roundedButton.anchor(top: nil, bottom: view.bottomAnchor, leading: nil, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: -150, right: -70), size: CGSize(width: 60, height: 60))
     }
     
     // MARK: - CoreData

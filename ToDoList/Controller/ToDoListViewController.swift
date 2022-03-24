@@ -4,61 +4,60 @@
 //
 //  Created by Szymon Tadrzak on 16/12/2021.
 //
-import CoreData
 import UIKit
+import CoreData
 
 class ToDoListViewController: MainViewController {
     
-    // MARK: Properties
-
+    // MARK: - Properties
+    
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
             loadItems()
-//            items.sort{$0.title! < $1.title!}
         }
     }
     
     // MARK: - LifeCycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
         shouldShowBinButton()
     }
     
- 
+    
     // MARK: - TableView Datasource
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
-     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
-            cell.baseCellDelegate = self
-            cell.itemCellDelegate = self
-            cell.textField.text = items[indexPath.row].title
-            cell.checkmarkButton.isSelected = items[indexPath.row].done
-            if items[indexPath.row].done {
-                cell.textField.textColor = .label.withAlphaComponent(0.5)
-            } else {
-                cell.textField.textColor = .label.withAlphaComponent(1)
-            }
-            return cell
+        cell.baseCellDelegate = self
+        cell.itemCellDelegate = self
+        cell.textField.text = items[indexPath.row].title
+        cell.checkmarkButton.isSelected = items[indexPath.row].done
+        if items[indexPath.row].done {
+            cell.textField.textColor = .label.withAlphaComponent(0.5)
+        } else {
+            cell.textField.textColor = .label.withAlphaComponent(1)
+        }
+        return cell
     }
     
     // MARK: - Helpers
-
-    @objc override func sortTapped() {
-            if items.count > 1 {
-                items.sort{$0.title! < $1.title!}
-                tableView.reloadData()
-            }
+    
+    @objc override func sortButtonTapped() {
+        if items.count > 1 {
+            items.sort{$0.title! < $1.title!}
+            tableView.reloadData()
+        }
     }
     
     func shouldShowBinButton() {
@@ -67,7 +66,7 @@ class ToDoListViewController: MainViewController {
         if items.allSatisfy({ $0.done == true }) {
             let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
             let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
-                navigationItem.rightBarButtonItems = [binButton]
+            navigationItem.rightBarButtonItems = [binButton]
         } else {
             navigationItem.rightBarButtonItems = []
         }
@@ -83,8 +82,8 @@ class ToDoListViewController: MainViewController {
             self.navigationItem.setRightBarButton(nil, animated: true)
         })
     }
-
-    @objc override func addTapped() {
+    
+    @objc override func addButtonTapped() {
         let alert = UIAlertController(title: "Add New Item", message: nil, preferredStyle: .alert)
         alert.addTextField()
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
@@ -95,7 +94,14 @@ class ToDoListViewController: MainViewController {
         })
         present(alert, animated: true)
     }
-
+    
+    override func setupViews() {
+        super.setupViews()
+        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+    }
+    
+    // MARK: - CoreData
+    
     func addItem(_ item: String) {
         if item == "" { return }
         let newItem = Item(context: context)
@@ -108,16 +114,9 @@ class ToDoListViewController: MainViewController {
         saveData()
     }
     
-    override func setupViews() {
-        super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
-    }
-    
-    // MARK: - CoreData
-    
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
         guard let selectedCategory = selectedCategory else { return }
-
+        
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
         request.predicate = predicate
         do {
@@ -160,7 +159,7 @@ class ToDoListViewController: MainViewController {
         saveData()
     }
 }
-    // MARK: - ItemCellProtocol
+// MARK: - ItemCellProtocol
 
 extension ToDoListViewController: ItemCellProtocol {
     func toggleDone(sender: ItemCell) {
@@ -172,14 +171,14 @@ extension ToDoListViewController: ItemCellProtocol {
                 selectedCategory?.quantityDone -= 1
             }
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-//            tableView.reloadData()
+            //            tableView.reloadData()
             shouldShowBinButton()
             saveData()
         }
     }
 }
 
-    // MARK: - BaseCellProtocol
+// MARK: - BaseCellProtocol
 
 extension ToDoListViewController: BaseCellProtocol {
     func updateUI(sender: BaseCell, title: String) {
