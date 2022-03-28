@@ -10,7 +10,16 @@ import UIKit
 class MainViewController: UIViewController {
     
     // MARK: - Properties
-
+    let model = Model()
+//    let dataBase: Database
+//    init(dataBase: Database) {
+//        self.dataBase = dataBase
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var selectedIndexPath: IndexPath?
     
@@ -71,6 +80,8 @@ class MainViewController: UIViewController {
     
     @objc func addButtonTapped() {
     }
+    @objc func sortButtonTapped() {
+    }
    
     @objc func doneButtonPressed() {
         if let selectedIndexPath = selectedIndexPath {
@@ -90,10 +101,7 @@ class MainViewController: UIViewController {
         navigationItem.leftBarButtonItem = sortButton
     }
     
-    @objc func sortButtonTapped() {
-    }
-
-    func setupViews() {
+    public func setupViews() {
         view.addSubview(tableView)
         view.addSubview(roundedButton)
 
@@ -101,15 +109,7 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - CoreData
-    
-    func saveData() {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving context \(error)")
-            }
-        }
-    
+
     func remove(at indexPath: IndexPath) {
         if navigationItem.rightBarButtonItems != nil {
             navigationItem.setRightBarButton(nil, animated: true)

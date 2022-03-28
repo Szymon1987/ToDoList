@@ -111,7 +111,7 @@ class ToDoListViewController: MainViewController {
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
         tableView.reloadData()
-        saveData()
+        model.saveContext()
     }
     
     func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
@@ -136,7 +136,7 @@ class ToDoListViewController: MainViewController {
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
-        self.saveData()
+        model.saveContext()
     }
     
     private func removeAllItems() {
@@ -156,7 +156,7 @@ class ToDoListViewController: MainViewController {
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
         tableView.reloadData()
-        saveData()
+        model.saveContext()
     }
 }
 // MARK: - ItemCellProtocol
@@ -173,7 +173,7 @@ extension ToDoListViewController: ItemCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             //            tableView.reloadData()
             shouldShowBinButton()
-            saveData()
+            model.saveContext()
         }
     }
 }
@@ -187,7 +187,7 @@ extension ToDoListViewController: BaseCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
         navigationItem.rightBarButtonItems = []
-        saveData()
+        model.saveContext()
         shouldShowBinButton()
     }
 }

@@ -23,7 +23,8 @@ class CategoryViewController: MainViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
-        loadCategory()
+//        loadCategory()
+        updateDataSource()
         navigationItem.title = "CATEGORIES"
         tableView.sectionHeaderTopPadding = 10
         tableView.separatorStyle = .none
@@ -106,7 +107,7 @@ class CategoryViewController: MainViewController {
             let newCategory = Category(context: context)
             newCategory.name = category
             categories.append(newCategory)
-            saveData()
+            model.saveContext()
             tableView.reloadData()
         }
     }
@@ -130,21 +131,47 @@ class CategoryViewController: MainViewController {
     
     // MARK: - CoreData
     
-    func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-           categories = try context.fetch(request)
-        } catch {
-            print("Error fetching data from context \(error)")
+//    func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
+//        do {
+//           categories = try context.fetch(request)
+//        } catch {
+//            print("Error fetching data from context \(error)")
+//        }
+//        tableView.reloadData()
+//    }
+    
+//    func updateDataSource() {
+//        self.model.fetchPersistendData { (fetchCategoryResult) in
+//            switch fetchCategoryResult {
+//            case .success(let categories):
+//                self.categories = categories
+//            case .failure(_):
+//                self.categories.removeAll()
+//            }
+//            self.tableView.reloadData()
+//        }
+//    }
+   
+    
+    func updateDataSource() {
+        self.model.fetchPersistendData(entityName: Category.self) { (fetchCategoryResult) in
+            switch fetchCategoryResult {
+            case .success(let categories):
+                self.categories = categories
+            case .failure(_):
+                self.categories.removeAll()
+            }
+            self.tableView.reloadData()
         }
-        tableView.reloadData()
     }
+    
     
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
         self.context.delete(self.categories[indexPath.section])
         self.categories.remove(at: indexPath.section)
         tableView.reloadData()
-        self.saveData()
+        model.saveContext()
     }
 }
 
@@ -161,11 +188,12 @@ extension CategoryViewController: BaseCellProtocol {
                 return
             } else {
                 categories[selectedIndexPath.section].name = title
-                saveData()
+                model.saveContext()
             }
         }
     }
 }
+
     
 
         
