@@ -32,7 +32,7 @@ class BaseCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func setupViews() {
         self.selectionStyle = .none
         backgroundColor = .viewBackground
@@ -40,7 +40,7 @@ class BaseCell: UITableViewCell {
         textField.isUserInteractionEnabled = false
     }
 }
-    //MARK: - UITextfield Delegate
+//MARK: - UITextfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
     

@@ -14,7 +14,8 @@ class ToDoListViewController: MainViewController {
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
-            loadItems()
+//            loadItems()
+            updateDataSource()
         }
     }
     
@@ -104,51 +105,67 @@ class ToDoListViewController: MainViewController {
     
     func addItem(_ item: String) {
         if item == "" { return }
-        let newItem = Item(context: context)
+        let newItem = model.addObject(entityType: Item.self)
         newItem.title = item
         newItem.done = false
         selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
         tableView.reloadData()
-        model.saveContext()
+        model.saveObject()
     }
     
-    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
-        guard let selectedCategory = selectedCategory else { return }
-        
-        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
-        request.predicate = predicate
-        do {
-            items = try context.fetch(request)
-        } catch {
-            print("Error fetching data from context \(error) ")
+//    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+//        guard let selectedCategory = selectedCategory else { return }
+//
+//        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
+//        request.predicate = predicate
+//        do {
+//            items = try model.context.fetch(request)
+//        } catch {
+//            print("Error fetching data from context \(error) ")
+//        }
+//        tableView.reloadData()
+//    }
+    
+    func updateDataSource() {
+        /// is it ok to force unwrap below?
+        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        self.model.fetchObjects(entityName: Item.self, predicate: predicate) { (fetchResult) in
+            switch fetchResult {
+            case .success(let items):
+                self.items = items
+            case .failure(_):
+                self.items.removeAll()
+            }
+            self.tableView.reloadData()
         }
-        tableView.reloadData()
     }
     
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
-        self.context.delete(self.items[indexPath.row])
-        if items[indexPath.row].done {
+//        model.context.delete(self.items[indexPath.row])
+        let item = items[indexPath.row]
+        model.deleteObject(item)
+        if item.done {
             selectedCategory?.quantityDone -= 1
         }
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
-        model.saveContext()
+        model.saveObject()
     }
     
     private func removeAllItems() {
         guard let selectedCategory = selectedCategory else { return }
-        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        model.context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
         fetchRequest.predicate = predicate
         let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
         do {
-            try context.execute(batchDeleteRequest)
+            try model.context.execute(batchDeleteRequest)
         } catch {
             print("Error removing all Items \(error)")
         }
@@ -156,7 +173,7 @@ class ToDoListViewController: MainViewController {
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
         tableView.reloadData()
-        model.saveContext()
+        model.saveObject()
     }
 }
 // MARK: - ItemCellProtocol
@@ -173,7 +190,7 @@ extension ToDoListViewController: ItemCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             //            tableView.reloadData()
             shouldShowBinButton()
-            model.saveContext()
+            model.saveObject()
         }
     }
 }
@@ -187,7 +204,7 @@ extension ToDoListViewController: BaseCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
         navigationItem.rightBarButtonItems = []
-        model.saveContext()
+        model.saveObject()
         shouldShowBinButton()
     }
 }

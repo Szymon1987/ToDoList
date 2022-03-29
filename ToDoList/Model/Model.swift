@@ -9,10 +9,10 @@ import UIKit
 import CoreData
 
 protocol Database {
-    func saveContext()
-    func fetchPersistendData()
-    func remove()
-    func rename()
+    func addObject()
+    func saveObject()
+    func fetchObjects()
+    func deleteObject()
 }
 
 
@@ -26,7 +26,12 @@ class Model: NSObject {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    func saveContext () {
+    func addObject<T: NSManagedObject>(entityType: T.Type) -> T {
+        let newCategory = entityType.init(context: context)
+        return newCategory
+    }
+    
+    func saveObject() {
         if context.hasChanges {
             do {
                 try context.save()
@@ -37,41 +42,21 @@ class Model: NSObject {
         }
     }
     
-//    func fetchPersistendData(completion: @escaping (FetchCategoryResult) -> Void) {
-//
-//        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
-//        do {
-//            let categories = try context.fetch(fetchRequest)
-//            completion(.success(categories))
-//        } catch {
-//            completion(.failure(error))
-//        }
-//
-//    }
-    
-    func fetchPersistendData<T: NSManagedObject>(entityName: T.Type, completion: @escaping (FetchResult<T>) -> Void) {
-        
+    func fetchObjects<T: NSManagedObject>(entityName: T.Type, predicate: NSPredicate?, completion: @escaping (FetchResult<T>) -> Void) {
         let entityName = String(describing: entityName)
         let fetchRequest = NSFetchRequest<T>(entityName: entityName)
+        if let predicate = predicate {
+            fetchRequest.predicate = predicate
+        }
         do {
             let categories = try context.fetch(fetchRequest)
             completion(.success(categories))
         } catch {
             completion(.failure(error))
         }
-
     }
     
-    
-    
-//    
-//    func remove() {
-//        
-//    }
-//    
-//    func rename() {
-//        
-//    }
-    
-    
+    func deleteObject<T: NSManagedObject>(_ object: T) {
+        context.delete(object)
+    }
 }

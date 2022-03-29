@@ -82,6 +82,7 @@ class CategoryViewController: MainViewController {
     
     @objc override func sortButtonTapped() {
         if categories.count > 1 {
+            /// fix exclamation marks
             categories.sort{$0.name! < $1.name!}
             tableView.reloadData()
         }
@@ -104,10 +105,10 @@ class CategoryViewController: MainViewController {
         if categoryAlreadyExists(category) || category == "" {
             return
         } else {
-            let newCategory = Category(context: context)
-            newCategory.name = category
+            let newCategory = model.addObject(entityType: Category.self)
             categories.append(newCategory)
-            model.saveContext()
+            newCategory.name = category
+            model.saveObject()
             tableView.reloadData()
         }
     }
@@ -154,8 +155,8 @@ class CategoryViewController: MainViewController {
    
     
     func updateDataSource() {
-        self.model.fetchPersistendData(entityName: Category.self) { (fetchCategoryResult) in
-            switch fetchCategoryResult {
+        self.model.fetchObjects(entityName: Category.self, predicate: nil) { (fetchResult) in
+            switch fetchResult {
             case .success(let categories):
                 self.categories = categories
             case .failure(_):
@@ -168,10 +169,11 @@ class CategoryViewController: MainViewController {
     
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
-        self.context.delete(self.categories[indexPath.section])
+        let category = categories[indexPath.section]
+        model.deleteObject(category)
         self.categories.remove(at: indexPath.section)
         tableView.reloadData()
-        model.saveContext()
+        model.saveObject()
     }
 }
 
@@ -188,7 +190,7 @@ extension CategoryViewController: BaseCellProtocol {
                 return
             } else {
                 categories[selectedIndexPath.section].name = title
-                model.saveContext()
+                model.saveObject()
             }
         }
     }

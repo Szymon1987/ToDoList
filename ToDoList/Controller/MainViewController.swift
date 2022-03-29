@@ -10,7 +10,7 @@ import UIKit
 class MainViewController: UIViewController {
     
     // MARK: - Properties
-    let model = Model()
+    var model = Model()
 //    let dataBase: Database
 //    init(dataBase: Database) {
 //        self.dataBase = dataBase
@@ -20,7 +20,7 @@ class MainViewController: UIViewController {
 //    required init?(coder: NSCoder) {
 //        fatalError("init(coder:) has not been implemented")
 //    }
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var selectedIndexPath: IndexPath?
     
     // MARK: - LifeCycle

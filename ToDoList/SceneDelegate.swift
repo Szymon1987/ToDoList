@@ -20,11 +20,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
         
-//        let layout = UICollectionViewFlowLayout()
-
         let rootVc = CategoryViewController()
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
+        
 //        navVc.navigationBar.prefersLargeTitles = true
 
        
@@ -58,7 +57,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
 
         // Save changes in the application's managed object context when the application transitions to the background.
+        
+        
+
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+        
+        /// not sure if I can leave it like that
+        
+//        (UIApplication.shared.delegate as? Model)?.saveContext()
     }
 
 
