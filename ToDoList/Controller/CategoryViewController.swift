@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 class CategoryViewController: MainViewController {
 
@@ -23,7 +22,6 @@ class CategoryViewController: MainViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(CategoryCell.self, forCellReuseIdentifier: "CellId")
-//        loadCategory()
         updateDataSource()
         navigationItem.title = "CATEGORIES"
         tableView.sectionHeaderTopPadding = 10

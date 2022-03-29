@@ -5,7 +5,6 @@
 //  Created by Szymon Tadrzak on 16/12/2021.
 //
 import UIKit
-import CoreData
 
 class ToDoListViewController: MainViewController {
     
@@ -114,20 +113,7 @@ class ToDoListViewController: MainViewController {
         tableView.reloadData()
         model.saveObject()
     }
-    
-//    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
-//        guard let selectedCategory = selectedCategory else { return }
-//
-//        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
-//        request.predicate = predicate
-//        do {
-//            items = try model.context.fetch(request)
-//        } catch {
-//            print("Error fetching data from context \(error) ")
-//        }
-//        tableView.reloadData()
-//    }
-    
+
     func updateDataSource() {
         /// is it ok to force unwrap below?
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
@@ -144,7 +130,6 @@ class ToDoListViewController: MainViewController {
     
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
-//        model.context.delete(self.items[indexPath.row])
         let item = items[indexPath.row]
         model.deleteObject(item)
         if item.done {
@@ -155,20 +140,11 @@ class ToDoListViewController: MainViewController {
         tableView.reloadData()
         model.saveObject()
     }
-    
+
     private func removeAllItems() {
         guard let selectedCategory = selectedCategory else { return }
-        model.context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Item")
-        fetchRequest.predicate = predicate
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try model.context.execute(batchDeleteRequest)
-        } catch {
-            print("Error removing all Items \(error)")
-        }
+        model.deleteAllObjects(entityName: Item.self, predicate: predicate)
         items.removeAll()
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
@@ -188,7 +164,6 @@ extension ToDoListViewController: ItemCellProtocol {
                 selectedCategory?.quantityDone -= 1
             }
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-            //            tableView.reloadData()
             shouldShowBinButton()
             model.saveObject()
         }

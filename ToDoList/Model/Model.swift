@@ -59,4 +59,18 @@ class Model: NSObject {
     func deleteObject<T: NSManagedObject>(_ object: T) {
         context.delete(object)
     }
+    
+    func deleteAllObjects<T: NSManagedObject>(entityName: T.Type, predicate: NSPredicate?) {
+        context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        let entityName = String(describing: entityName)
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+        fetchRequest.predicate = predicate
+        let batchDeletedRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(batchDeletedRequest)
+        } catch {
+            print("Error removing all Items \(error)")
+        }
+    }
 }
