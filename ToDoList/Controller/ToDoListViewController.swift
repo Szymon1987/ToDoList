@@ -13,7 +13,6 @@ class ToDoListViewController: MainViewController {
     var items = [Item]()
     var selectedCategory: Category? {
         didSet {
-//            loadItems()
             updateDataSource()
         }
     }
@@ -51,7 +50,7 @@ class ToDoListViewController: MainViewController {
         return cell
     }
     
-    // MARK: - Helpers
+    // MARK: - UIInteraction
     
     @objc override func sortButtonTapped() {
         if items.count > 1 {
@@ -59,20 +58,8 @@ class ToDoListViewController: MainViewController {
             tableView.reloadData()
         }
     }
-    
-    func shouldShowBinButton() {
-        if items.isEmpty { return }
-        // checks, if all items in the array have been selected
-        if items.allSatisfy({ $0.done == true }) {
-            let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
-            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binTapped))
-            navigationItem.rightBarButtonItems = [binButton]
-        } else {
-            navigationItem.rightBarButtonItems = []
-        }
-    }
-    
-    @objc func binTapped() {
+
+    @objc func binButtonTapped() {
         let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
@@ -94,11 +81,25 @@ class ToDoListViewController: MainViewController {
         })
         present(alert, animated: true)
     }
-    
+    //MARK: - ViewSetup
     override func setupViews() {
         super.setupViews()
         tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
     }
+    
+    
+    func shouldShowBinButton() {
+        if items.isEmpty { return }
+        // checks, if all items in the array have been selected
+        if items.allSatisfy({ $0.done == true }) {
+            let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
+            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binButtonTapped))
+            navigationItem.rightBarButtonItems = [binButton]
+        } else {
+            navigationItem.rightBarButtonItems = []
+        }
+    }
+    
     
     // MARK: - CoreData
     
@@ -113,7 +114,7 @@ class ToDoListViewController: MainViewController {
         tableView.reloadData()
         model.saveObject()
     }
-
+    
     func updateDataSource() {
         /// is it ok to force unwrap below?
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
@@ -140,7 +141,7 @@ class ToDoListViewController: MainViewController {
         tableView.reloadData()
         model.saveObject()
     }
-
+    
     private func removeAllItems() {
         guard let selectedCategory = selectedCategory else { return }
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)

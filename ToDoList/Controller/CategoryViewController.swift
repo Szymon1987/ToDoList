@@ -8,12 +8,12 @@
 import UIKit
 
 class CategoryViewController: MainViewController {
-
+    
     // MARK: - Properties
     
     var categories = [Category]()
     
- // MARK: - LifeCycle
+    // MARK: - LifeCycle
     
     override func viewWillAppear(_ animated: Bool) {
         tableView.reloadData()
@@ -27,7 +27,7 @@ class CategoryViewController: MainViewController {
         tableView.sectionHeaderTopPadding = 10
         tableView.separatorStyle = .none
     }
-   
+    
     // MARK: - TableView data source
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -39,13 +39,13 @@ class CategoryViewController: MainViewController {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return .leastNormalMagnitude
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         headerView.backgroundColor = .clear
         return headerView
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? CategoryCell else {
             fatalError("Unable to dequeue the CustomCell")
@@ -63,7 +63,7 @@ class CategoryViewController: MainViewController {
         }
         return cell
     }
-        
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let category = categories[indexPath.section]
         let vc = ToDoListViewController()
@@ -76,7 +76,7 @@ class CategoryViewController: MainViewController {
         return 60
     }
     
-    // MARK: - Helpers
+    // MARK: - UIInteraction
     
     @objc override func sortButtonTapped() {
         if categories.count > 1 {
@@ -93,11 +93,13 @@ class CategoryViewController: MainViewController {
         present(ac, animated: true)
         
         ac.addAction(UIAlertAction(title: "Add ", style: .default, handler: { [weak self, weak ac] _ in
-        guard let newCategory = ac?.textFields?[0].text else { return }
-        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespacesAndNewlines)
-        self?.addCategory(trimmedCategory)
+            guard let newCategory = ac?.textFields?[0].text else { return }
+            let trimmedCategory = newCategory.trimmingCharacters(in: .whitespacesAndNewlines)
+            self?.addCategory(trimmedCategory)
         }))
     }
+    
+    //MARK: - Helpers
     
     func addCategory(_ category: String) {
         if categoryAlreadyExists(category) || category == "" {
@@ -113,10 +115,10 @@ class CategoryViewController: MainViewController {
     
     func categoryAlreadyExists(_ category: String) -> Bool {
         if categories.contains(where: { $0.name == category}) {
-        let alert = UIAlertController(title: "The category already exists", message: "Please enter unique category name", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-        tableView.reloadData()
+            let alert = UIAlertController(title: "The category already exists", message: "Please enter unique category name", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            tableView.reloadData()
             return true
         } else {
             return false
@@ -130,28 +132,6 @@ class CategoryViewController: MainViewController {
     
     // MARK: - CoreData
     
-//    func loadCategory(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-//        do {
-//           categories = try context.fetch(request)
-//        } catch {
-//            print("Error fetching data from context \(error)")
-//        }
-//        tableView.reloadData()
-//    }
-    
-//    func updateDataSource() {
-//        self.model.fetchPersistendData { (fetchCategoryResult) in
-//            switch fetchCategoryResult {
-//            case .success(let categories):
-//                self.categories = categories
-//            case .failure(_):
-//                self.categories.removeAll()
-//            }
-//            self.tableView.reloadData()
-//        }
-//    }
-   
-    
     func updateDataSource() {
         self.model.fetchObjects(entityName: Category.self, predicate: nil) { (fetchResult) in
             switch fetchResult {
@@ -163,7 +143,6 @@ class CategoryViewController: MainViewController {
             self.tableView.reloadData()
         }
     }
-    
     
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
@@ -194,9 +173,9 @@ extension CategoryViewController: BaseCellProtocol {
     }
 }
 
-    
 
-        
+
+
 
 
 

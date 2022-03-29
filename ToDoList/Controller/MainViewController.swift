@@ -11,16 +11,16 @@ class MainViewController: UIViewController {
     
     // MARK: - Properties
     var model = Model()
-//    let dataBase: Database
-//    init(dataBase: Database) {
-//        self.dataBase = dataBase
-//        super.init(nibName: nil, bundle: nil)
-//    }
+    //    let dataBase: Database
+    //    init(dataBase: Database) {
+    //        self.dataBase = dataBase
+    //        super.init(nibName: nil, bundle: nil)
+    //    }
     
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //    required init?(coder: NSCoder) {
+    //        fatalError("init(coder:) has not been implemented")
+    //    }
+
     var selectedIndexPath: IndexPath?
     
     // MARK: - LifeCycle
@@ -30,7 +30,7 @@ class MainViewController: UIViewController {
         view.backgroundColor = .viewBackground
         setupViews()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationController()
@@ -47,10 +47,10 @@ class MainViewController: UIViewController {
     }()
     
     lazy var roundedButton: RoundedButton = {
-         let button = RoundedButton()
-         button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
-         return button
-     }()
+        let button = RoundedButton()
+        button.addTarget(self, action: #selector(addButtonTapped), for: .touchUpInside)
+        return button
+    }()
     
     // MARK: - Helpers
     
@@ -63,27 +63,29 @@ class MainViewController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         else {
-          // if keyboard size is not available for some reason, dont do anything
-          return
+            // if keyboard size is not available for some reason, dont do anything
+            return
         }
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height , right: 0)
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
-      }
-
+    }
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         // reset back the content inset to zero after keyboard is gone
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
-      }
+    }
+    
+    //MARK: - UIInteraction
     
     @objc func addButtonTapped() {
     }
     @objc func sortButtonTapped() {
     }
-   
-    @objc func doneButtonPressed() {
+    
+    @objc func doneButtonTapped() {
         if let selectedIndexPath = selectedIndexPath {
             if let cell = tableView.cellForRow(at: selectedIndexPath) as? BaseCell {
                 cell.textField.isUserInteractionEnabled = false
@@ -101,15 +103,17 @@ class MainViewController: UIViewController {
         navigationItem.leftBarButtonItem = sortButton
     }
     
+    //MARK: - ViewSetup
+    
     public func setupViews() {
         view.addSubview(tableView)
         view.addSubview(roundedButton)
-
+        
         roundedButton.anchor(top: nil, bottom: view.bottomAnchor, leading: nil, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: -150, right: -70), size: CGSize(width: 60, height: 60))
     }
     
     // MARK: - CoreData
-
+    
     func remove(at indexPath: IndexPath) {
         if navigationItem.rightBarButtonItems != nil {
             navigationItem.setRightBarButton(nil, animated: true)
@@ -123,7 +127,7 @@ class MainViewController: UIViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 cell.textField.isUserInteractionEnabled = true
                 cell.textField.becomeFirstResponder()
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonPressed))
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonTapped))
             }
         }
         selectedIndexPath = indexPath

@@ -53,9 +53,7 @@ class ItemCell: BaseCell {
         checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
         checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
-
     }
-    
 }
     
 

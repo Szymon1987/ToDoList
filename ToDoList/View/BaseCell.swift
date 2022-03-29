@@ -7,13 +7,13 @@
 
 import UIKit
 
-protocol BaseCellProtocol: AnyObject {
+protocol BaseCellProtocol {
     func updateUI(sender: BaseCell, title: String)
 }
 
 class BaseCell: UITableViewCell {
     
-    weak var baseCellDelegate: BaseCellProtocol?
+    var baseCellDelegate: BaseCellProtocol?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
