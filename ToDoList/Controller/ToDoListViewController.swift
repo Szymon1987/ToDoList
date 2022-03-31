@@ -82,9 +82,11 @@ class ToDoListViewController: MainViewController {
         present(alert, animated: true)
     }
     //MARK: - ViewSetup
+    
     override func setupViews() {
         super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+//        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor)
+        tableView.anchorSize(to: view)
     }
     
     
@@ -105,20 +107,23 @@ class ToDoListViewController: MainViewController {
     
     func addItem(_ item: String) {
         if item == "" { return }
-        let newItem = model.addObject(entityType: Item.self)
+        let newItem = coreDataStack.addObject(entityType: Item.self)
+        
+        ///new method, probably better so implement later
+//        let newItem = coreDataStack.create(type: Item.self)
         newItem.title = item
         newItem.done = false
         selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
         tableView.reloadData()
-        model.saveObject()
+        coreDataStack.saveObject()
     }
     
     func updateDataSource() {
         /// is it ok to force unwrap below?
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-        self.model.fetchObjects(entityName: Item.self, predicate: predicate) { (fetchResult) in
+        self.coreDataStack.fetchObjects(entityName: Item.self, predicate: predicate) { (fetchResult) in
             switch fetchResult {
             case .success(let items):
                 self.items = items
@@ -132,25 +137,25 @@ class ToDoListViewController: MainViewController {
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
         let item = items[indexPath.row]
-        model.deleteObject(item)
+        coreDataStack.deleteObject(item)
         if item.done {
             selectedCategory?.quantityDone -= 1
         }
         self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
         tableView.reloadData()
-        model.saveObject()
+        coreDataStack.saveObject()
     }
     
     private func removeAllItems() {
         guard let selectedCategory = selectedCategory else { return }
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
-        model.deleteAllObjects(entityName: Item.self, predicate: predicate)
+        coreDataStack.deleteAllObjects(entityName: Item.self, predicate: predicate)
         items.removeAll()
         selectedCategory.quantity = 0
         selectedCategory.quantityDone = 0
         tableView.reloadData()
-        model.saveObject()
+        coreDataStack.saveObject()
     }
 }
 // MARK: - ItemCellProtocol
@@ -166,7 +171,7 @@ extension ToDoListViewController: ItemCellProtocol {
             }
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             shouldShowBinButton()
-            model.saveObject()
+            coreDataStack.saveObject()
         }
     }
 }
@@ -180,7 +185,7 @@ extension ToDoListViewController: BaseCellProtocol {
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
         navigationItem.rightBarButtonItems = []
-        model.saveObject()
+        coreDataStack.saveObject()
         shouldShowBinButton()
     }
 }

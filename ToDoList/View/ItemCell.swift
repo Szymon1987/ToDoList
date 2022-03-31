@@ -42,17 +42,28 @@ class ItemCell: BaseCell {
         super.setupViews()
         backgroundColor = .cellBackground
         
-        contentView.addSubview(textField)
-        textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
-        textField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
-        textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        textField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-   
-        addSubview(checkmarkButton)
-        checkmarkButton.trailingAnchor.constraint(equalTo: textField.leadingAnchor, constant: -30).isActive = true
-        checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+//        contentView.addSubview(textField)
+//        textField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 80).isActive = true
+//        textField.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
+//        textField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+//        textField.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+//
+//        addSubview(checkmarkButton)
+//        checkmarkButton.trailingAnchor.constraint(equalTo: textField.leadingAnchor, constant: -30).isActive = true
+//        checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+//        checkmarkButton.widthAnchor.constraint(equalToConstant: 32).isActive = true
+//        checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        
+        contentView.addSubview(checkmarkButton)
+        checkmarkButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
         checkmarkButton.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        checkmarkButton.widthAnchor.constraint(equalTo: checkmarkButton.heightAnchor).isActive = true
+        checkmarkButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+        addSubview(textField)
+        textField.leadingAnchor.constraint(equalTo: checkmarkButton.trailingAnchor, constant: 30).isActive = true
+        textField.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+        textField.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
 }
     

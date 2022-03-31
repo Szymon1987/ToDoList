@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    
+    var coreDataStack = CoreDataStack()
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         window?.windowScene = windowScene
         
-        let rootVc = CategoryViewController()
+        let rootVc = CategoryViewController(coreDataStack: coreDataStack)
         let navVc = UINavigationController(rootViewController: rootVc)
         window?.rootViewController = navVc
         
@@ -60,11 +60,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         
         
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
+//        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
         
-        /// not sure if I can leave it like that
-        
-        //        (UIApplication.shared.delegate as? Model)?.saveContext()
+        coreDataStack.saveObject()
     }
     
     

@@ -10,16 +10,23 @@ import UIKit
 class MainViewController: UIViewController {
     
     // MARK: - Properties
-    var model = Model()
-    //    let dataBase: Database
-    //    init(dataBase: Database) {
-    //        self.dataBase = dataBase
-    //        super.init(nibName: nil, bundle: nil)
-    //    }
     
-    //    required init?(coder: NSCoder) {
-    //        fatalError("init(coder:) has not been implemented")
-    //    }
+    var coreDataStack: CoreDataStack
+    
+    init(coreDataStack: CoreDataStack) {
+        self.coreDataStack = coreDataStack
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    //    var dataBase: DataBase
+//        init(dataBase: Database) {
+//            self.dataBase = dataBase
+//            super.init(nibName: nil, bundle: nil)
+//        }
+
 
     var selectedIndexPath: IndexPath?
     
@@ -36,6 +43,7 @@ class MainViewController: UIViewController {
         setupNavigationController()
         notificationForKeyboard()
     }
+ 
     // MARK: - UIComponents
     
     lazy var tableView: UITableView = {
@@ -43,6 +51,7 @@ class MainViewController: UIViewController {
         tableView.backgroundColor = .viewBackground
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
     
@@ -53,13 +62,13 @@ class MainViewController: UIViewController {
     }()
     
     // MARK: - Helpers
-    
+
     func notificationForKeyboard() {
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MainViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MainViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
+
     @objc func keyboardWillShow(notification: NSNotification) {
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         else {
@@ -70,7 +79,7 @@ class MainViewController: UIViewController {
         tableView.contentInset = contentInsets
         tableView.scrollIndicatorInsets = contentInsets
     }
-    
+
     @objc func keyboardWillHide(notification: NSNotification) {
         let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         // reset back the content inset to zero after keyboard is gone
@@ -109,7 +118,11 @@ class MainViewController: UIViewController {
         view.addSubview(tableView)
         view.addSubview(roundedButton)
         
-        roundedButton.anchor(top: nil, bottom: view.bottomAnchor, leading: nil, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: -150, right: -70), size: CGSize(width: 60, height: 60))
+//        roundedButton.anchor(top: nil, bottom: view.bottomAnchor, leading: nil, trailing: view.trailingAnchor, padding: UIEdgeInsets(top: 0, left: 0, bottom: -150, right: -70), size: CGSize(width: 60, height: 60))
+        roundedButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        roundedButton.widthAnchor.constraint(equalTo: roundedButton.heightAnchor).isActive = true
+        roundedButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -150).isActive = true
+        roundedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70).isActive = true
     }
     
     // MARK: - CoreData

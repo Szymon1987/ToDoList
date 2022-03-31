@@ -10,7 +10,7 @@
 		AD069F1027A45DE5007ED69E /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD069F0F27A45DE5007ED69E /* CategoryCell.swift */; };
 		AD39CF0F27A5CCB80050B502 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD39CF0E27A5CCB80050B502 /* Extensions.swift */; };
 		AD65A78A2799DBFA00377DF3 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD65A7892799DBFA00377DF3 /* CategoryViewController.swift */; };
-		AD680F0327ECE28E0097701B /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD680F0227ECE28E0097701B /* Model.swift */; };
+		AD680F0327ECE28E0097701B /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD680F0227ECE28E0097701B /* CoreDataStack.swift */; };
 		AD8B1AE127A84A200029A70D /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8B1AE027A84A200029A70D /* MainViewController.swift */; };
 		AD8B1AE327A84B320029A70D /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8B1AE227A84B320029A70D /* ItemCell.swift */; };
 		AD8B1AE527A850CB0029A70D /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8B1AE427A850CB0029A70D /* BaseCell.swift */; };
@@ -50,7 +50,7 @@
 		AD39CF0C27A58A5A0050B502 /* ToDoListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD39CF0E27A5CCB80050B502 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AD65A7892799DBFA00377DF3 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
-		AD680F0227ECE28E0097701B /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		AD680F0227ECE28E0097701B /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		AD8B1AE027A84A200029A70D /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		AD8B1AE227A84B320029A70D /* ItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
 		AD8B1AE427A850CB0029A70D /* BaseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCell.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				ADC28E70279B5037002B013B /* DataModel.xcdatamodeld */,
-				AD680F0227ECE28E0097701B /* Model.swift */,
+				AD680F0227ECE28E0097701B /* CoreDataStack.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -310,7 +310,7 @@
 				ADFEFC82276BD35700539B44 /* ToDoListViewController.swift in Sources */,
 				AD8B1AE527A850CB0029A70D /* BaseCell.swift in Sources */,
 				ADFEFC7E276BD35700539B44 /* AppDelegate.swift in Sources */,
-				AD680F0327ECE28E0097701B /* Model.swift in Sources */,
+				AD680F0327ECE28E0097701B /* CoreDataStack.swift in Sources */,
 				ADFEFC80276BD35700539B44 /* SceneDelegate.swift in Sources */,
 				AD069F1027A45DE5007ED69E /* CategoryCell.swift in Sources */,
 				AD8B1AE327A84B320029A70D /* ItemCell.swift in Sources */,

@@ -63,10 +63,10 @@ class CategoryViewController: MainViewController {
         }
         return cell
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let category = categories[indexPath.section]
-        let vc = ToDoListViewController()
+        /// passing coreDataStack here
+        let vc = ToDoListViewController(coreDataStack: coreDataStack)
         vc.title = category.name
         vc.selectedCategory = category
         navigationController?.pushViewController(vc, animated: true)
@@ -105,10 +105,10 @@ class CategoryViewController: MainViewController {
         if categoryAlreadyExists(category) || category == "" {
             return
         } else {
-            let newCategory = model.addObject(entityType: Category.self)
+            let newCategory = coreDataStack.addObject(entityType: Category.self)
             categories.append(newCategory)
             newCategory.name = category
-            model.saveObject()
+            coreDataStack.saveObject()
             tableView.reloadData()
         }
     }
@@ -127,13 +127,17 @@ class CategoryViewController: MainViewController {
     
     override func setupViews() {
         super.setupViews()
-        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+//        tableView.anchor(top: view.topAnchor, bottom: view.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, padding: .init(top: 8, left: 8, bottom: 0, right: -8))
+        tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
     }
-    
+
     // MARK: - CoreData
     
     func updateDataSource() {
-        self.model.fetchObjects(entityName: Category.self, predicate: nil) { (fetchResult) in
+        self.coreDataStack.fetchObjects(entityName: Category.self, predicate: nil) { (fetchResult) in
             switch fetchResult {
             case .success(let categories):
                 self.categories = categories
@@ -147,10 +151,10 @@ class CategoryViewController: MainViewController {
     override func remove(at indexPath: IndexPath) {
         super.remove(at: indexPath)
         let category = categories[indexPath.section]
-        model.deleteObject(category)
+        coreDataStack.deleteObject(category)
         self.categories.remove(at: indexPath.section)
         tableView.reloadData()
-        model.saveObject()
+        coreDataStack.saveObject()
     }
 }
 
@@ -167,7 +171,7 @@ extension CategoryViewController: BaseCellProtocol {
                 return
             } else {
                 categories[selectedIndexPath.section].name = title
-                model.saveObject()
+                coreDataStack.saveObject()
             }
         }
     }
