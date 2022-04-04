@@ -7,13 +7,16 @@
 
 import UIKit
 
-protocol BaseCellProtocol {
-    func updateUI(sender: BaseCell, title: String)
+protocol BaseCellDelegate {
+    func updateUI(_ sender: BaseCell, title: String)
 }
 
 class BaseCell: UITableViewCell {
     
-    var baseCellDelegate: BaseCellProtocol?
+    var baseCellDelegate: BaseCellDelegate?
+    
+    /// closure way of doing things
+    var titleSent: ((String?) -> Void)?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
@@ -60,7 +63,8 @@ extension BaseCell: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let title = textField.text {
-            baseCellDelegate?.updateUI(sender: self, title: title)
+            baseCellDelegate?.updateUI(self, title: title)
+            titleSent?(title)
         }
     }
 }

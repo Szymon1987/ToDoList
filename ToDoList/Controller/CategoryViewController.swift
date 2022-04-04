@@ -160,8 +160,8 @@ class CategoryViewController: MainViewController {
 
     // MARK: - BaseCellDelegate
 
-extension CategoryViewController: BaseCellProtocol {
-    func updateUI(sender: BaseCell, title: String) {
+extension CategoryViewController: BaseCellDelegate {
+    func updateUI(_ sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             navigationItem.rightBarButtonItems = []
             guard let name = categories[selectedIndexPath.section].name else { return }
@@ -175,6 +175,8 @@ extension CategoryViewController: BaseCellProtocol {
             }
         }
     }
+    
+    
 }
 
 

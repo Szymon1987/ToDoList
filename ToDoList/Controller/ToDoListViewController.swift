@@ -40,9 +40,10 @@ class ToDoListViewController: MainViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CellId", for: indexPath) as? ItemCell else { fatalError("Unable to dequeue ItemCell")}
         cell.baseCellDelegate = self
         cell.itemCellDelegate = self
-        cell.textField.text = items[indexPath.row].title
-        cell.checkmarkButton.isSelected = items[indexPath.row].done
-        if items[indexPath.row].done {
+        let item = items[indexPath.row]
+        cell.textField.text = item.title
+        cell.checkmarkButton.isSelected = item.isDone
+        if item.isDone {
             cell.textField.textColor = .label.withAlphaComponent(0.5)
         } else {
             cell.textField.textColor = .label.withAlphaComponent(1)
@@ -93,7 +94,7 @@ class ToDoListViewController: MainViewController {
     func shouldShowBinButton() {
         if items.isEmpty { return }
         // checks, if all items in the array have been selected
-        if items.allSatisfy({ $0.done == true }) {
+        if items.allSatisfy({ $0.isDone == true }) {
             let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
             let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binButtonTapped))
             navigationItem.rightBarButtonItems = [binButton]
@@ -112,7 +113,7 @@ class ToDoListViewController: MainViewController {
         ///new method, probably better so implement later
 //        let newItem = coreDataStack.create(type: Item.self)
         newItem.title = item
-        newItem.done = false
+        newItem.isDone = false
         selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
@@ -138,7 +139,7 @@ class ToDoListViewController: MainViewController {
         super.remove(at: indexPath)
         let item = items[indexPath.row]
         coreDataStack.deleteObject(item)
-        if item.done {
+        if item.isDone {
             selectedCategory?.quantityDone -= 1
         }
         self.items.remove(at: indexPath.row)
@@ -160,11 +161,11 @@ class ToDoListViewController: MainViewController {
 }
 // MARK: - ItemCellProtocol
 
-extension ToDoListViewController: ItemCellProtocol {
-    func toggleDone(sender: ItemCell) {
+extension ToDoListViewController: ItemCellDelegate {
+    func toggleIsDone(sender: ItemCell) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
-            items[selectedIndexPath.row].done.toggle()
-            if items[selectedIndexPath.row].done == true {
+            items[selectedIndexPath.row].isDone.toggle()
+            if items[selectedIndexPath.row].isDone == true {
                 selectedCategory?.quantityDone += 1
             } else {
                 selectedCategory?.quantityDone -= 1
@@ -178,8 +179,8 @@ extension ToDoListViewController: ItemCellProtocol {
 
 // MARK: - BaseCellProtocol
 
-extension ToDoListViewController: BaseCellProtocol {
-    func updateUI(sender: BaseCell, title: String) {
+extension ToDoListViewController: BaseCellDelegate {
+    func updateUI(_ sender: BaseCell, title: String) {
         if let selectedIndexPath = selectedIndexPath {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
