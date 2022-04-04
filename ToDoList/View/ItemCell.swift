@@ -31,10 +31,8 @@ class ItemCell: BaseCell {
 
     @objc func checkmarkButtonTapped() {
         if textField.isEditing == false {
+            Haptics.playLightImpact()
             itemCellDelegate?.toggleIsDone(sender: self)
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred(intensity: 1.0)
-            textField.endEditing(true)
         }
     }
     

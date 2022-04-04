@@ -80,7 +80,6 @@ class CategoryViewController: MainViewController {
     
     @objc override func sortButtonTapped() {
         if categories.count > 1 {
-            /// fix exclamation marks
             categories.sort{$0.name! < $1.name!}
             tableView.reloadData()
         }
@@ -161,11 +160,11 @@ class CategoryViewController: MainViewController {
     // MARK: - BaseCellDelegate
 
 extension CategoryViewController: BaseCellDelegate {
-    func updateUI(_ sender: BaseCell, title: String) {
+    func updateWithTitle(_ sender: BaseCell, title: String) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
             navigationItem.rightBarButtonItems = []
-            guard let name = categories[selectedIndexPath.section].name else { return }
-            if name == title {
+            guard let categoryName = categories[selectedIndexPath.section].name else { return }
+            if categoryName == title {
                 return
             } else if categoryAlreadyExists(title) {
                 return
@@ -175,8 +174,6 @@ extension CategoryViewController: BaseCellDelegate {
             }
         }
     }
-    
-    
 }
 
 

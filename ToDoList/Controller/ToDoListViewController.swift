@@ -7,7 +7,7 @@
 import UIKit
 
 class ToDoListViewController: MainViewController {
-    
+  
     // MARK: - Properties
     
     var items = [Item]()
@@ -22,9 +22,8 @@ class ToDoListViewController: MainViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ItemCell.self, forCellReuseIdentifier: "CellId")
-        shouldShowBinButton()
+        shouldShowRemoveAllButton()
     }
-    
     
     // MARK: - TableView Datasource
     
@@ -43,11 +42,7 @@ class ToDoListViewController: MainViewController {
         let item = items[indexPath.row]
         cell.textField.text = item.title
         cell.checkmarkButton.isSelected = item.isDone
-        if item.isDone {
-            cell.textField.textColor = .label.withAlphaComponent(0.5)
-        } else {
-            cell.textField.textColor = .label.withAlphaComponent(1)
-        }
+        cell.textField.textColor = item.isDone ? .label.withAlphaComponent(0.5) : .label.withAlphaComponent(1)
         return cell
     }
     
@@ -60,14 +55,13 @@ class ToDoListViewController: MainViewController {
         }
     }
 
-    @objc func binButtonTapped() {
+    @objc func removeAllButtonTapped() {
         let alert = UIAlertController(title: "Are you sure you want to remove all items?", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(alert, animated: true)
-        // probaly [weak self, weak alert isnt't needed as we aren't passing any parameters in removeAllItems]
-        alert.addAction(UIAlertAction(title: "Delete all", style: .default) { _ in
-            self.removeAllItems()
-            self.navigationItem.setRightBarButton(nil, animated: true)
+        alert.addAction(UIAlertAction(title: "Delete all", style: .default) { [weak self] _ in
+            self?.removeAllItems()
+            self?.navigationItem.setRightBarButton(nil, animated: true)
         })
     }
     
@@ -91,12 +85,12 @@ class ToDoListViewController: MainViewController {
     }
     
     
-    func shouldShowBinButton() {
+    func shouldShowRemoveAllButton() {
         if items.isEmpty { return }
         // checks, if all items in the array have been selected
         if items.allSatisfy({ $0.isDone == true }) {
             let image = UIImage(systemName: "trash")?.withRenderingMode(.alwaysTemplate)
-            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(binButtonTapped))
+            let binButton = UIBarButtonItem(image: image, landscapeImagePhone: image, style: .plain, target: self, action: #selector(removeAllButtonTapped))
             navigationItem.rightBarButtonItems = [binButton]
         } else {
             navigationItem.rightBarButtonItems = []
@@ -117,12 +111,14 @@ class ToDoListViewController: MainViewController {
         selectedCategory?.quantity += 1
         newItem.parentCategory = self.selectedCategory
         items.append(newItem)
+        shouldShowRemoveAllButton()
         tableView.reloadData()
         coreDataStack.saveObject()
     }
     
     func updateDataSource() {
-        /// is it ok to force unwrap below?
+        
+        /// i think force unwrapping here is ok
         let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
         self.coreDataStack.fetchObjects(entityName: Item.self, predicate: predicate) { (fetchResult) in
             switch fetchResult {
@@ -142,19 +138,19 @@ class ToDoListViewController: MainViewController {
         if item.isDone {
             selectedCategory?.quantityDone -= 1
         }
-        self.items.remove(at: indexPath.row)
         self.selectedCategory?.quantity -= 1
+        self.items.remove(at: indexPath.row)
+        shouldShowRemoveAllButton()
         tableView.reloadData()
         coreDataStack.saveObject()
     }
     
     private func removeAllItems() {
-        guard let selectedCategory = selectedCategory else { return }
-        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory.name!)
+        let predicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
         coreDataStack.deleteAllObjects(entityName: Item.self, predicate: predicate)
         items.removeAll()
-        selectedCategory.quantity = 0
-        selectedCategory.quantityDone = 0
+        selectedCategory?.quantity = 0
+        selectedCategory?.quantityDone = 0
         tableView.reloadData()
         coreDataStack.saveObject()
     }
@@ -164,14 +160,15 @@ class ToDoListViewController: MainViewController {
 extension ToDoListViewController: ItemCellDelegate {
     func toggleIsDone(sender: ItemCell) {
         if let selectedIndexPath = tableView.indexPath(for: sender) {
-            items[selectedIndexPath.row].isDone.toggle()
-            if items[selectedIndexPath.row].isDone == true {
+            let item = items[selectedIndexPath.row]
+            item.isDone.toggle()
+            if item.isDone {
                 selectedCategory?.quantityDone += 1
             } else {
                 selectedCategory?.quantityDone -= 1
             }
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
-            shouldShowBinButton()
+            shouldShowRemoveAllButton()
             coreDataStack.saveObject()
         }
     }
@@ -180,13 +177,13 @@ extension ToDoListViewController: ItemCellDelegate {
 // MARK: - BaseCellProtocol
 
 extension ToDoListViewController: BaseCellDelegate {
-    func updateUI(_ sender: BaseCell, title: String) {
+    func updateWithTitle(_ sender: BaseCell, title: String) {
         if let selectedIndexPath = selectedIndexPath {
             items[selectedIndexPath.row].title = title
             tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
         navigationItem.rightBarButtonItems = []
         coreDataStack.saveObject()
-        shouldShowBinButton()
+        shouldShowRemoveAllButton()
     }
 }

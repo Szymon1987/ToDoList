@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController {
     
     // MARK: - Properties
     
     var coreDataStack: CoreDataStack
+    var selectedIndexPath: IndexPath?
     
     init(coreDataStack: CoreDataStack) {
         self.coreDataStack = coreDataStack
@@ -26,9 +28,6 @@ class MainViewController: UIViewController {
 //            self.dataBase = dataBase
 //            super.init(nibName: nil, bundle: nil)
 //        }
-
-
-    var selectedIndexPath: IndexPath?
     
     // MARK: - LifeCycle
     
@@ -134,15 +133,16 @@ class MainViewController: UIViewController {
     }
     
     func rename(at indexPath: IndexPath) {
-        tableView.isEditing = false
         if let cell = tableView.cellForRow(at: indexPath) as? BaseCell {
-            // solution below is questionable, find better one
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                cell.textField.isUserInteractionEnabled = true
-                cell.textField.becomeFirstResponder()
-                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonTapped))
-            }
+            
+            // solution below is questionable, find better one, without DispatchQueue the code doesn't work
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    cell.textField.isUserInteractionEnabled = true
+                    cell.textField.becomeFirstResponder()
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.doneButtonTapped))
+                }
         }
+        tableView.isEditing = false
         selectedIndexPath = indexPath
     }
 }
@@ -162,16 +162,15 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
         let delete = UIContextualAction(style: .destructive, title: "Delete") { action, view, handler in
             self.remove(at: indexPath)
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-            
+            Haptics.playSuccessNotification()
         }
         let rename = UIContextualAction(style: .normal, title: "Edit") { action, view, handler in
             self.rename(at: indexPath)
         }
-        rename.backgroundColor = .black
+        rename.backgroundColor = .lightGray
         if tableView.isEditing == false {
             return UISwipeActionsConfiguration(actions: [delete, rename])
         } else {
@@ -179,4 +178,5 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
 

@@ -8,15 +8,12 @@
 import UIKit
 
 protocol BaseCellDelegate {
-    func updateUI(_ sender: BaseCell, title: String)
+    func updateWithTitle(_ sender: BaseCell, title: String)
 }
 
 class BaseCell: UITableViewCell {
     
     var baseCellDelegate: BaseCellDelegate?
-    
-    /// closure way of doing things
-    var titleSent: ((String?) -> Void)?
     
     lazy var textField: UITextField = {
         let textField = UITextField()
@@ -43,6 +40,7 @@ class BaseCell: UITableViewCell {
         textField.isUserInteractionEnabled = false
     }
 }
+
 //MARK: - UITextfield Delegate
 
 extension BaseCell: UITextFieldDelegate {
@@ -63,8 +61,7 @@ extension BaseCell: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let title = textField.text {
-            baseCellDelegate?.updateUI(self, title: title)
-            titleSent?(title)
+            baseCellDelegate?.updateWithTitle(self, title: title)
         }
     }
 }
